@@ -8,7 +8,7 @@ ClientFlow is a simple and intuitive dashboard that allows freelancers to manage
   Create, organize, and track project progress with clear status indicators.
 
 - **Task Tracking**  
-  Add and manage tasks with statuses like *To Do*, *In Progress*, *Completed*, and *Blocked*.
+  Add and manage tasks with statuses like _To Do_, _In Progress_, _Completed_, and _Blocked_.
 
 - **Client Portal**  
   Clients can log in and see the real-time progress of their projects.
@@ -21,10 +21,11 @@ ClientFlow is a simple and intuitive dashboard that allows freelancers to manage
 
 ## 🎯 Goal of the Project
 
-ClientFlow aims to simplify communication between freelancers and clients by providing:  
-- A centralized workspace for project tracking  
-- A clean and modern UI  
-- A transparent space for clients to monitor progress at any time  
+ClientFlow aims to simplify communication between freelancers and clients by providing:
+
+- A centralized workspace for project tracking
+- A clean and modern UI
+- A transparent space for clients to monitor progress at any time
 
 ## 🛠️ Tech Stack
 
