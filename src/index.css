@@ -1,9 +1,45 @@
 :root {
-  line-height: 1;
+  --light-background-lv1: #f5f3f2;
+  --light-background-lv2: #fafafa;
+  --main-color: #ff5741;
+  --main-text-color: #111;
+  --light-text-color: #f9f9f9;
+  --button-color: #1d2125;
+  --secondary-text-color: #727272;
+  
+  /*--- Border ---*/
+  --border: 1px solid #00000026;
+  --border-radius-lv1: 10px;
+  --border-radius-lv2: 15px;
+  --border-radius-lv3: 20px;
+  
+  /*--- Padding ---*/
+  --padding-lv1: 30px;
+  --padding-lv2: 50px;
+
+  /*--- Height ---*/
+
+  --height-lv1: 40px;
+  --height-lv2: 50px;
+  --height-lv3: 80px;
+
+  line-height: 0.9;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/**------ Importing fonts ------**/
+
+@font-face {
+  font-family: "main-font-regular";
+  src: url('../Font/main-font/main-font-regular.otf');
+}
+
+@font-face {
+  font-family: "main-font-bold";
+  src: url('../Font/main-font/main-font-bold.otf');
 }
 
 body {
@@ -18,4 +54,156 @@ body {
   outline: none;
   border: none;
   box-sizing: border-box;
+  font-family: "main-font-regular";
+}
+
+button{
+  cursor: pointer;
+}
+
+/*------ Backgrounds ------*/
+
+.bgc-lv1{
+  background-color: var(--light-background-lv1);
+}.bgc-lv2{
+  background-color: var(--light-background-lv2);
+}.btn-bgc{
+  background-color: var(--button-color);
+}
+
+/*------ Fonts ------*/
+
+.mff-r{
+  font-family: "main-font-regular";
+}.mff-b{
+  font-family: "main-font-bold";
+}
+
+/*------ Text colors ------*/
+
+.mt-c{
+  color: var(--main-text-color);
+  fill: var(--main-text-color);
+}.st-c{
+  color: var(--secondary-text-color);
+  fill: var(--secondary-text-color);
+}.lt-c{
+  color: var(--light-text-color);
+}
+
+/*------ Padding ------*/
+
+.pad-1{
+  padding: var(--padding-lv1);
+}.pad-2{
+  padding: var(--padding-lv2);
+}
+
+/*------ Borders ------*/
+
+.brad-1{
+  border-radius: var(--border-radius-lv1);
+}.brad-2{
+  border-radius: var(--border-radius-lv2);
+}.brad-3{
+  border-radius: var(--border-radius-lv3);
+}.br{
+  border: var(--border);
+}
+
+/*------ Heights ------*/
+
+.h-1{
+  height: var(--height-lv1);
+}.h-2{
+  height: var(--height-lv2);
+}.h-3{
+  height: var(--height-lv3);
+}
+
+/*------ Authentification pages ------*/
+
+.signup-page, .login-page{
+  display: flex;
+}
+
+.home-button{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.signup-page .content, .login-page .content{ 
+  height: 100vh;
+  border-right: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45vw;
+  padding: 0 80px;
+}
+
+.signup-page .form, .login-page .form{ 
+  width: 100%;
+}
+
+.signup-page .form-header, .login-page .form-header{ 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.signup-page .form-content, .login-page .form-content{ 
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: var(--padding-lv1) 0;
+}
+
+.signup-page .field-container, .login-page .field-container{ 
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  gap: 10px;
+}
+
+.signup-page input, .login-page input{ 
+  color: var(--main-text-color);
+  padding: 0 20px;
+  font-size: 1.1rem;
+}
+
+.signup-page input.error, .login-page input.error{ 
+  border-color: #ff4848;
+  color: #ff4848;
+  background-color: #ff48480b;
+}
+
+.signup-page .error-message, .login-page .error-message{ 
+  color: #ff4848;
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+
+.signup-page .submit-button, .login-page .submit-button{ 
+  width: 100%;
+  font-size: 1.1rem;
+}
+
+@media screen and (max-width: 1000px) {
+  .signup-page .content, .login-page .content{ 
+    width: 65vw;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .signup-page .content, .login-page .content{ 
+    width: 100vw;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .signup-page .content, .login-page .content{ 
+    padding: 0 var(--padding-lv1);
+  }
 }
