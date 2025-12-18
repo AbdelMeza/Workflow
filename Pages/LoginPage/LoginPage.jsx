@@ -1,11 +1,27 @@
 import { useNavigate } from "react-router-dom"
+import authentificationManagement from "../../Stores/Authentification"
+import { useState } from "react"
 
 export default function LoginPage() {
     const navigate = useNavigate()
+    const [identifier, setIdentifier] = useState("")
+    const [password, setPassword] = useState("")
 
-    const error = {
-        field: "",
-        errorMessage: "",
+    const { login, errors } = authentificationManagement()
+
+    const handleSubmit = () => {
+        const values = {
+            identifier: identifier,
+            password: password,
+        }
+
+        login(values)
+    }
+
+    const verifyField = (selectedField) => {
+        if (errors?.some(err => err.field === selectedField)) {
+            return <span className="error-message">{errors.find(err => err.field === selectedField).errorMessage}</span>
+        }
     }
 
     return <div className="signup-page bgc-lv1">
@@ -24,19 +40,19 @@ export default function LoginPage() {
                     <div className="upper-content">
                         <div className="field-container">
                             <label htmlFor="username" className="st-c">Username or email</label>
-                            <input type="text" className={`username-input h-2 br brad-1 ${error.field === "identifier" || error.field === "all" ? "error" : ""}`} />
-                            {error && (error.field === "identifier" || error.field === "all") ? <span className="error-message">{error.errorMessage}</span> : null}
+                            <input type="text" className={`username-input h-2 br brad-1 ${verifyField("identifier") ? "error" : ""}`} value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
+                            {verifyField("identifier")}
                         </div>
                         <div className="field-container">
                             <label htmlFor="passowrd" className="st-c">Password</label>
-                            <input type="password" className={`password-input h-2 br brad-1 ${error.field === "password" || error.field === "all" ? "error" : ""}`} />
-                            {error && error.field === "password" ? <span className="error-message">{error.errorMessage}</span> : null}
+                            <input type="password" className={`password-input h-2 br brad-1 ${verifyField("password") ? "error" : ""}`} value={password} onChange={(e) => setPassword(e.target.value)} />
+                            {verifyField("password")}
                         </div>
                         <div className="switch-form-container">
                             <span className="st-c">You don't have an account ? {""}
                                 <span
                                     className="switch-button" style={{ textDecoration: "underline", cursor: "pointer" }}
-                                    onClick={()=> navigate('/signup')}
+                                    onClick={() => navigate('/signup')}
                                 >
                                     Sign up
                                 </span>
@@ -44,7 +60,7 @@ export default function LoginPage() {
                         </div>
                     </div>
                     <div className="lower-content">
-                        <button className="submit-button h-2 brad-1 btn-bgc lt-c">Log in</button>
+                        <button className="submit-button h-2 brad-1 btn-bgc lt-c" onClick={() => handleSubmit()}>Log in</button>
                     </div>
                 </div>
             </div>

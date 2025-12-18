@@ -4,53 +4,61 @@ import { createToken } from "../utils/token.js";
 
 export async function signupUser(req, res) {
     try {
-        const { username, email, password, repeatedPassword, role } = req.body
+        const { username, email, password, role } = req.body
 
-        if (!username || !email || !password || !repeatedPassword || !role) {
-            return res.status(400).json({ field: "all", message: "All fields are required" })
+        if (!username || !email || !password || !role) {
+            let errors = []
+
+            if (!username) {
+                errors.push({ field: "username", errorMessage: "This field is required" })
+            } if (!email) {
+                errors.push({ field: "email", errorMessage: "This field is required" })
+            } if (!password) {
+                errors.push({ field: "password", errorMessage: "This field is required" })
+            } if (!role) {
+                errors.push({ field: "role", errorMessage: "This field is required" })
+            }
+
+            return res.status(400).json(errors)
         }
 
         const usernameExists = await userModel.findOne({ username })
         if (usernameExists) {
-            return res.status(400).json({ field: "username", message: "Username already exists" })
+            return res.status(400).json({ field: "username", errorMessage: "Username already exists" })
         }
 
         const emailExists = await userModel.findOne({ email })
         if (emailExists) {
-            return res.status(400).json({ field: "email", message: "Email already exists" })
+            return res.status(400).json({ field: "email", errorMessage: "Email already exists" })
         }
 
         if (!validateEmail(email)) {
-            return res.status(400).json({ field: "email", message: "Invalid email format" })
+            return res.status(400).json({ field: "email", errorMessage: "Invalid email format" })
         }
 
-        const isPasswordValid = checkPasswordStrength(password);
+        const isPasswordValid = checkPasswordStrength(password)
         if (!isPasswordValid.valid) {
-            return res.status(400).json({ field: "password", message: isPasswordValid.message })
+            return res.status(400).json({ field: "password", errorMessage: isPasswordValid.message })
         }
 
-        if (password !== repeatedPassword) {
-            return res.status(400).json({ field: "repeatedPassword", message: "Passwords must match" })
-        }
-
-        const hashedPass = await hashPassword(password);
+        const hashedPass = await hashPassword(password)
         if (!hashedPass) {
-            return res.status(500).json({ field: "all", message: "Authentication error, please try again" })
+            return res.status(500).json({ field: "all", errorMessage: "Authentication error, please try again" })
         }
 
-        let newUser = await userModel.create({ username, email, password: hashedPass, role })
+        let newUser = await userModel.create({ username, email, password: hashedPass, role: role.trim() })
         newUser = newUser.toObject()
         delete newUser.password
 
         const userToken = createToken({ id: newUser._id, username, role })
         if (!userToken) {
-            return res.status(500).json({ field: "all", message: "Authentication error, please try again" })
+            return res.status(500).json({ field: "all", errorMessage: "Authentication error, please try again" })
         }
 
         res.status(201).json({ user: newUser, token: userToken })
     } catch (error) {
         console.error(error)
-        res.status(500).json({ message: "Server error" })
+        res.status(500).json({ message: error })
     }
 }
 
@@ -59,22 +67,30 @@ export async function loginUser(req, res) {
         const { identifier, password } = req.body
 
         if (!identifier || !password) {
-            return res.status(400).json({ field: "all", message: "All fields are required" })
+            let errors = []
+
+            if (!identifier) {
+                errors.push({ field: "identifier", errorMessage: "This field is required" })
+            } if (!password) {
+                errors.push({ field: "password", errorMessage: "This field is required" })
+            }
+
+            return res.status(400).json(errors)
         }
 
         let user = await userModel.findOne({ $or: [{ username: identifier }, { email: identifier }] }).select("+password")
         if (!user) {
-            return res.status(400).json({ field: "identifier", message: "Account not found, try again" })
+            return res.status(400).json({ field: "identifier", errorMessage: "Account not found, try again" })
         }
 
         const isPasswordValid = await comparePasswords(password, user.password)
         if (!isPasswordValid) {
-            return res.status(400).json({ field: "password", message: "Password is incorrect, try again" })
+            return res.status(400).json({ field: "password", errorMessage: "Password is incorrect, try again" })
         }
 
         const userToken = createToken({ id: user._id, username: user.username, role: user.role })
         if (!userToken) {
-            return res.status(500).json({ field: "all", message: "Authentication error, please try again" })
+            return res.status(500).json({ field: "all", errorMessage: "Authentication error, please try again" })
         }
 
         user = user.toObject()

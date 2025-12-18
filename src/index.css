@@ -23,6 +23,11 @@
   --height-lv2: 50px;
   --height-lv3: 80px;
 
+  /*--- Animations ---*/
+
+  --animation-short-duration: 200ms;
+  --animation-long-duration: 800ms;
+
   line-height: 0.9;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -167,15 +172,79 @@ button{
   gap: 10px;
 }
 
-.signup-page input, .login-page input{ 
+.signup-page input, .login-page input,
+.signup-page .role-selection{ 
+  position: relative;
   color: var(--main-text-color);
+  background: #fff;
   padding: 0 20px;
   font-size: 1.1rem;
 }
 
-.signup-page input.error, .login-page input.error{ 
+.signup-page .role-selection{
+  cursor: pointer;
+  padding: 0;
+}
+
+.signup-page .role-selected{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  user-select: none;
+}
+
+.signup-page .arrow-down{
+  position: absolute;
+  right: 10px;
+  height: 100%;
+  transition: transform var(--animation-short-duration);
+}
+
+.signup-page .arrow-down.closed{
+  transform: rotateX(180deg);
+}
+
+.signup-page .arrow-down.opened{
+  transform: rotateX(0);
+}
+
+.signup-page .role-options{
+  margin-top: 5px;
+  background: #fff;
+  transition: opacity 100ms;
+}
+
+.signup-page .role-options.closed{
+  opacity: 0;
+  pointer-events: none;
+}
+
+.signup-page .role-options.opened{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.signup-page .role-options .option{
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  transition: background-color var(--animation-short-duration);
+}
+
+.signup-page .role-options .option:hover{
+  background-color: #00000005;
+}
+
+.signup-page .role-options .option:first-child{
+  border-bottom: var(--border);
+}
+
+.signup-page input.error, .login-page input.erro,
+.signup-page .role-selection.error{ 
   border-color: #ff4848;
-  color: #ff4848;
   background-color: #ff48480b;
 }
 

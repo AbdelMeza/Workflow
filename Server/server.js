@@ -7,8 +7,8 @@ const app = express()
 
 app.use(cors(), express.json())
 
-app.post('/signup', signupUser)
-app.post('/login', loginUser)
+app.post('/userSignup', signupUser)
+app.post('/userLogin', loginUser)
 
 mongoose.connect('mongodb://localhost:27017/WorkFlow')
 
