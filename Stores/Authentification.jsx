@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const authentificationManagement = create((set, get) => ({
+const authentificationManagement = create((set) => ({
     isValid: false,
     errors: [],
 
@@ -11,7 +11,7 @@ const authentificationManagement = create((set, get) => ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
             })
-            
+
             const response = await req.json()
 
             if (response.status !== 201) {
@@ -45,6 +45,10 @@ const authentificationManagement = create((set, get) => ({
             console.log(error)
         }
     },
+
+    clearErrorsLog: () => {
+        set({ errors: [] })
+    }
 }))
 
 export default authentificationManagement

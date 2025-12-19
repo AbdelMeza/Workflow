@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import authentificationManagement from "../../Stores/Authentification"
 
@@ -10,7 +10,11 @@ export default function SignupPage() {
     const [role, setRole] = useState("")
     const [selectionStatus, setSelectionStatus] = useState(false)
 
-    const { signup, errors } = authentificationManagement()
+    const { signup, errors, clearErrorsLog } = authentificationManagement()
+
+    useEffect(()=>{
+        clearErrorsLog()
+    }, [])
 
     const handleSubmit = () => {
         const values = {

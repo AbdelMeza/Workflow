@@ -1,13 +1,17 @@
 import { useNavigate } from "react-router-dom"
 import authentificationManagement from "../../Stores/Authentification"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function LoginPage() {
     const navigate = useNavigate()
     const [identifier, setIdentifier] = useState("")
     const [password, setPassword] = useState("")
 
-    const { login, errors } = authentificationManagement()
+    const { login, errors, clearErrorsLog } = authentificationManagement()
+
+    useEffect(() => {
+        clearErrorsLog()
+    }, [])
 
     const handleSubmit = () => {
         const values = {
