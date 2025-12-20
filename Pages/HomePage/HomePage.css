@@ -1,0 +1,35 @@
+.home-page {
+    min-height: 100vh;
+    width: 100%;
+}
+
+/*------ Navigation bar ------*/
+
+.navigation-bar{
+    position: absolute;
+    width: 100%;
+}
+
+.navigation-bar-content {
+    width: calc(100% / 3);
+}
+
+.navigation-bar .main-link {
+    width: max-content;
+}
+
+.navigation-bar .main-link:hover {
+    cursor: pointer;
+}
+
+.navigation-bar .main-link:hover .slide-text {
+    transform: translateY(-100%);
+}
+
+/*------ Hero Section ------*/
+
+section.hero-section{
+    height: 80vh;
+    width: 100%;
+    background-size: cover;
+}

@@ -103,12 +103,12 @@ export async function loginUser(req, res) {
     }
 }
 
-export function validateEmail(email) {
+function validateEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return regex.test(email)
 }
 
-export function checkPasswordStrength(password) {
+function checkPasswordStrength(password) {
     if (password.length < 8) {
         return { valid: false, message: "Password must be at least 8 characters long" }
     }

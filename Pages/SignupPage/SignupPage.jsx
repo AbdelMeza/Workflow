@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import authentificationManagement from "../../Stores/Authentification"
+import TextSlider from "../../Components/TextSlider/TextSlider"
+import Button from "../../Components/Button/Button"
 
 export default function SignupPage() {
     const navigate = useNavigate()
@@ -10,9 +12,9 @@ export default function SignupPage() {
     const [role, setRole] = useState("")
     const [selectionStatus, setSelectionStatus] = useState(false)
 
-    const { signup, errors, clearErrorsLog } = authentificationManagement()
+    const { signup, errors, clearErrorsLog, isValid } = authentificationManagement()
 
-    useEffect(()=>{
+    useEffect(() => {
         clearErrorsLog()
     }, [])
 
@@ -27,6 +29,12 @@ export default function SignupPage() {
         signup(values)
     }
 
+    useEffect(() => {
+        if (isValid) {
+            navigate('/')
+        }
+    }, [isValid])
+
     const verifyField = (selectedField) => {
         if (errors?.some(err => err.field === selectedField)) {
             return <span className="error-message">{errors.find(err => err.field === selectedField).errorMessage}</span>
@@ -34,14 +42,14 @@ export default function SignupPage() {
     }
 
     return <div className="signup-page bgc-lv1">
-        <div className="home-button bgc-lv2 h-1 br brad-1" style={{ aspectRatio: 1, display: "flex", placeContent: "center", cursor: "pointer" }}>
-            <svg xmlns="http://www.w3.org/2000/svg" className="st-c" width={20} fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        <div className="home-button bgc-lv2 h-1 br brad-1" style={{ aspectRatio: 1, display: "flex", placeContent: "center", cursor: "pointer" }} onClick={() => navigate('/')}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="st-c" width={20} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
         </div>
         <div className="content form-container bgc-lv2">
-            <div className="form">
-                <div className="form-header">
+            <div className="form s-fs">
+                <div className="form-header flex-c gap-1">
                     <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/WorkFlow%20assets/Icons/Worflow-icon.png" alt="workflow-icon" width={25} />
                     <span className="mt-c">WorkFlow</span>
                 </div>
@@ -72,16 +80,17 @@ export default function SignupPage() {
                                     </svg>
                                 </div>
                                 <div className={`role-options br brad-1 ${selectionStatus ? "opened" : "closed"}`}>
-                                    <div className="option" onClick={() => setRole("Freelancer")}>Freelancer</div>
-                                    <div className="option" onClick={() => setRole("Client")}>Client</div>
+                                    <div className="option" onClick={() => { setRole("Freelancer"), setSelectionStatus(false) }}>Freelancer</div>
+                                    <div className="option" onClick={() => { setRole("Client"), setSelectionStatus(false) }}>Client</div>
                                 </div>
                             </div>
                             {verifyField("role")}
                         </div>
                         <div className="switch-form-container">
-                            <span className="st-c">Already have an account ? {""}
+                            <span className="st-c s-fs">Already have an account ? {""}
                                 <span
-                                    className="switch-button" style={{ textDecoration: "underline", cursor: "pointer" }}
+                                    className="switch-button"
+                                    style={{ textDecoration: "underline", cursor: "pointer" }}
                                     onClick={() => navigate('/login')}
                                 >
                                     Log in
@@ -90,7 +99,9 @@ export default function SignupPage() {
                         </div>
                     </div>
                     <div className="lower-content">
-                        <button className="submit-button h-2 brad-1 btn-bgc lt-c" onClick={() => handleSubmit()}>Create account</button>
+                        <div onClick={() => handleSubmit()}>
+                            <Button content={"Create account"} size={"medium"} classGiven={"btn-bgc brad-1"}></Button>
+                        </div>
                     </div>
                 </div>
             </div>

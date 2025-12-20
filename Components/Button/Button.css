@@ -1,0 +1,29 @@
+.button-element{
+    overflow: hidden;
+}
+
+.button-element.small {
+    height: var(--height-lv1);
+}
+
+.button-element.medium {
+    height: var(--height-lv2);
+}
+
+.button-element .button-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 0 var(--padding-lv1);
+    cursor: pointer;
+}
+
+.button-element .button-content:hover .slide-text{
+    transform: translateY(-100%);
+}
+
+.btn-bgc{
+    color: var(--light-text-color);
+}
