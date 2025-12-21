@@ -62,7 +62,7 @@ function NavBar() {
 }
 
 function HeroSection() {
-    return <section className="hero-section" style={{ backgroundImage: "url('https://raw.githubusercontent.com/AbdelMeza/Workflow/main/WorkFlow%20assets/Grid background.png')" }}>
+    return <section className="hero-section" style={{ backgroundImage: "url('https://raw.githubusercontent.com/AbdelMeza/Workflow/main/WorkFlow%20assets/Background/Grid background.png')" }}>
 
     </section>
 }

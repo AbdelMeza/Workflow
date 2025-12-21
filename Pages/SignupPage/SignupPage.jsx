@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import authentificationManagement from "../../Stores/Authentification"
-import TextSlider from "../../Components/TextSlider/TextSlider"
 import Button from "../../Components/Button/Button"
 
 export default function SignupPage() {
@@ -12,13 +11,13 @@ export default function SignupPage() {
     const [role, setRole] = useState("")
     const [selectionStatus, setSelectionStatus] = useState(false)
 
-    const { signup, errors, clearErrorsLog, isValid } = authentificationManagement()
+    const { signup, errors, clearErrorsLog } = authentificationManagement()
 
     useEffect(() => {
         clearErrorsLog()
     }, [])
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const values = {
             username: username,
             email: email,
@@ -26,14 +25,9 @@ export default function SignupPage() {
             role: role.toLowerCase(),
         }
 
-        signup(values)
+        const verify = await signup(values)
+        if (verify) navigate("/")
     }
-
-    useEffect(() => {
-        if (isValid) {
-            navigate('/')
-        }
-    }, [isValid])
 
     const verifyField = (selectedField) => {
         if (errors?.some(err => err.field === selectedField)) {

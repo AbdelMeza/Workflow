@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
 const authentificationManagement = create((set) => ({
-    isValid: false,
     errors: [],
     userData: undefined,
 
@@ -19,11 +18,10 @@ const authentificationManagement = create((set) => ({
                 headers: { token: userToken },
             })
 
-            if (res.status !== 200) {
+            if (!res.ok) {
                 set({ userData: null })
                 return
             }
-
             const data = await res.json()
 
             set({ userData: data.userData })
@@ -45,13 +43,14 @@ const authentificationManagement = create((set) => ({
 
             if (res?.status !== 201) {
                 set({ errors: Array.isArray(data) ? data : [data] })
-                return
+                return false
             }
 
             localStorage.setItem("userToken", data.token)
-            set({ isValid: true })
+            return true
         } catch (error) {
             console.log(error)
+            return false
         }
     },
 
@@ -67,14 +66,14 @@ const authentificationManagement = create((set) => ({
 
             if (res.status !== 200) {
                 set({ errors: Array.isArray(data) ? data : [data] })
-                return
+                return false
             }
 
             localStorage.setItem("userToken", data.token)
-
-            set({ isValid: true })
+            return true
         } catch (error) {
             console.log(error)
+            return false
         }
     },
 

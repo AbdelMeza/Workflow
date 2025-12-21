@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import authentificationManagement from "../../Stores/Authentification"
 import { useEffect, useState } from "react"
-import TextSlider from "../../Components/TextSlider/TextSlider"
 import Button from "../../Components/Button/Button"
 
 export default function LoginPage() {
@@ -9,26 +8,21 @@ export default function LoginPage() {
     const [identifier, setIdentifier] = useState("")
     const [password, setPassword] = useState("")
 
-    const { login, errors, clearErrorsLog, isValid } = authentificationManagement()
+    const { login, errors, clearErrorsLog } = authentificationManagement()
 
     useEffect(() => {
         clearErrorsLog()
     }, [])
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const values = {
             identifier: identifier,
             password: password,
         }
 
-        login(values)
+        const verify = await login(values)
+        if (verify) navigate("/")
     }
-
-    useEffect(() => {
-        if (isValid) {
-            navigate('/')
-        }
-    }, [isValid])
 
     const verifyField = (selectedField) => {
         if (errors?.some(err => err.field === selectedField)) {

@@ -11,7 +11,11 @@ function App() {
   return <Routes>
     <Route path="/signup" element={<SignupPage />}></Route>
     <Route path="/login" element={<LoginPage />}></Route>
-    <Route path="/" element={<HomePage />}></Route>
+    <Route path="/" element={
+      <VerifyAuth>
+        <HomePage />
+      </VerifyAuth>
+    }></Route>
   </Routes >
 }
 

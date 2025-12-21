@@ -1,13 +1,16 @@
-import { Navigate, Outlet } from "react-router-dom"
+import authentificationManagement from "../Stores/Authentification"
+import { useEffect } from "react"
 
-export function VerifyAuth({ userData }) {
+export function VerifyAuth({ children }) {
+  const { getUserData, userData } = authentificationManagement()
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
   if (userData === undefined) {
     return null
   }
 
-  if (!userData) {
-    return <Navigate to="/signup" replace />
-  }
-
-  return <Outlet />
+  return children
 }
