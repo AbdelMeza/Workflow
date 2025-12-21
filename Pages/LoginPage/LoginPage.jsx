@@ -39,7 +39,7 @@ export default function LoginPage() {
         <div className="content form-container bgc-lv2">
             <div className="form s-fs">
                 <div className="form-header flex flex-c gap-1">
-                    <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/WorkFlow%20assets/Icons/Worflow-icon.png" alt="workflow-icon" width={25} />
+                    <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/assets/Icons/WorkFlow_icon.png" alt="workflow-icon" width={25} />
                     <span className="mt-c">WorkFlow</span>
                 </div>
                 <div className="form-content">

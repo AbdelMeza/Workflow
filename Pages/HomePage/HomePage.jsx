@@ -18,7 +18,7 @@ function NavBar() {
     return <div className="navigation-bar flex">
         <div className="navigation-bar-content main-link-container flex">
             <div className="main-link flex gap-1 flex-c">
-                <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/WorkFlow%20assets/Icons/Worflow-icon.png" alt="workflow-icon" width={25} />
+                <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/assets/Icons/WorkFlow_icon.png" alt="workflow-icon" width={25} />
                 <TextSlider
                     type={"navigate"}
                     redirectTo={"/"}
@@ -73,7 +73,7 @@ function NavBar() {
 function HeroSection() {
     const { userData } = authentificationManagement()
 
-    return <section className="hero-section" style={{ backgroundImage: "url('https://raw.githubusercontent.com/AbdelMeza/Workflow/main/WorkFlow%20assets/Background/Grid background.png')" }}>
+    return <section className="hero-section" style={{ backgroundImage: "url('https://raw.githubusercontent.com/AbdelMeza/Workflow/main/assets/Backgrounds/Grid_background.png')" }}>
         <div className="hero-section-content flex-c flex-d-c gap-3">
             <div className="upper-content">
                 <h1 className="main-headline mff-b mt-c">Manage Your Clients and <br /> Projects Effortlessly</h1>
@@ -88,6 +88,6 @@ function HeroSection() {
 
 function PreviewContainer() {
     return <div className="preview-container pad-1 bgc-lv2 brad-2">
-        <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/WorkFlow%20assets/Previews/Freelancer dashboard.png" className='preview-image br brad-1' alt="preview-image" />
+        <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/assets/Previews/Freelancer_dashboard_view.png" className='preview-image br brad-1' alt="preview-image" />
     </div>
 }
