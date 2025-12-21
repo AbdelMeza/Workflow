@@ -41,7 +41,7 @@ const authentificationManagement = create((set) => ({
 
             const data = await res.json()
 
-            if (res?.status !== 201) {
+            if (!res.ok) {
                 set({ errors: Array.isArray(data) ? data : [data] })
                 return false
             }
@@ -64,7 +64,7 @@ const authentificationManagement = create((set) => ({
 
             const data = await res.json()
 
-            if (res.status !== 200) {
+            if (!res.ok) {
                 set({ errors: Array.isArray(data) ? data : [data] })
                 return false
             }

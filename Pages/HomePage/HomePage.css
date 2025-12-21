@@ -1,13 +1,16 @@
 .home-page {
+    position: relative;
     min-height: 100vh;
     width: 100%;
+    padding: 0 var(--padding-lv2);
 }
 
 /*------ Navigation bar ------*/
 
 .navigation-bar{
-    position: absolute;
     width: 100%;
+    box-sizing: border-box;
+    padding: var(--padding-lv2) 0 0;
 }
 
 .navigation-bar-content {
@@ -29,7 +32,27 @@
 /*------ Hero Section ------*/
 
 section.hero-section{
-    height: 80vh;
+    height: 65vh;
     width: 100%;
     background-size: cover;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: calc(var(--padding-lv3) * 1.2);
+}
+
+.hero-section-content{
+    text-align: center;
+}
+
+.hero-section-content .button-element{
+    width: max-content;
+}
+
+/*------ Preview container ------*/
+
+.preview-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

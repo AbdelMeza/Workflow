@@ -1,0 +1,7 @@
+.default-profile{
+    width: 35px;
+    aspect-ratio: 1;
+    font-size: 0.3rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+}

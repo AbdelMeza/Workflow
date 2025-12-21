@@ -10,7 +10,7 @@
 
   /*--- Font sizes ---*/
   --big-font-size: 1.1rem;
-  --medium-font-size: 0.7rem;
+  --medium-font-size: 0.6rem;
   --small-font-size: 0.5rem;
 
   /*--- Border ---*/
@@ -20,9 +20,9 @@
   --border-radius-lv3: 20px;
 
   /*--- Padding ---*/
-  --padding-lv1: 1vw;
-  --padding-lv2: 2vw;
-  --padding-lv3: 3vw;
+  --padding-lv1: 1.5vw;
+  --padding-lv2: 2.5vw;
+  --padding-lv3: 3.5vw;
 
   /*--- Height ---*/
 
@@ -35,7 +35,7 @@
   --animation-long-duration: 800ms;
   --animation-easing: cubic-bezier(0.75, 0, 0.25, 1);
 
-  line-height: 0.9;
+  line-height: 1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -58,6 +58,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 * {
@@ -75,7 +76,7 @@ button {
   font-size: var(--small-font-size);
 }
 
-input{
+input {
   font-size: var(--small-font-size);
 }
 
@@ -189,33 +190,46 @@ html {
   display: flex;
 }
 
-.flex-c{
+.flex-d-c {
+  flex-direction: column;
+}
+
+.flex-c {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+
 .ai-l {
   align-items: flex-start;
-}.ai-r {
+}
+
+.ai-r {
   align-items: flex-end;
 }
 
 .jc-l {
   justify-content: flex-start;
-}.jc-r {
+}
+
+.jc-r {
   justify-content: flex-end;
 }
 
 :has(.flex-d-c) .al {
   justify-content: flex-start;
-}:has(.flex-d-c) .ar {
+}
+
+:has(.flex-d-c) .ar {
   justify-content: flex-end;
 }
 
 :has(.flex-d-c) .jc-l {
   align-items: flex-start;
-}:has(.flex-d-c) .jc-r {
+}
+
+:has(.flex-d-c) .jc-r {
   align-items: flex-end;
 }
 
@@ -231,9 +245,6 @@ html {
   gap: 3vw;
 }
 
-.flex-d-c {
-  flex-direction: column;
-}
 
 /*------ Authentification pages ------*/
 
