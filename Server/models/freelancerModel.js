@@ -5,15 +5,9 @@ const freelancerSchema = new mongoose.Schema({
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'project' }],
     tasks: [{ taskId: { type: mongoose.Schema.Types.ObjectId, ref: 'task' } }],
     clients: [{ clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'client' } }],
-    services: {
-        type: [String]
-    },
-    portfolioUrl: {
-        type: String
-    },
-    socials: {
-        type: [Object]
-    }
+    services: { type: [String] },
+    portfolioUrl: { type: String },
+    socials: { type: [Object] }
 }, { timestamps: true })
 
 export const freelancerModel = mongoose.model("userFreelance", freelancerSchema)
