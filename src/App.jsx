@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import { VerifyAuth } from "../RoutesProtection/VerifyAuth"
 import Lenis from "lenis"
-import authentificationManagement from "../Stores/Authentification"
 
 const SignupPage = lazy(() => import("../Pages/SignupPage/SignupPage"))
 const LoginPage = lazy(() => import("../Pages/LoginPage/LoginPage"))

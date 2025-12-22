@@ -5,9 +5,13 @@ export function VerifyAuth({ children }) {
   const { getUserData, userData } = authentificationManagement()
 
   useEffect(() => {
-    getUserData()
+    const fetchUserData = async () => {
+      await getUserData()
+    }
+    
+    fetchUserData()
   }, [])
-
+  
   if (userData === undefined) {
     return null
   }

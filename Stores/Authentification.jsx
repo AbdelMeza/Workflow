@@ -9,7 +9,7 @@ import { create } from "zustand";
  * - fetching user data from token
  */
 const authentificationManagement = create((set) => ({
-    
+
     // Backend validation / authentication errors
     errors: [],
 
@@ -51,7 +51,7 @@ const authentificationManagement = create((set) => ({
             const data = await res.json()
 
             // Store authenticated user data
-            set({ userData: data.userData })
+            set({ userData: data.user })
 
         } catch (error) {
             // Network or server error

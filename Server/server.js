@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import express from "express"
 import cors from "cors"
 import { loginUser, signupUser } from "./controllers/authentification.js"
-import { getUserData } from "./controllers/user.js"
+import { getUserData } from "./controllers/users.js"
 
 const app = express()
 

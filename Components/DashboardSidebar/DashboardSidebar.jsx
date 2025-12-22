@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import './DashboardSidebar.css'
+import TextSlider from '../TextSlider/TextSlider'
 
 export default function DashboardSidebar() {
     const navigate = useNavigate()
@@ -43,9 +44,20 @@ export default function DashboardSidebar() {
     ]
 
     return <div className="dashboard-side-bar bgc-lv1">
-        <div className="side-bar-header s-fs gap-1 pad-1">
-            <img src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/assets/Icons/Workflow_icon.png" alt="workflow-icon" width={25} />
-            <span className="mt-c">WorkFlow</span>
+        <div className="side-bar-header s-fs gap-1 pad-1" >
+            <div className="main-link flex gap-1 flex-c">
+                <img
+                    src="https://raw.githubusercontent.com/AbdelMeza/Workflow/main/assets/Icons/Workflow_icon.png"
+                    alt="workflow-icon"
+                    width={25}
+                />
+                <TextSlider
+                    type="navigate"
+                    redirectTo="/"
+                    classGiven="mt-c"
+                    content="WorkFlow"
+                />
+            </div>
         </div>
         <div className="navigation-links-container gap-1">
             {navigationLinks.map((element, index) => (

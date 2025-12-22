@@ -25,6 +25,7 @@ export default function SignupPage() {
     // Authentication store
     const { signup, errors, clearErrorsLog } = authentificationManagement()
 
+    console.log(errors)
     /**
      * Clear previous authentication errors
      * when the page is mounted.

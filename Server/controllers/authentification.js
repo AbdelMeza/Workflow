@@ -1,113 +1,197 @@
-import { userModel } from "../models/userModel.js";
-import { comparePasswords, hashPassword } from "../utils/hashPass.js";
-import { createToken } from "../utils/token.js";
+import { clientModel } from "../models/clientModel.js"
+import { freelancerModel } from "../models/freelancerModel.js"
+import { usersModel } from "../models/usersModel.js"
+import { comparePasswords, hashPassword } from "../utils/hashPass.js"
+import { createToken } from "../utils/token.js"
 
+/**
+ * =========================
+ * SIGNUP CONTROLLER
+ * =========================
+ * Handles user registration:
+ * - Validates input fields
+ * - Creates a base user
+ * - Creates a role-specific profile (freelancer or client)
+ * - Returns auth token
+ */
 export async function signupUser(req, res) {
     try {
         const { username, email, password, role } = req.body
 
-        if (!username || !email || !password || !role) {
-            let errors = []
+        // 1. Validate required fields
+        let errors = []
 
-            if (!username) {
-                errors.push({ field: "username", errorMessage: "This field is required" })
-            } if (!email) {
-                errors.push({ field: "email", errorMessage: "This field is required" })
-            } if (!password) {
-                errors.push({ field: "password", errorMessage: "This field is required" })
-            } if (!role) {
-                errors.push({ field: "role", errorMessage: "This field is required" })
-            }
+        if (!username) errors.push({ field: "username", errorMessage: "This field is required" })
+        if (!email) errors.push({ field: "email", errorMessage: "This field is required" })
+        if (!password) errors.push({ field: "password", errorMessage: "This field is required" })
+        if (!role) errors.push({ field: "role", errorMessage: "This field is required" })
 
+        if (errors.length) {
             return res.status(400).json(errors)
         }
 
-        const usernameExists = await userModel.findOne({ username })
-        if (usernameExists) {
-            return res.status(400).json({ field: "username", errorMessage: "Username already exists" })
+        // 2. Check if user already exists (username or email)
+        const userExists = await usersModel.findOne({
+            $or: [{ username }, { email }]
+        })
+
+        if (userExists) {
+            return res.status(400).json({
+                field: "username",
+                errorMessage: "Account already exists"
+            })
         }
 
-        const emailExists = await userModel.findOne({ email })
-        if (emailExists) {
-            return res.status(400).json({ field: "email", errorMessage: "Email already exists" })
-        }
-
+        // 3. Validate email format
         if (!validateEmail(email)) {
-            return res.status(400).json({ field: "email", errorMessage: "Invalid email format" })
+            return res.status(400).json({
+                field: "email",
+                errorMessage: "Invalid email format"
+            })
         }
 
+        // 4. Validate password strength
         const isPasswordValid = checkPasswordStrength(password)
         if (!isPasswordValid.valid) {
-            return res.status(400).json({ field: "password", errorMessage: isPasswordValid.message })
+            return res.status(400).json({
+                field: "password",
+                errorMessage: isPasswordValid.message
+            })
         }
 
+        // 5. Hash password before saving
         const hashedPass = await hashPassword(password)
-        if (!hashedPass) {
-            return res.status(500).json({ field: "all", errorMessage: "Authentication error, please try again" })
+
+        // 6. Create base user (authentication entity)
+        const user = await usersModel.create({
+            username,
+            email,
+            password: hashedPass,
+            role
+        })
+
+        // 7. Create role-specific profile
+        if (role === "freelancer") {
+            await freelancerModel.create({
+                userId: user._id
+            })
         }
 
-        let newUser = await userModel.create({ username, email, password: hashedPass, role: role.trim() })
-        newUser = newUser.toObject()
-        delete newUser.password
-
-        const userToken = createToken({ id: newUser._id, username, role })
-        if (!userToken) {
-            return res.status(500).json({ field: "all", errorMessage: "Authentication error, please try again" })
+        if (role === "client") {
+            await clientModel.create({
+                userId: user._id
+            })
         }
 
-        res.status(201).json({ user: newUser, token: userToken })
+        // 8. Generate authentication token
+        const token = createToken({
+            id: user._id,
+            role: user.role
+        })
+
+        // 9. Remove password before sending response
+        const userResponse = user.toObject()
+        delete userResponse.password
+
+        // 10. Send response
+        res.status(201).json({
+            user: userResponse,
+            token
+        })
+
     } catch (error) {
         console.error(error)
-        res.status(500).json({ message: error })
+        res.status(500).json({
+            field: "all",
+            errorMessage: "Internal server error"
+        })
     }
 }
 
+
+/**
+ * =========================
+ * LOGIN CONTROLLER
+ * =========================
+ * Handles user authentication:
+ * - Finds user by username or email
+ * - Verifies password
+ * - Returns auth token
+ */
 export async function loginUser(req, res) {
     try {
         const { identifier, password } = req.body
 
-        if (!identifier || !password) {
-            let errors = []
+        let errors = []
 
-            if (!identifier) {
-                errors.push({ field: "identifier", errorMessage: "This field is required" })
-            } if (!password) {
-                errors.push({ field: "password", errorMessage: "This field is required" })
-            }
+        // 1. Validate required fields
+        if (!identifier) errors.push({ field: "identifier", errorMessage: "This field is required" })
+        if (!password) errors.push({ field: "password", errorMessage: "This field is required" })
 
+        if (errors.length) {
             return res.status(400).json(errors)
         }
 
-        let user = await userModel.findOne({ $or: [{ username: identifier }, { email: identifier }] }).select("+password")
+        // 2. Find user by username or email
+        let user = await usersModel
+            .findOne({
+                $or: [{ username: identifier }, { email: identifier }]
+            })
+            .select("+password")
+
         if (!user) {
-            return res.status(400).json({ field: "identifier", errorMessage: "Account not found, try again" })
+            return res.status(400).json({
+                field: "identifier",
+                errorMessage: "Account not found"
+            })
         }
 
-        const isPasswordValid = await comparePasswords(password, user.password)
-        if (!isPasswordValid) {
-            return res.status(400).json({ field: "password", errorMessage: "Password is incorrect, try again" })
+        // 3. Compare passwords
+        const isValid = await comparePasswords(password, user.password)
+        if (!isValid) {
+            return res.status(400).json({
+                field: "password",
+                errorMessage: "Password is incorrect"
+            })
         }
 
-        const userToken = createToken({ id: user._id, username: user.username, role: user.role })
-        if (!userToken) {
-            return res.status(500).json({ field: "all", errorMessage: "Authentication error, please try again" })
-        }
+        // 4. Generate authentication token
+        const token = createToken({
+            id: user._id,
+            role: user.role
+        })
 
+        // 5. Remove password before sending response
         user = user.toObject()
         delete user.password
 
-        res.status(200).json({ user: user, token: userToken })
+        res.status(200).json({
+            user,
+            token
+        })
+
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: "Server error" })
+        console.error(error)
+        res.status(500).json({
+            field: "all",
+            errorMessage: "Server error"
+        })
     }
 }
 
+/**
+ * =========================
+ * UTILITIES
+ * =========================
+ */
+
+// Validate email format using regex
 function validateEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return regex.test(email)
 }
 
+// Check password strength rules
 function checkPasswordStrength(password) {
     if (password.length < 8) {
         return { valid: false, message: "Password must be at least 8 characters long" }
