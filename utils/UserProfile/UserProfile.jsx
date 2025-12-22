@@ -5,8 +5,7 @@ export default function UserProfile() {
     const { userData } = authentificationManagement()
 
     return <div className="user-profile flex-c gap-1">
-        <span className="username s-fs mt-c">{userData.username}</span>
-        <span className="default-profile btn-bgc flex-c lt-c">{getDefaultProfile(userData.username)}</span>
+        <span className="default-profile btn-bgc brad-2 flex-c lt-c">{getDefaultProfile(userData.username)}</span>
     </div>
 }
 

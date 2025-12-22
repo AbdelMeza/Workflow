@@ -1,0 +1,16 @@
+.key-performance-indicator{
+    flex: 1;
+    padding: var(--padding-lv1) var(--padding-lv1);
+}
+
+.key-performance-indicator .icon-container{
+    margin-bottom: var(--gap-lv2);
+}
+
+.key-performance-indicator .data-title-container{
+    margin-bottom: var(--gap-lv1);
+}
+
+.key-performance-indicator .icon-container svg{
+    width: 35px;
+}

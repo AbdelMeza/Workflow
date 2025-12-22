@@ -1,8 +1,9 @@
 :root {
   --light-background-lv1: #DEDCD8;
-  --light-background-lv2: #F5F3F2;
-  --light-background-lv2: #fafafa;
-  --main-color: #ff5741;
+  --light-background-lv2: #F0EEE8;
+  --light-background-lv3: #fafafa;
+  --main-color: 255, 87, 65;
+  --red-color: #ff3434;
   --main-text-color: #111;
   --light-text-color: #f9f9f9;
   --button-color: #1d2125;
@@ -10,7 +11,8 @@
 
   /*--- Font sizes ---*/
   --big-font-size: 1.1rem;
-  --medium-font-size: 0.6rem;
+  --medium-font-size: 0.8rem;
+  --normal-font-size: 0.6rem;
   --small-font-size: 0.5rem;
 
   /*--- Border ---*/
@@ -29,6 +31,11 @@
   --height-lv1: 40px;
   --height-lv2: 50px;
   --height-lv3: 80px;
+
+  /*--- Height ---*/
+  --gap-lv1: 0.5vw;
+  --gap-lv2: 1.5vw;
+  --gap-lv3: 3vw;
 
   /*--- Animations ---*/
   --animation-short-duration: 200ms;
@@ -61,7 +68,7 @@ body {
   overflow-x: hidden;
 }
 
-* {
+*:not(code) {
   margin: 0;
   padding: 0;
   outline: none;
@@ -94,6 +101,10 @@ html {
   background-color: var(--light-background-lv2);
 }
 
+.bgc-lv3 {
+  background-color: var(--light-background-lv3);
+}
+
 .btn-bgc {
   background-color: var(--button-color);
 }
@@ -116,6 +127,10 @@ html {
 
 .m-fs {
   font-size: var(--medium-font-size);
+}
+
+.n-fs {
+  font-size: var(--normal-font-size);
 }
 
 .s-fs {
@@ -234,15 +249,15 @@ html {
 }
 
 .gap-1 {
-  gap: 0.5vw;
+  gap: var(--gap-lv1);
 }
 
 .gap-2 {
-  gap: 1.5vw;
+  gap: var(--gap-lv2);
 }
 
 .gap-3 {
-  gap: 3vw;
+  gap: var(--gap-lv3);
 }
 
 

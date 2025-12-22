@@ -1,7 +1,8 @@
 .default-profile{
-    width: 35px;
+    width: var(--height-lv2);
     aspect-ratio: 1;
-    font-size: 0.3rem;
-    border-radius: 8px;
+    font-size: 0.4rem;
     text-transform: uppercase;
+    user-select: none;
+    cursor: pointer;
 }

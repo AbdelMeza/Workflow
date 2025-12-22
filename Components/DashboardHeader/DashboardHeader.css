@@ -1,0 +1,51 @@
+.dashboard-header{
+    width: 100%;
+    justify-content: space-between;
+}
+
+.search-bar-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 350px;
+    padding: 0 10px;
+}
+
+
+.search-bar-container .search-input{
+    background: none;
+    position: absolute;
+    width: 75%;
+    height: 100%;
+    padding-left: 35px;
+}
+
+.search-bar-container .indication{
+    position: absolute;
+    right: 15px;
+    display: flex;
+    gap: 3px;
+    font-size: 0.4rem;
+}
+
+.search-bar-container .indication .key{
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.notification-btn{
+    position: relative;
+    aspect-ratio: 1;
+    cursor: pointer;
+}
+
+.notification-btn .notifications-count{
+    position: absolute;
+    right: -5%;
+    top: -15%;
+    font-size: 0.3rem;
+    width: 20px;
+    aspect-ratio: 1;
+    background-color: var(--red-color);
+}
