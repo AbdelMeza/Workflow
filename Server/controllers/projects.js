@@ -8,9 +8,9 @@ import { projectsModel } from "../models/projectsModel.js"
  */
 export async function createProject(req, res) {
     try {
-        const { title, description, clientId } = req.body
-        const newProject = new projectsModel({ title, description, clientId })
-        await newProject.save()
+        const { title, description, freelancerId, clientId, budget } = req.body
+        const newProject = await projectsModel.create({ title, description, freelancerId, clientId, budget })
+
         res.status(201).json(newProject)
     } catch (error) {
         console.error(error)
@@ -27,7 +27,12 @@ export async function createProject(req, res) {
 
 export async function getProjects(req, res) {
     try {
-        const projects = await projectsModel.find().populate('clientId', 'name email')
+        const projects = await projectsModel
+            .find({ $or: [{ freelancerId: req.user.id }, { clientId: req.user.id }] })
+            .populate("clientId", "username email role clientProfile")
+            .populate("freelancerId", "username email role freelancerProfile")
+            .sort({ createdAt: -1 })
+
         res.status(200).json(projects)
     } catch (error) {
         console.error(error)
@@ -44,7 +49,22 @@ export async function getProjects(req, res) {
 export async function getProjectById(req, res) {
     try {
         const { id } = req.params
-        const project = await projectsModel.findById(id).populate('clientId', 'name email')
+        const project = await projectsModel
+            .findById(id)
+            .populate({
+                path: 'clientId',
+                populate: {
+                    path: 'userId',
+                    select: 'username email'
+                }
+            })
+            .populate({
+                path: 'freelancerId',
+                populate: {
+                    path: 'userId',
+                    select: 'username email'
+                }
+            })
         if (!project) {
             return res.status(404).json({ error: "Project not found" })
         }
@@ -65,7 +85,22 @@ export async function updateProject(req, res) {
     try {
         const { id } = req.params
         const updates = req.body
-        const updatedProject = await projectsModel.findByIdAndUpdate(id, updates, { new: true }).populate('clientId', 'name email')
+        const updatedProject = await projectsModel
+            .findByIdAndUpdate(id, updates, { new: true })
+            .populate({
+                path: 'clientId',
+                populate: {
+                    path: 'userId',
+                    select: 'username email'
+                }
+            })
+            .populate({
+                path: 'freelancerId',
+                populate: {
+                    path: 'userId',
+                    select: 'username email'
+                }
+            })
         if (!updatedProject) {
             return res.status(404).json({ error: "Project not found" })
         }

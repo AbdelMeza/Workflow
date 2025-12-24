@@ -35,7 +35,7 @@ export default function LoginPage() {
      */
     const handleSubmit = async () => {
         const values = {
-            identifier,
+            identifier: identifier.trim(),
             password,
         }
 

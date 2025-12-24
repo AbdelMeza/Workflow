@@ -1,3 +1,4 @@
+import projectsManagement from '../../Stores/projectsManagement'
 import './KeyPerfIndicator.css'
 
 /**
@@ -9,23 +10,24 @@ import './KeyPerfIndicator.css'
  */
 export default function KeyPerfIndicators() {
 
+    const { totalProjects, totalLateProjects, projects } = projectsManagement()
+
     /**
      * Static KPI data
      * In a real-world scenario, this data could be fetched from an API
      * and stored in state or provided via props.
      */
+
     const datas = [
         {
-            // Icon displayed at the top of the card
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                 </svg>
             ),
-            // KPI label
             dataTitle: "Upcoming deadlines",
-            // KPI value
-            data: 3
+            data: totalLateProjects,
+            alert: totalLateProjects > 0 ? true : false
         },
         {
             icon: (
@@ -34,7 +36,16 @@ export default function KeyPerfIndicators() {
                 </svg>
             ),
             dataTitle: "Total projects",
-            data: 5
+            data: totalProjects
+        },
+        {
+            icon: (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            ),
+            dataTitle: "Projects completed",
+            data: projects.filter(el => el.status === "completed").length
         },
         {
             icon: (
@@ -44,15 +55,6 @@ export default function KeyPerfIndicators() {
             ),
             dataTitle: "Tasks for the day",
             data: 2
-        },
-        {
-            icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-            ),
-            dataTitle: "Projects completed",
-            data: 1
         },
         {
             icon: (
@@ -68,23 +70,15 @@ export default function KeyPerfIndicators() {
     return (
         <>
             {datas.map((d, index) => (
-                <div
-                    key={index}
-                    className="key-performance-indicator bgc-lv3 brad-2 br flex flex-d-c"
-                >
-                    {/* Icon section */}
+                <div key={index} className={`key-performance-indicator ${d.alert && "alert"} bgc-lv3 brad-2 br flex flex-d-c`}>
                     {d.icon && (
                         <div className="icon-container">
                             <span className="icon">{d.icon}</span>
                         </div>
                     )}
-
-                    {/* KPI title */}
                     <div className="data-title-container st-c s-fs">
                         <span className="data-title">{d.dataTitle}</span>
                     </div>
-
-                    {/* KPI value */}
                     <div className="data-container mt-c m-fs">
                         <span className="data">{d.data}</span>
                     </div>

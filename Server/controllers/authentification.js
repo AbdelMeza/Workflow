@@ -1,6 +1,4 @@
-import { clientModel } from "../models/clientModel.js"
-import { freelancerModel } from "../models/freelancerModel.js"
-import { usersModel } from "../models/usersModel.js"
+import { userModel } from "../models/userModel.js"
 import { comparePasswords, hashPassword } from "../utils/hashPass.js"
 import { createToken } from "../utils/token.js"
 
@@ -8,17 +6,15 @@ import { createToken } from "../utils/token.js"
  * =========================
  * SIGNUP CONTROLLER
  * =========================
- * Handles user registration:
- * - Validates input fields
- * - Creates a base user
- * - Creates a role-specific profile (freelancer or client)
- * - Returns auth token
+ * - Creates a user
+ * - Assigns role
+ * - Initializes role profile
  */
 export async function signupUser(req, res) {
     try {
         const { username, email, password, role } = req.body
 
-        // 1. Validate required fields
+        // 1️⃣ Validation
         let errors = []
 
         if (!username) errors.push({ field: "username", errorMessage: "This field is required" })
@@ -26,23 +22,21 @@ export async function signupUser(req, res) {
         if (!password) errors.push({ field: "password", errorMessage: "This field is required" })
         if (!role) errors.push({ field: "role", errorMessage: "This field is required" })
 
-        if (errors.length) {
-            return res.status(400).json(errors)
-        }
+        if (errors.length) return res.status(400).json(errors)
 
-        // 2. Check if user already exists (username or email)
-        const userExists = await usersModel.findOne({
+        // 2️⃣ User exists ?
+        const userExists = await userModel.findOne({
             $or: [{ username }, { email }]
         })
 
         if (userExists) {
             return res.status(400).json({
-                field: "username",
+                field: "email",
                 errorMessage: "Account already exists"
             })
         }
 
-        // 3. Validate email format
+        // 3️⃣ Email format
         if (!validateEmail(email)) {
             return res.status(400).json({
                 field: "email",
@@ -50,7 +44,7 @@ export async function signupUser(req, res) {
             })
         }
 
-        // 4. Validate password strength
+        // 4️⃣ Password strength
         const isPasswordValid = checkPasswordStrength(password)
         if (!isPasswordValid.valid) {
             return res.status(400).json({
@@ -59,41 +53,29 @@ export async function signupUser(req, res) {
             })
         }
 
-        // 5. Hash password before saving
+        // 5️⃣ Hash password
         const hashedPass = await hashPassword(password)
 
-        // 6. Create base user (authentication entity)
-        const user = await usersModel.create({
+        // 6️⃣ Create user with embedded profile
+        const user = await userModel.create({
             username,
             email,
             password: hashedPass,
-            role
+            role,
+            freelancerProfile: role === "freelancer" ? {} : undefined,
+            clientProfile: role === "client" ? {} : undefined
         })
 
-        // 7. Create role-specific profile
-        if (role === "freelancer") {
-            await freelancerModel.create({
-                userId: user._id
-            })
-        }
-
-        if (role === "client") {
-            await clientModel.create({
-                userId: user._id
-            })
-        }
-
-        // 8. Generate authentication token
+        // 7️⃣ Token
         const token = createToken({
             id: user._id,
             role: user.role
         })
 
-        // 9. Remove password before sending response
+        // 8️⃣ Response
         const userResponse = user.toObject()
         delete userResponse.password
 
-        // 10. Send response
         res.status(201).json({
             user: userResponse,
             token
@@ -102,11 +84,11 @@ export async function signupUser(req, res) {
     } catch (error) {
         console.error(error)
         res.status(500).json({
-            field: "all",
-            errorMessage: "Internal server error"
+            error: "Internal server error"
         })
     }
 }
+
 
 
 /**
@@ -133,7 +115,7 @@ export async function loginUser(req, res) {
         }
 
         // 2. Find user by username or email
-        let user = await usersModel
+        let user = await userModel
             .findOne({
                 $or: [{ username: identifier }, { email: identifier }]
             })

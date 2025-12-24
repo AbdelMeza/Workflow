@@ -3,6 +3,14 @@
     padding: var(--padding-lv1) var(--padding-lv1);
 }
 
+.key-performance-indicator.alert{
+    border-color: rgb(var(--main-color));
+}
+
+.key-performance-indicator.alert svg{
+    stroke: rgb(var(--main-color));
+}
+
 .key-performance-indicator .icon-container{
     margin-bottom: var(--gap-lv2);
 }

@@ -3,6 +3,7 @@ import TextSlider from '../../Components/TextSlider/TextSlider'
 import Button from '../../Components/Button/Button'
 import authentificationManagement from '../../Stores/Authentification'
 import UserProfile from '../../utils/UserProfile/UserProfile'
+import { useEffect } from 'react'
 
 /**
  * HomePage
@@ -14,6 +15,16 @@ import UserProfile from '../../utils/UserProfile/UserProfile'
  * - Dashboard preview
  */
 export default function HomePage() {
+    const { getUserData } = authentificationManagement()
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            await getUserData()
+        }
+
+        fetchUserData()
+    }, [])
+
     return (
         <div className="home-page bgc-lv1">
             <NavBar />
@@ -32,7 +43,7 @@ export default function HomePage() {
  * - If not logged in → show Login / Get Started buttons
  */
 function NavBar() {
-    const { userData, logout } = authentificationManagement()
+    const { userData } = authentificationManagement()
 
     return (
         <div className="navigation-bar flex">

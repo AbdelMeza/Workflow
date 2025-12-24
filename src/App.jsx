@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
-import { VerifyAuth } from "../RoutesProtection/VerifyAuth"
 import Lenis from "lenis"
+import { RequireAuth } from "../RoutesProtection/requireAuth"
 
 const SignupPage = lazy(() => import("../Pages/SignupPage/SignupPage"))
 const LoginPage = lazy(() => import("../Pages/LoginPage/LoginPage"))
@@ -19,8 +19,6 @@ function App() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
     })
 
-    const cards = document.querySelectorAll(".service-container")
-
     const raf = (time) => {
       lenis.raf(time)
 
@@ -37,8 +35,8 @@ function App() {
   return <Routes>
     <Route path="/signup" element={<SignupPage />}></Route>
     <Route path="/login" element={<LoginPage />}></Route>
-    <Route path="/" element={<VerifyAuth><HomePage /></VerifyAuth>}></Route>
-    <Route path="/dashboard" element={<VerifyAuth><Dashboard /></VerifyAuth>} >
+    <Route path="/" element={<HomePage />}></Route>
+    <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
       <Route path="" element={
         <Suspense fallback={<div>Loading..</div>} >
           <Overview />

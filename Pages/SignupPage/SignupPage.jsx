@@ -41,7 +41,7 @@ export default function SignupPage() {
      */
     const handleSubmit = async () => {
         const values = {
-            username,
+            username: username.trim(),
             email,
             password,
             role: role.toLowerCase(),

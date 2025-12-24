@@ -1,6 +1,5 @@
-import { usersModel } from "../models/usersModel.js"
-import { freelancerModel } from "../models/freelancerModel.js"
-import { clientModel } from "../models/clientModel.js"
+import { userModel } from "../models/userModel.js"
+import { projectsModel } from "../models/projectsModel.js"
 import { readToken } from "../utils/token.js"
 
 export async function getUserData(req, res) {
@@ -13,17 +12,19 @@ export async function getUserData(req, res) {
             })
         }
 
-        // 1. Read the token
+        // 1️⃣ Decode token
         const decoded = readToken(token)
 
-        if (!decoded || !decoded.id) {
+        if (!decoded?.id) {
             return res.status(401).json({
                 error: "Invalid or expired token"
             })
         }
 
-        // 2. Find the user (AUTH)
-        const user = await usersModel.findById(decoded.id).select("username email role")
+        // 2️⃣ Get user
+        const user = await userModel
+            .findById(decoded.id)
+            .select("username email role")
 
         if (!user) {
             return res.status(401).json({
@@ -31,20 +32,27 @@ export async function getUserData(req, res) {
             })
         }
 
-        // 3. Change the profile depending on the role
-        let profile = null
+        // 3️⃣ Get projects depending on role
+        let projects = []
 
         if (user.role === "freelancer") {
-            profile = await freelancerModel.findOne({ userId: user._id }).populate("projects clients tasks")
+            projects = await projectsModel
+                .find({ freelancerId: user._id })
+                .populate("clientId", "username email")
+                .sort({ createdAt: -1 })
         }
 
         if (user.role === "client") {
-            profile = await clientModel.findOne({ userId: user._id }).populate("projects freelancer")
+            projects = await projectsModel
+                .find({ clientId: user._id })
+                .populate("freelancerId", "username email")
+                .sort({ createdAt: -1 })
         }
 
-        // 4. Response
+        // 4️⃣ Response
         res.status(200).json({
-            user
+            user,
+            projects
         })
 
     } catch (error) {
@@ -54,3 +62,4 @@ export async function getUserData(req, res) {
         })
     }
 }
+
