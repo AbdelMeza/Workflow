@@ -1,15 +1,14 @@
-import { create } from "zustand"
+import { create } from "zustand";
 
-const projectsManagement = create((set, get) => ({
-    projects: [],
-    lateProjects: [],
-    totalProjects: 0,
-    totalLateProjects: 0,
+const tasksManagement = create((set) => ({
+    tasks: [],
+    lateTasks: [],
+    totalTasks: 0,
 
-    getProjects: async () => {
+    getTasks: async () => {
         const userToken = localStorage.getItem("userToken")
 
-        const res = await fetch("http://127.0.0.1:2005/project/all", {
+        const res = await fetch("http://127.0.0.1:2005/task/all", {
             headers: {
                 token: userToken,
                 "Content-Type": "application/json",
@@ -18,10 +17,11 @@ const projectsManagement = create((set, get) => ({
 
         const data = await res.json()
 
-        if (!data) return
-        set({ projects: data })
-        set({ totalProjects: data.length })
+        console.log(data)
 
+        if (!data) return
+
+        set({ tasks: data })
         const upcoming = data.filter((project) => {
             if (!project.deadline || project.status === "completed") return false
             const deadline = new Date(project.deadline)
@@ -29,10 +29,7 @@ const projectsManagement = create((set, get) => ({
             const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24))
             return diffDays <= 7 && diffDays > 0
         })
-
-        set({ lateProjects: upcoming })
-        set({ totalLateProjects: get().lateProjects.length })
-    },
+    }
 }))
 
-export default projectsManagement
+export default tasksManagement

@@ -4,16 +4,19 @@ import DashboardSidebar from "../../Components/DashboardSidebar/DashboardSidebar
 import './Dashboard.css'
 import { useEffect } from "react"
 import projectsManagement from "../../Stores/projectsManagement"
+import tasksManagement from "../../Stores/tasksManagement"
 
 export default function Dashboard() {
-    const { getProjects, projects } = projectsManagement()
+    const { getProjects } = projectsManagement()
+    const { getTasks } = tasksManagement()
 
     useEffect(() => {
-        const fetchProjects = async () =>{
+        const fetchData = async () => {
             await getProjects()
+            await getTasks()
         }
 
-        fetchProjects()
+        fetchData()
     }, [])
 
     return <div className="dashboard-page bgc-lv2">

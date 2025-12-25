@@ -1,5 +1,5 @@
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
-import UpcomingDeadlines from "../../../utils/UpcomingDeadlies/UpcomingDeadlines"
+import UpcomingProjectsDeadlines from "../../../Components/UpcomingProjectsDeadlies/UpcomingProjectsDeadlines"
 
 export default function Overview() {
 
@@ -7,6 +7,9 @@ export default function Overview() {
         <div className="key-performance-indicators-container flex gap-1">
             <KeyPerfIndicators />
         </div>
-        <UpcomingDeadlines/>
+        <div className="late-work-container flex gap-1">
+            <UpcomingProjectsDeadlines />
+            <UpcomingProjectsDeadlines />
+        </div>
     </div>
 }

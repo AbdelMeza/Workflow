@@ -26,7 +26,7 @@ export default function KeyPerfIndicators() {
                 </svg>
             ),
             dataTitle: "Upcoming deadlines",
-            data: totalLateProjects,
+            data: totalLateProjects < 10 ? "0" + totalLateProjects : totalLateProjects,
             alert: totalLateProjects > 0 ? true : false
         },
         {
@@ -36,7 +36,7 @@ export default function KeyPerfIndicators() {
                 </svg>
             ),
             dataTitle: "Total projects",
-            data: totalProjects
+            data: totalProjects < 10 ? "0" + totalProjects : totalProjects,
         },
         {
             icon: (
@@ -45,7 +45,9 @@ export default function KeyPerfIndicators() {
                 </svg>
             ),
             dataTitle: "Projects completed",
-            data: projects.filter(el => el.status === "completed").length
+            data: projects.filter(el => el.status === "completed").length < 10 ?
+                "0" + projects.filter(el => el.status === "completed").length :
+                projects.filter(el => el.status === "completed").length,
         },
         {
             icon: (
@@ -54,7 +56,7 @@ export default function KeyPerfIndicators() {
                 </svg>
             ),
             dataTitle: "Tasks for the day",
-            data: 2
+            data: 0
         },
         {
             icon: (
@@ -63,7 +65,7 @@ export default function KeyPerfIndicators() {
                 </svg>
             ),
             dataTitle: "Estimated revenue",
-            data: "23 350$"
+            data: "0"
         }
     ]
 

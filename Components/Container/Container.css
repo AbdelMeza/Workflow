@@ -1,3 +1,7 @@
 .container .content{
     overflow: hidden;
 }
+
+#late-projects:nth-child(1){
+    flex: 1;
+}

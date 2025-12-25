@@ -47,7 +47,6 @@ function NavBar() {
 
     return (
         <div className="navigation-bar flex">
-            {/* Brand / Logo */}
             <div className="navigation-bar-content main-link-container flex">
                 <div className="main-link flex gap-1 flex-c">
                     <img
@@ -64,7 +63,6 @@ function NavBar() {
                 </div>
             </div>
 
-            {/* Navigation links */}
             <div className="navigation-bar-content navigation-links-container flex-c gap-3">
                 <TextSlider type="navigate" redirectTo="/" classGiven="mt-c" content="Features" />
                 <TextSlider type="navigate" redirectTo="/" classGiven="mt-c" content="Pricing" />
@@ -73,17 +71,14 @@ function NavBar() {
                 <TextSlider type="navigate" redirectTo="/" classGiven="mt-c" content="FAQ" />
             </div>
 
-            {/* Authentication actions */}
             <div className="navigation-bar-content authentification-buttons flex jc-r">
                 {userData ? (
                     <>
-                        {/* Redirect logged users to dashboard */}
                         <Button content="Dashboard" size="small" path="/dashboard" />
                         <UserProfile />
                     </>
                 ) : (
                     <>
-                        {/* Public actions */}
                         <Button content="Login" size="small" path="/login" />
                         <Button
                             content="Get started"
@@ -116,29 +111,32 @@ function HeroSection() {
             }}
         >
             <div className="hero-section-content flex-c flex-d-c gap-3">
-                {/* Main headline */}
                 <div className="upper-content">
                     <h1 className="main-headline mff-b mt-c">
                         Manage Your Clients and <br /> Projects Effortlessly
                     </h1>
                 </div>
 
-                {/* Subtitle & CTA */}
                 <div className="lower-content flex-c flex-d-c gap-2">
                     <span className="sub-headline n-fs st-c">
                         Track clients, organize projects, and collaborate <br />
                         effortlessly—all in one place.
                     </span>
 
-                    {/* Call to action only for unauthenticated users */}
-                    {!userData && (
+                    {userData ? (
                         <Button
-                            content="Get started"
+                            content="Dashboard"
                             size="small"
                             classGiven="btn-bgc brad-1"
-                            path="/signup"
+                            path="/dashboard"
                         />
-                    )}
+
+                    ) : <Button
+                        content="Get started"
+                        size="small"
+                        classGiven="btn-bgc brad-1"
+                        path="/signup"
+                    />}
                 </div>
             </div>
         </section>
