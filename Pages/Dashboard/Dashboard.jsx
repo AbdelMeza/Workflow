@@ -1,10 +1,10 @@
-import { Outlet } from "react-router-dom"
-import DashboardHeader from "../../Components/DashboardHeader/DashboardHeader"
-import DashboardSidebar from "../../Components/DashboardSidebar/DashboardSidebar"
 import './Dashboard.css'
 import { useEffect } from "react"
-import projectsManagement from "../../Stores/projectsManagement"
+import { Outlet } from "react-router-dom"
 import tasksManagement from "../../Stores/tasksManagement"
+import projectsManagement from "../../Stores/projectsManagement"
+import DashboardHeader from "../../Components/DashboardHeader/DashboardHeader"
+import DashboardSidebar from "../../Components/DashboardSidebar/DashboardSidebar"
 
 export default function Dashboard() {
     const { getProjects } = projectsManagement()

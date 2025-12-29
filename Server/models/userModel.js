@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
   clientProfile: {
     companyName: String,
     companyWebsite: String,
-  }
+  },
+  activity: [{ type: mongoose.Schema.Types.ObjectId, ref: 'activity' }]
 
 }, { timestamps: true })
 

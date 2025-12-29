@@ -1,9 +1,7 @@
 .dashboard-page{
     display: flex;
-    height: 100vh;
-    max-height: 100vh;
 }
 
 .dashboard-page > .content{
-    width: 100%;
+    flex: 1;
 }

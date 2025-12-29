@@ -1,0 +1,10 @@
+.overview {
+    width: 100%;
+}
+
+@media screen and (max-width: 1080px) {
+    .late-work-container {
+        display: flex;
+        flex-direction: column;
+    }
+}

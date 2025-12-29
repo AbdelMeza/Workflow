@@ -2,13 +2,8 @@ import Container from "../Container/Container"
 import tasksManagement from "../../Stores/tasksManagement"
 
 export default function TasksDueDate() {
-    const { tasks } = tasksManagement()
-    const today = new Date()
-    const tasksForToday = tasks.filter((task) => {
-        if (!task.dueDate || task.status === "completed") return false
-        const deadline = new Date(task.dueDate)
-        return deadline.toDateString() === today.toDateString()
-    }).slice(0, 3)
+    const { tasks, totalTasks } = tasksManagement()
+    const tasksForToday = tasks.slice(0, 3)
 
     console.log(tasks)
     return <>
