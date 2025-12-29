@@ -2,6 +2,10 @@
     overflow: hidden;
 }
 
-#late-projects:nth-child(1){
+#late-projects{
     flex: 1;
+}
+
+#late-tasks{
+    min-width: 400px;
 }

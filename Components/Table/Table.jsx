@@ -1,22 +1,23 @@
 import './Table.css'
 
-export default function Table({ title, header, data }) {
-    return <table className="data-table s-fs" id={title}>
-        <thead className="table-header bgc-lv3">
-            <tr className="flex-c h-1">
-                {header.map((headItem, index) => (
-                    <th key={index} className="table-cell header-item st-c">{headItem}</th>
-                ))}
-            </tr>
-        </thead>
-        <tbody className="table-body">
-            {data.map((dataRow, index) => (
-                <tr key={index} className="table-row h-2 flex-c">
-                    {dataRow.map((dataItem, index) => (
-                        <td key={index} className="table-cell row-item">{dataItem}</td>
-                    ))}
-                </tr>
-            ))}
-        </tbody>
-    </table>
+export default function Table({ tableData, title }) {
+    return <div className="data-table flex s-fs" id={title}>
+        {tableData && tableData.length > 0 ?
+            Object.keys(tableData[0]).map((items, index) => (
+                <div className="table-column flex flex-d-c s-fs" key={index}>
+                    <div className="column-header bgc-lv3 h-1">
+                        <span className="header-item s-fs st-c">
+                            {items}
+                        </span>
+                    </div>
+                    <div className="column-data flex flex-d-c">
+                        {tableData.map((dataItem, index) => (
+                            <span className="data-item mt-c s-fs h-2" key={index}>
+                                {dataItem[items]}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )) : <code className="empty-data s-fs st-c pad-3">No deadline, you're free</code>}
+    </div>
 }

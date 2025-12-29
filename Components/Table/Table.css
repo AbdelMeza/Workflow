@@ -1,23 +1,54 @@
-.data-table{
+.data-table {
     width: 100%;
     border-collapse: collapse;
+    display: flex;
+    justify-content: center;
 }
 
-.data-table .table-header{
+.data-table .column-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     padding: 0 var(--padding-lv1);
     border-bottom: var(--border);
     font-size: calc((var(--small-font-size)) * 0.8);
 }
 
-.data-table .table-row:not(:last-child){
-    border-bottom: var(--border);
-}
-
-.data-table .table-cell{
+.data-table .data-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     padding: 0 var(--padding-lv1);
 }
 
-#upcoming-deadlines .table-cell{
+.data-table .data-item:not(:last-child) {
+    border-bottom: var(--border);
+}
+
+.data-table .table-cell {
+    padding: 0 var(--padding-lv1);
+}
+
+#upcoming-deadlines .table-column:nth-child(1) {
     display: flex;
-    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:clip;
+    width: 150px;
+    width: 40%;
+}
+
+#upcoming-deadlines .table-column:nth-child(2) {
+    display: flex;
+    width: 20%;
+}
+
+#upcoming-deadlines .table-column:nth-child(3) {
+    display: flex;
+    width: 20%;
+}
+
+#upcoming-deadlines .table-column:last-child {
+    display: flex;
+    width: 20%;
 }

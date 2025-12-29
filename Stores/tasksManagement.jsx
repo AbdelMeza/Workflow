@@ -4,6 +4,7 @@ const tasksManagement = create((set) => ({
     tasks: [],
     lateTasks: [],
     totalTasks: 0,
+    totalLateTasks: 0,
 
     getTasks: async () => {
         const userToken = localStorage.getItem("userToken")
@@ -17,11 +18,11 @@ const tasksManagement = create((set) => ({
 
         const data = await res.json()
 
-        console.log(data)
-
         if (!data) return
 
         set({ tasks: data })
+        set({ totalTasks: data.length })
+        
         const upcoming = data.filter((project) => {
             if (!project.deadline || project.status === "completed") return false
             const deadline = new Date(project.deadline)
@@ -29,6 +30,9 @@ const tasksManagement = create((set) => ({
             const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24))
             return diffDays <= 7 && diffDays > 0
         })
+
+        set({ lateTasks: upcoming })
+        set({ totalLateTasks: upcoming.lenght })
     }
 }))
 

@@ -5,26 +5,24 @@ import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
 
 export default function UpcomingProjectsDeadlines() {
     const { projects } = projectsManagement()
-    const tableHeader = ["Title", "Creator", "Time remaining", "Status"]
-    const tableData = projects
+    const tableData = []
+    projects
         .filter((project) => !project.deadline ||
             project.status === "completed" ||
             !getTimeRemaining(project.deadline) ? false : true)
         .slice(0, 3)
-        .map((project) => ([
-            project.title,
-            project.freelancerId.username,
-            getTimeRemaining(project.deadline),
-            project.status,
-        ]))
+        .map(project => tableData.push({
+            "Title": project.title,
+            "Creator": project.freelancerId.username,
+            "Time left": getTimeRemaining(project.deadline),
+            "Status": project.status,
+        })
+        )
 
     return <>
-        {projects && projects.length > 0 ?
+        {projects && projects.length > 0 &&
             <Container headerTitle={"Upcoming deadlines"} title="late-projects">
-                <Table title={"upcoming-deadlines"} header={tableHeader} data={tableData} />
-            </Container>
-            : <Container headerTitle={"Upcoming deadlines"}>
-                <code className="empty-data s-fs st-c pad-3" style={{ display: "block", textAlign: "center" }}>No deadline, you're free!</code>
+                <Table title={"upcoming-deadlines"} tableData={tableData} />
             </Container>
         }
     </>

@@ -5,7 +5,7 @@ import { createTask, getTasks } from "../controllers/tasks.js"
 
 const tasksRouter = Router()
 
-tasksRouter.get('/all', requireAuth, requireRole(["freelancer"]), getTasks)
 tasksRouter.post('/create', requireAuth, requireRole(["freelancer"]), createTask)
+tasksRouter.get('/all', requireAuth, requireRole(["freelancer"]), getTasks)
 
 export default tasksRouter

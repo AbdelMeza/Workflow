@@ -16,10 +16,8 @@ export async function getTasks(req, res) {
     try {
         const tasks = await tasksModel
             .find({ freelancerId: req.user.id })
-            .populate("freelancerId", "username")
+            .populate("projectId", "title")
             .sort({ createdAt: -1 })
-
-        console.log(req.user)
 
         res.status(200).json(tasks)
     } catch (error) {

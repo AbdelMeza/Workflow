@@ -8,8 +8,8 @@ import { projectsModel } from "../models/projectsModel.js"
  */
 export async function createProject(req, res) {
     try {
-        const { title, description, freelancerId, clientId, budget } = req.body
-        const newProject = await projectsModel.create({ title, description, freelancerId, clientId, budget })
+        const { title, description, clientId, budget } = req.body
+        const newProject = await projectsModel.create({ title, description, freelancerId: req.user.id, clientId, budget })
 
         res.status(201).json(newProject)
     } catch (error) {
