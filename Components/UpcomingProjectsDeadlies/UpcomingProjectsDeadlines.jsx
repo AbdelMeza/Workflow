@@ -6,10 +6,9 @@ import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
 export default function UpcomingProjectsDeadlines() {
     const { projects } = projectsManagement()
     const tableData = []
-    projects
-        .filter((project) => !project.deadline ||
-            project.status === "completed" ||
-            !getTimeRemaining(project.deadline) ? false : true)
+    projects.filter((project) => !project.deadline ||
+        project.status === "completed" ||
+        !getTimeRemaining(project.deadline) ? false : true)
         .slice(0, 3)
         .map(project => tableData.push({
             "Title": project.title,

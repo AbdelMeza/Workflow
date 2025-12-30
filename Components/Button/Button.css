@@ -1,4 +1,5 @@
 .button-element{
+    width: max-content;
     overflow: hidden;
 }
 

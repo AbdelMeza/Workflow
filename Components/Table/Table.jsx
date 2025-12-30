@@ -5,7 +5,7 @@ export default function Table({ tableData, title }) {
         {tableData && tableData.length > 0 ?
             Object.keys(tableData[0]).map((items, index) => (
                 <div className="table-column flex flex-d-c s-fs" key={index}>
-                    <div className="column-header bgc-lv3 h-1">
+                    <div className="column-header bgc-lv3 h-2">
                         <span className="header-item s-fs st-c">
                             {items}
                         </span>

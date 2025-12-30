@@ -8,6 +8,7 @@ const LoginPage = lazy(() => import("../Pages/LoginPage/LoginPage"))
 const HomePage = lazy(() => import("../Pages/HomePage/HomePage"))
 const Dashboard = lazy(() => import("../Pages/Dashboard/Dashboard"))
 const Overview = lazy(() => import("../Pages/Dashboard/Overview/Overview"))
+const Projects = lazy(() => import("../Pages/Dashboard/Projects/Projects"))
 
 function App() {
   useEffect(() => {
@@ -44,6 +45,7 @@ function App() {
       }></Route>
       <Route path="projects" element={
         <Suspense fallback={<div>Loading..</div>} >
+          <Projects/>
         </Suspense>
       }></Route>
     </Route>

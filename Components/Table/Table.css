@@ -2,7 +2,10 @@
     width: 100%;
     border-collapse: collapse;
     display: flex;
-    justify-content: center;
+}
+
+.data-table .table-column {
+    flex: 1;
 }
 
 .data-table .column-header {
@@ -11,7 +14,10 @@
     justify-content: flex-start;
     padding: 0 var(--padding-lv1);
     border-bottom: var(--border);
-    font-size: calc((var(--small-font-size)) * 0.8);
+}
+
+.data-table .column-header .header-item {
+    font-size: calc((var(--small-font-size)) * 0.9);
 }
 
 .data-table .data-item {
@@ -33,7 +39,7 @@
     display: flex;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow:clip;
+    text-overflow: clip;
     width: 150px;
     width: 40%;
 }

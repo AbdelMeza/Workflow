@@ -1,15 +1,13 @@
+import Button from "../../../Components/Button/Button"
+import Container from "../../../Components/Container/Container"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
-import RecentActivity from "../../../Components/RecentActivity/RecentActivity"
-import TasksDueDate from "../../../Components/TasksDuDate/TasksDueDate"
-import UpcomingProjectsDeadlines from "../../../Components/UpcomingProjectsDeadlies/UpcomingProjectsDeadlines"
+import Table from "../../../Components/Table/Table"
 import projectsManagement from "../../../Stores/projectsManagement"
-import tasksManagement from "../../../Stores/tasksManagement"
-import './Overview.css'
+import { getTimeRemaining } from "../../../utils/TimeRemaining/getTimeRemaining"
+import './Projects.css'
 
-export default function Overview() {
-
+export default function Projects() {
     const { totalProjects, totalLateProjects, projects } = projectsManagement()
-    const { totalTasks } = tasksManagement()
 
     const data = [
         {
@@ -41,28 +39,45 @@ export default function Overview() {
             data: projects.filter(el => el.status === "completed").length < 10 ?
                 "0" + projects.filter(el => el.status === "completed").length :
                 projects.filter(el => el.status === "completed").length,
-        },
-        {
-            icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122" />
-                </svg>
-            ),
-            dataTitle: "Total tasks",
-            data: totalTasks
         }
     ]
 
-    return <div className="overview flex flex-d-c gap-2">
+    const tableData = []
+    projects.map(project => tableData.push({
+        "Title": project.title,
+        "Creator": project.freelancerId.username,
+        "Deadline": new Date(project.deadline).toLocaleDateString(),
+        "Status": project.status,
+    })
+    )
+
+    return <div className="projects flex flex-d-c gap-2">
+        <div className="header-container">
+            <div className="side-content">
+                <span className="page-title s-fs mt-c">Projects</span>
+            </div>
+            <div className="side-content">
+                <Button
+                    content={
+                        <>
+                            <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            Add project
+                        </>
+                    }
+                    size="medium"
+                    classGiven="bgc-lv3 br brad-1"
+                />
+            </div>
+        </div>
         <div className="key-performance-indicators-container flex gap-1">
             <KeyPerfIndicators data={data} />
         </div>
-        <div className="late-work-container flex gap-1">
-            <UpcomingProjectsDeadlines />
-            <TasksDueDate />
-        </div>
-        <div className="activity-container">
-            <RecentActivity />
+        <div className="projects-container">
+            <Container headerTitle={"All projects"}>
+                <Table tableData={tableData}/>
+            </Container>
         </div>
     </div>
 }
