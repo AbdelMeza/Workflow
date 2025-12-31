@@ -27,18 +27,46 @@ export async function createProject(req, res) {
 
 export async function getProjects(req, res) {
     try {
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+
+        const skip = (page - 1) * limit
+
+        const filter = {
+            $or: [
+                { freelancerId: req.user.id },
+                { clientId: req.user.id }
+            ]
+        }
+
+        const total = await projectsModel.countDocuments(filter)
+        const totalPages = Math.ceil(total / limit)
+
         const projects = await projectsModel
-            .find({ $or: [{ freelancerId: req.user.id }, { clientId: req.user.id }] })
+            .find(filter)
+            .skip(skip)
+            .limit(limit)
             .populate("clientId", "username email role clientProfile")
             .populate("freelancerId", "username email role freelancerProfile")
             .sort({ createdAt: -1 })
 
-        res.status(200).json(projects)
+        res.status(200).json({
+            projects,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            }
+        })
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Internal server error" })
     }
 }
+
 
 /**
  * =========================

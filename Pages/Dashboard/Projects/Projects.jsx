@@ -1,13 +1,19 @@
+import { useEffect } from "react"
 import Button from "../../../Components/Button/Button"
 import Container from "../../../Components/Container/Container"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
 import Table from "../../../Components/Table/Table"
 import projectsManagement from "../../../Stores/projectsManagement"
-import { getTimeRemaining } from "../../../utils/TimeRemaining/getTimeRemaining"
+import { useSearchParams } from "react-router-dom"
 import './Projects.css'
 
 export default function Projects() {
-    const { totalProjects, totalLateProjects, projects } = projectsManagement()
+    const { pageData } = projectsManagement()
+    const projects = pageData.projectsData.projectsList.projects
+    const totalProjects = pageData.projectsData.totalProjects
+    const totalLateProjects = pageData.projectsData.totalLateProjects
+
+    const [queryParams, setQueryParams] = useSearchParams()
 
     const data = [
         {
@@ -42,10 +48,20 @@ export default function Projects() {
         }
     ]
 
+    const page = parseInt(queryParams.get("page")) || 1
+    const limit = parseInt(queryParams.get("limit")) || 5
+
     const tableData = []
     projects.map(project => tableData.push({
         "Title": project.title,
         "Creator": project.freelancerId.username,
+        "Client": project.clientId ? project.clientId.username :
+            <> <Button
+                content={"Add"}
+                size="small"
+                classGiven="bgc-lv3 br brad-1"
+            />
+            </>,
         "Deadline": new Date(project.deadline).toLocaleDateString(),
         "Status": project.status,
     })
@@ -60,7 +76,7 @@ export default function Projects() {
                 <Button
                     content={
                         <>
-                            <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
                             Add project
@@ -76,7 +92,7 @@ export default function Projects() {
         </div>
         <div className="projects-container">
             <Container headerTitle={"All projects"}>
-                <Table tableData={tableData}/>
+                <Table tableData={tableData} title={"projects"} />
             </Container>
         </div>
     </div>

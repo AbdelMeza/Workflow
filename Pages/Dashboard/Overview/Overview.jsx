@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
 import RecentActivity from "../../../Components/RecentActivity/RecentActivity"
 import TasksDueDate from "../../../Components/TasksDuDate/TasksDueDate"
@@ -8,8 +9,11 @@ import './Overview.css'
 
 export default function Overview() {
 
-    const { totalProjects, totalLateProjects, projects } = projectsManagement()
+    const { pageData } = projectsManagement()
     const { totalTasks } = tasksManagement()
+    const projects = pageData.projectsData.projectsList.projects
+    const totalProjects = pageData.projectsData.totalProjects
+    const totalLateProjects = pageData.projectsData.totalLateProjects
 
     const data = [
         {

@@ -26,6 +26,7 @@ export default function LoginPage() {
      */
     useEffect(() => {
         clearErrorsLog()
+        document.title = "Workflow — Login"
     }, [])
 
     /**
@@ -155,7 +156,7 @@ export default function LoginPage() {
                                 <Button
                                     content="Login"
                                     size="medium"
-                                    classGiven="btn-bgc brad-1"
+                                    classGiven="submit-btn btn-bgc brad-1"
                                 />
                             </div>
                         </div>

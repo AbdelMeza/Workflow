@@ -23,6 +23,7 @@ export default function HomePage() {
         }
 
         fetchUserData()
+        document.title = "Workflow — Home"
     }, [])
 
     return (

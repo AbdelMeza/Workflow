@@ -32,6 +32,7 @@ export default function SignupPage() {
      */
     useEffect(() => {
         clearErrorsLog()
+        document.title = "Workflow — Signup"
     }, [])
 
     /**
@@ -232,7 +233,7 @@ export default function SignupPage() {
                                 <Button
                                     content="Create account"
                                     size="medium"
-                                    classGiven="btn-bgc brad-1"
+                                    classGiven="submit-btn btn-bgc brad-1"
                                 />
                             </div>
                         </div>

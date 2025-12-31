@@ -395,9 +395,9 @@ html {
   margin-left: 10px;
 }
 
-.signup-page .submit-button,
-.login-page .submit-button {
-  width: 100%;
+.signup-page .submit-btn,
+.login-page .submit-btn {
+  width: 100% !important;
 }
 
 @media screen and (max-width: 1000px) {

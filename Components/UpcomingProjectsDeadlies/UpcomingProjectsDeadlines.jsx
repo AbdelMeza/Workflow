@@ -4,7 +4,8 @@ import projectsManagement from "../../Stores/projectsManagement"
 import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
 
 export default function UpcomingProjectsDeadlines() {
-    const { projects } = projectsManagement()
+    const { pageData } = projectsManagement()
+    const projects = pageData.projectsData.projectsList.lateProjects
     const tableData = []
     projects.filter((project) => !project.deadline ||
         project.status === "completed" ||

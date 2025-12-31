@@ -6,6 +6,6 @@ import { requireRole } from "../middlewares/roleVerification.js"
 const projectsRouter = Router()
 
 projectsRouter.post('/create', requireAuth, requireRole("freelancer"), createProject)
-projectsRouter.get('/all', requireAuth, requireRole(["freelancer", "client"]), getProjects)
+projectsRouter.get('/get', requireAuth, requireRole(["freelancer", "client"]), getProjects)
 
 export default projectsRouter
