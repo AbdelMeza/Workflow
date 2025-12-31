@@ -1,7 +1,7 @@
 import './Table.css'
 
 export default function Table({ tableData, title }) {
-    return <div className="data-table flex s-fs" id={title}>
+    return <div className="data-table flex s-fs br brad-2" id={title}>
         {tableData && tableData.length > 0 ?
             Object.keys(tableData[0]).map((items, index) => (
                 <div className="table-column flex flex-d-c s-fs" key={index}>
@@ -18,6 +18,6 @@ export default function Table({ tableData, title }) {
                         ))}
                     </div>
                 </div>
-            )) : <code className="empty-data s-fs st-c pad-3">No deadline, you're free</code>}
+            )) : <code className="empty-data s-fs st-c pad-3">No project found</code>}
     </div>
 }

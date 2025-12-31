@@ -2,6 +2,7 @@
     width: 100%;
     border-collapse: collapse;
     display: flex;
+    overflow: hidden;
 }
 
 .data-table .table-column {
@@ -25,6 +26,12 @@
     align-items: center;
     justify-content: flex-start;
     padding: 0 var(--padding-lv1);
+}
+
+.data-table .empty-data{
+    font-size: calc((var(--small-font-size)) * 0.7);
+    text-align: center;
+    width: 100%;
 }
 
 .data-table .data-item:not(:last-child) {

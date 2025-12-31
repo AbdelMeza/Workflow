@@ -20,41 +20,40 @@ const projectsManagement = create((set) => ({
         const userToken = localStorage.getItem("userToken")
         const { page, limit } = queries
 
-        const res = await fetch(`http://127.0.0.1:2005/project/get?page=${page}&limit=${limit}`, {
-            headers: {
-                "Content-Type": "application/json",
-                token: userToken,
-            },
-        })
+        try {
+            const res = await fetch(`http://127.0.0.1:2005/project/get?page=${page}&limit=${limit}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    token: userToken,
+                },
+            })
 
-        const data = await res.json()
+            const data = await res.json()
+            if (!data) return
 
-        if (!data) return
+            console.log(data)
 
-        const upcoming = data.projects.filter((project) => {
-            if (!project.deadline || project.status === "completed") return false
-            const deadline = new Date(project.deadline)
-            const today = new Date()
-            const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24))
-            return diffDays <= 7 && diffDays > 0
-        })
-
-        set({
-            pageData: {
-                projectsData: {
-                    totalProjects: data.projects.length,
-                    totalLateProjects: upcoming.length,
-                    projectsList: {
-                        projects: data.projects,
-                        lateProjects: upcoming,
+            set({
+                pageData: {
+                    projectsData: {
+                        totalProjects: data.projectsData.totalProjects,
+                        totalLateProjects: data.projectsData.totalLateProjects,
+                        projectsList: {
+                            projects: data.projectsData.projects,
+                            lateProjects: data.projectsData.lateProjects
+                        }
+                    },
+                    pagination: {
+                        page: data.pagination.page,
+                        totalPages: data.pagination.totalPages,
+                        hasNextPage: data.pagination.hasNextPage,
+                        hasPrevPage: data.pagination.hasPrevPage
                     }
                 },
-                pagination: {
-                    page: page,
-                    totalPages: data.pagination.totalPages,
-                }
-            },
-        })
+            })
+        } catch (error) {
+            console.error("Error fetching projects:", error)
+        }
     },
 }))
 

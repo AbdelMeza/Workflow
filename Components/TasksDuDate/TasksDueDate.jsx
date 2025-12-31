@@ -5,7 +5,6 @@ export default function TasksDueDate() {
     const { tasks, totalTasks } = tasksManagement()
     const tasksForToday = tasks.slice(0, 3)
 
-    console.log(tasks)
     return <>
         {tasks && tasks.length > 0 ?
             <Container headerTitle={"Tasks for the day"} title="late-tasks">

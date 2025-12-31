@@ -42,6 +42,37 @@ export async function getProjects(req, res) {
         const total = await projectsModel.countDocuments(filter)
         const totalPages = Math.ceil(total / limit)
 
+        const today = new Date()
+        const in7Days = new Date()
+        in7Days.setDate(today.getDate() + 7)
+
+        const lateProjects = await projectsModel.find({
+            $or: [
+                { freelancerId: req.user.id },
+                { clientId: req.user.id }
+            ],
+            status: { $ne: "completed" },
+            deadline: {
+                $gte: today,
+                $lte: in7Days
+            }
+        })
+            .populate("clientId", "username")
+            .populate("freelancerId", "username")
+            .sort({ deadline: 1 })
+
+        const totalLateProjects = await projectsModel.countDocuments({
+            $or: [
+                { freelancerId: req.user.id },
+                { clientId: req.user.id }
+            ],
+            status: { $ne: "completed" },
+            deadline: {
+                $gt: today,
+                $lte: in7Days
+            }
+        })
+
         const projects = await projectsModel
             .find(filter)
             .skip(skip)
@@ -51,7 +82,12 @@ export async function getProjects(req, res) {
             .sort({ createdAt: -1 })
 
         res.status(200).json({
-            projects,
+            projectsData: {
+                projects,
+                lateProjects,
+                totalProjects: total,
+                totalLateProjects
+            },
             pagination: {
                 page,
                 limit,
@@ -66,7 +102,6 @@ export async function getProjects(req, res) {
         res.status(500).json({ error: "Internal server error" })
     }
 }
-
 
 /**
  * =========================

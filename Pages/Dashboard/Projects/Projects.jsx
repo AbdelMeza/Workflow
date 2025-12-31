@@ -13,7 +13,13 @@ export default function Projects() {
     const totalProjects = pageData.projectsData.totalProjects
     const totalLateProjects = pageData.projectsData.totalLateProjects
 
-    const [queryParams, setQueryParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    useEffect(() => {
+        if (!searchParams.get("page")) {
+            setSearchParams({ page: 1, limit: 5 })
+        }
+    }, [])
 
     const data = [
         {
@@ -47,9 +53,6 @@ export default function Projects() {
                 projects.filter(el => el.status === "completed").length,
         }
     ]
-
-    const page = parseInt(queryParams.get("page")) || 1
-    const limit = parseInt(queryParams.get("limit")) || 5
 
     const tableData = []
     projects.map(project => tableData.push({

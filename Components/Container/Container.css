@@ -2,6 +2,10 @@
     overflow: hidden;
 }
 
+.container .content:has(.data-table){
+    border: 0;
+}
+
 #late-projects{
     flex: 1;
 }
