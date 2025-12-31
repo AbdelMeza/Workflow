@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom"
 import './Projects.css'
 
 export default function Projects() {
-    const { pageData } = projectsManagement()
+    const { pageData, getProjects } = projectsManagement()
     const projects = pageData.projectsData.projectsList.projects
     const totalProjects = pageData.projectsData.totalProjects
     const totalLateProjects = pageData.projectsData.totalLateProjects
@@ -94,9 +94,19 @@ export default function Projects() {
             <KeyPerfIndicators data={data} />
         </div>
         <div className="projects-container">
-            <Container headerTitle={"All projects"}>
+            <Container
+                headerTitle={"All projects"}
+                hasPag={true}
+                currentPage={parseInt(searchParams.get("page")) || 1}
+                totalPages={pageData.pagination.totalPages || 1}
+                onPageChange={(newPage) => {
+                    setSearchParams({ page: newPage, limit: parseInt(searchParams.get("limit")) })
+                    getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })
+                }}
+            >
                 <Table tableData={tableData} title={"projects"} />
             </Container>
+
         </div>
     </div>
 }

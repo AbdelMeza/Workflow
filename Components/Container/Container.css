@@ -6,6 +6,15 @@
     border: 0;
 }
 
+.container .pagination-container{
+    justify-content: flex-end;
+}
+
+.container .page-btn{
+    aspect-ratio: 1;
+    stroke: var(--light-text-color);
+}
+
 #late-projects{
     flex: 1;
 }
