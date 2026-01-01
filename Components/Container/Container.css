@@ -1,4 +1,8 @@
 .container .content{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
 
@@ -19,6 +23,6 @@
     flex: 1;
 }
 
-#late-tasks{
+#todays-tasks{
     min-width: 400px;
 }

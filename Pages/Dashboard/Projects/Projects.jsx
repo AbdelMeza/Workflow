@@ -6,6 +6,7 @@ import Table from "../../../Components/Table/Table"
 import projectsManagement from "../../../Stores/projectsManagement"
 import { useSearchParams } from "react-router-dom"
 import './Projects.css'
+import formatData from "../../../utils/FormatData/formatData"
 
 export default function Projects() {
     const { pageData, getProjects } = projectsManagement()
@@ -29,7 +30,7 @@ export default function Projects() {
                 </svg>
             ),
             dataTitle: "Upcoming deadlines",
-            data: totalLateProjects < 10 ? "0" + totalLateProjects : totalLateProjects,
+            data: formatData(totalLateProjects),
             alert: totalLateProjects > 0 ? true : false
         },
         {
@@ -39,7 +40,7 @@ export default function Projects() {
                 </svg>
             ),
             dataTitle: "Total projects",
-            data: totalProjects < 10 ? "0" + totalProjects : totalProjects,
+            data: formatData(totalProjects),
         },
         {
             icon: (
@@ -48,9 +49,7 @@ export default function Projects() {
                 </svg>
             ),
             dataTitle: "Projects completed",
-            data: projects.filter(el => el.status === "completed").length < 10 ?
-                "0" + projects.filter(el => el.status === "completed").length :
-                projects.filter(el => el.status === "completed").length,
+            data: formatData(projects.filter(el => el.status === "completed").length),
         }
     ]
 
@@ -82,7 +81,7 @@ export default function Projects() {
                             <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
-                            Add project
+                            Create project
                         </>
                     }
                     size="medium"
@@ -104,7 +103,25 @@ export default function Projects() {
                     getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })
                 }}
             >
-                <Table tableData={tableData} title={"projects"} />
+                {tableData && tableData.length > 0 ?
+                    <Table tableData={tableData} title={"projects"} /> :
+                    <div className="create-project-container flex-c flex-d-c gap-1 pad-3">
+                        <span className="m-fs mt-c">Oops..no project found</span>
+                        <span className="s-fs st-c" style={{ marginBottom: "1.5vw" }}>Create your first project</span>
+                        <Button
+                            content={
+                                <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                    Create project
+                                </>
+                            }
+                            size="medium"
+                            classGiven="bgc-lv3 br brad-1"
+                        />
+                    </div>
+                }
             </Container>
 
         </div>

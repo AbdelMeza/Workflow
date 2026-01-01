@@ -6,6 +6,7 @@ import UpcomingProjectsDeadlines from "../../../Components/UpcomingProjectsDeadl
 import projectsManagement from "../../../Stores/projectsManagement"
 import tasksManagement from "../../../Stores/tasksManagement"
 import './Overview.css'
+import formatData from "../../../utils/FormatData/formatData"
 
 export default function Overview() {
 
@@ -23,7 +24,7 @@ export default function Overview() {
                 </svg>
             ),
             dataTitle: "Upcoming deadlines",
-            data: totalLateProjects < 10 ? "0" + totalLateProjects : totalLateProjects,
+            data: formatData(totalLateProjects),
             alert: totalLateProjects > 0 ? true : false
         },
         {
@@ -33,7 +34,7 @@ export default function Overview() {
                 </svg>
             ),
             dataTitle: "Total projects",
-            data: totalProjects < 10 ? "0" + totalProjects : totalProjects,
+            data: formatData(totalProjects),
         },
         {
             icon: (
@@ -42,9 +43,7 @@ export default function Overview() {
                 </svg>
             ),
             dataTitle: "Projects completed",
-            data: projects.filter(el => el.status === "completed").length < 10 ?
-                "0" + projects.filter(el => el.status === "completed").length :
-                projects.filter(el => el.status === "completed").length,
+            data: formatData(projects.filter(el => el.status === "completed").length),
         },
         {
             icon: (
@@ -53,7 +52,7 @@ export default function Overview() {
                 </svg>
             ),
             dataTitle: "Total tasks",
-            data: totalTasks
+            data: formatData(totalTasks)
         }
     ]
 

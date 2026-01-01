@@ -1,0 +1,3 @@
+.task-item:not(:last-child){
+    border-bottom: var(--border);
+}

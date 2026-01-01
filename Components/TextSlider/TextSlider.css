@@ -6,13 +6,17 @@
 
 .text-slider{
     height: var(--small-font-size);
+    display: flex;
+    flex-direction: column;
 }
 
 .text-slider .slide-text {
     font-size: var(--small-font-size);
     line-height: var(--small-font-size);
     transition: transform var(--animation-short-duration) var(--animation-easing);
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-lv1);
 }
 
 .text-slider:hover .slide-text {

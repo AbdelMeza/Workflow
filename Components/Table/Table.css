@@ -28,7 +28,7 @@
     padding: 0 var(--padding-lv1);
 }
 
-.data-table .empty-data{
+.empty-data{
     font-size: calc((var(--small-font-size)) * 0.7);
     text-align: center;
     width: 100%;

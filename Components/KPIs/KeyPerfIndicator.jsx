@@ -1,5 +1,3 @@
-import projectsManagement from '../../Stores/projectsManagement'
-import tasksManagement from '../../Stores/tasksManagement'
 import './KeyPerfIndicator.css'
 
 /**

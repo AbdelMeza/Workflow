@@ -13,7 +13,8 @@
     padding: var(--padding-lv2) var(--padding-lv1);
 }
 
-.dashboard-side-bar .navigation-links-container {
+.dashboard-side-bar .navigation-links-container,
+.dashboard-side-bar .settings-container {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -30,7 +31,8 @@
     border-bottom: var(--border);
 }
 
-.dashboard-side-bar .navigation-link {
+.dashboard-side-bar .navigation-link,
+.dashboard-side-bar .setting-item {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -39,22 +41,24 @@
     transition: background var(--animation-short-duration);
 }
 
-.dashboard-side-bar .navigation-link .icon {
+.dashboard-side-bar .icon {
     width: 20px;
 }
 
-.dashboard-side-bar .navigation-link:hover {
+.dashboard-side-bar .navigation-link:hover,
+.dashboard-side-bar .setting-item:hover {
     background-color: #00000008;
 }
 
-.dashboard-side-bar .navigation-link.active {
+.dashboard-side-bar .navigation-link.active,
+.dashboard-side-bar .setting-item.active {
     background-color: rgb(var(--main-color), 0.1);
 }
 
-.dashboard-side-bar .navigation-link .icon svg {
+.dashboard-side-bar .icon svg {
     transition: stroke var(--animation-short-duration);
 }
 
-.dashboard-side-bar .navigation-link.active .icon svg {
+.dashboard-side-bar .active .icon svg {
     stroke: rgb(var(--main-color));
 }

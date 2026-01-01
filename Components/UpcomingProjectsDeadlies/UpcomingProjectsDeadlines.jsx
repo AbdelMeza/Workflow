@@ -2,6 +2,7 @@ import Container from "../Container/Container"
 import Table from "../Table/Table"
 import projectsManagement from "../../Stores/projectsManagement"
 import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
+import Button from "../Button/Button"
 
 export default function UpcomingProjectsDeadlines() {
     const { pageData } = projectsManagement()
@@ -13,16 +14,27 @@ export default function UpcomingProjectsDeadlines() {
 
     const tableData = upcomingProjects.map(project => ({
         "Title": project.title,
-        "Creator": project.freelancerId.username,
+        "Client": project.clientId ? project.clientId.username :
+            <> <Button
+                content={"Add"}
+                size="small"
+                classGiven="bgc-lv3 br brad-1"
+            />
+            </>,
         "Time left": getTimeRemaining(project.deadline),
         "Status": project.status,
     }))
 
-    if (!projects.length) return null
-
     return (
         <Container headerTitle={"Upcoming deadlines"} title="late-projects">
-            <Table title={"upcoming-deadlines"} tableData={tableData} />
+            {tableData && tableData.length > 0 ?
+                <Table title={"upcoming-deadlines"} tableData={tableData} /> :
+                <code
+                    className="empty-data s-fs st-c pad-3"
+                    style={{ display: "block", textAlign: "center" }}
+                >
+                    No projects are behind schedule.
+                </code>}
         </Container>
     )
 }
