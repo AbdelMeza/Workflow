@@ -1,6 +1,7 @@
 import { create } from "zustand"
 
 const projectsManagement = create((set) => ({
+    projectFormIsOpen: false,
     pageData: {
         projectsData: {
             totalProjects: 0,
@@ -31,8 +32,6 @@ const projectsManagement = create((set) => ({
             const data = await res.json()
             if (!data) return
 
-            console.log(data)
-
             set({
                 pageData: {
                     projectsData: {
@@ -55,6 +54,25 @@ const projectsManagement = create((set) => ({
             console.error("Error fetching projects:", error)
         }
     },
+
+    createProject: async (projectData) => {
+        const userToken = localStorage.getItem("userToken")
+        
+        try {
+            const res = await fetch(`http://127.0.0.1:2005/project/create`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: userToken,
+                },
+                body: JSON.stringify(projectData),
+            })
+            const data = await res.json()
+            return data
+        } catch (error) {
+            console.error("Error creating project:", error)
+        }
+    }
 }))
 
 export default projectsManagement

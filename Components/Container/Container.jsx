@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import './Container.css'
 
 export default function Container({ title, headerTitle, hasPag, children, currentPage, totalPages, onPageChange }) {
