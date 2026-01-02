@@ -18,7 +18,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: var(--padding-lv1) 0 var(--padding-lv3);
+    padding: var(--padding-lv1) 0 var(--padding-lv1);
 }
 
 .dashboard-side-bar .navigation-links-container::before {

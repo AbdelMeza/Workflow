@@ -113,9 +113,9 @@ function HeroSection() {
         >
             <div className="hero-section-content flex-c flex-d-c gap-3">
                 <div className="upper-content">
-                    <h1 className="main-headline mff-b mt-c">
+                    <span className="main-headline b-fs mff-b mt-c">
                         Manage Your Clients and <br /> Projects Effortlessly
-                    </h1>
+                    </span>
                 </div>
 
                 <div className="lower-content flex-c flex-d-c gap-2">

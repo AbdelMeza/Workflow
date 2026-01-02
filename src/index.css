@@ -10,21 +10,21 @@
   --secondary-text-color: #727272;
 
   /*--- Font sizes ---*/
-  --big-font-size: 1.1rem;
+  --big-font-size: 2rem;
   --medium-font-size: 0.8rem;
   --normal-font-size: 0.6rem;
   --small-font-size: 0.5rem;
 
   /*--- Border ---*/
   --border: 1px solid #cdcdcd;
-  --border-radius-lv1: 10px;
-  --border-radius-lv2: 15px;
-  --border-radius-lv3: 20px;
+  --border-radius-lv1: clamp(8px, 0.8vw, 10px);
+  --border-radius-lv2: calc(var(--border-radius-lv1) * 1.618);
+  --border-radius-lv3: calc(var(--border-radius-lv2) * 1.618);
 
   /*--- Padding ---*/
-  --padding-lv1: 1.5vw;
-  --padding-lv2: 2.5vw;
-  --padding-lv3: 3.5vw;
+  --padding-lv1: clamp(15px, 2vw, 23px);
+  --padding-lv2: calc(var(--padding-lv1) * 1.618);
+  --padding-lv3: calc(var(--padding-lv2) * 1.618);
 
   /*--- Height ---*/
 
@@ -33,9 +33,9 @@
   --height-lv3: 80px;
 
   /*--- Height ---*/
-  --gap-lv1: 0.5vw;
-  --gap-lv2: 1.5vw;
-  --gap-lv3: 3vw;
+  --gap-lv1: clamp(6px, 0.6vw, 8px);
+  --gap-lv2: calc(var(--gap-lv1) * 1.618);
+  --gap-lv3: calc(var(--gap-lv2) * 1.618);
 
   /*--- Animations ---*/
   --animation-short-duration: 200ms;
@@ -88,7 +88,7 @@ input {
 }
 
 html {
-  font-size: 2em;
+  font-size: clamp(25px, 3vw, 33px);
 }
 
 /*------ Backgrounds ------*/

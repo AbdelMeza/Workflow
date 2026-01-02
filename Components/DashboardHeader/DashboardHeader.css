@@ -1,6 +1,7 @@
 .dashboard-header{
     width: 100%;
     justify-content: space-between;
+    margin-bottom: var(--padding-lv1);
 }
 
 .search-bar-container{

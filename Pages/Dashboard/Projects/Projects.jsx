@@ -90,14 +90,12 @@ export default function Projects() {
                             </>
                         }
                         size="medium"
-                        classGiven="bgc-lv3 br brad-1"
+                        classGiven="bgc-lv3 br brad-2"
                     />
                 </div>
             </div>
         </div>
-        <div className="key-performance-indicators-container flex gap-1">
-            <KeyPerfIndicators data={data} />
-        </div>
+        <KeyPerfIndicators data={data} />
         <div className="projects-container">
             <Container
                 headerTitle={"All projects"}

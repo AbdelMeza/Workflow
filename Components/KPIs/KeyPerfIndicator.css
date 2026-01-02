@@ -1,24 +1,30 @@
-.key-performance-indicator{
+.key-performance-indicator {
     flex: 1;
     padding: var(--padding-lv1) var(--padding-lv1);
 }
 
-.key-performance-indicator.alert{
+.key-performance-indicator.alert {
     border-color: rgb(var(--main-color));
 }
 
-.key-performance-indicator.alert svg{
+.key-performance-indicator.alert svg {
     stroke: rgb(var(--main-color));
 }
 
-.key-performance-indicator .icon-container{
+.key-performance-indicator .icon-container {
     margin-bottom: var(--gap-lv2);
 }
 
-.key-performance-indicator .data-title-container{
+.key-performance-indicator .data-title-container {
     margin-bottom: var(--gap-lv1);
 }
 
-.key-performance-indicator .icon-container svg{
+.key-performance-indicator .icon-container svg {
     width: 35px;
+}
+
+@media screen and (max-width: 820px) {
+    .key-performance-container {
+        flex-direction: column;
+    }
 }
