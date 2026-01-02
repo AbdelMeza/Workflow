@@ -9,11 +9,12 @@ import { projectsModel } from "../models/projectsModel.js"
  */
 export async function createProject(req, res) {
     try {
-        const { title, description, clientId, budget } = req.body
+        const { title, description, deadline, clientId, budget } = req.body
 
         const newProject = await projectsModel.create({
             title,
             description,
+            deadline,
             freelancerId: req.user.id, // Current authenticated freelancer
             clientId,
             budget
@@ -39,7 +40,7 @@ export async function createProject(req, res) {
 export async function getProjects(req, res) {
     try {
         const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 10
+        const limit = parseInt(req.query.limit) || 5
         const skip = (page - 1) * limit
 
         const filter = {
@@ -48,6 +49,12 @@ export async function getProjects(req, res) {
                 { clientId: req.user.id }
             ]
         }
+
+        //Count completed projects
+        const totalProjectsCompleted = await projectsModel.countDocuments({
+            ...filter,
+            status: "completed"
+        })
 
         // Count total projects
         const total = await projectsModel.countDocuments(filter)
@@ -89,7 +96,8 @@ export async function getProjects(req, res) {
                 projects,
                 lateProjects,
                 totalProjects: total,
-                totalLateProjects
+                totalLateProjects,
+                totalProjectsCompleted
             },
             pagination: {
                 page,

@@ -16,7 +16,7 @@
   --small-font-size: 0.5rem;
 
   /*--- Border ---*/
-  --border: 1px solid #00000026;
+  --border: 1px solid #b4b4b4;
   --border-radius-lv1: 10px;
   --border-radius-lv2: 15px;
   --border-radius-lv3: 20px;
@@ -80,7 +80,6 @@ body {
 
 button {
   cursor: pointer;
-  font-size: var(--small-font-size);
 }
 
 input {
@@ -317,7 +316,7 @@ html {
   position: relative;
   color: var(--main-text-color);
   background: #fff;
-  padding: 0 20px;
+  padding: 0 var(--padding-lv1);
 }
 
 .signup-page .role-selection {

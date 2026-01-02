@@ -9,8 +9,6 @@ export default function UpcomingProjectsDeadlines() {
     const projects = pageData.projectsData.projectsList.lateProjects || []
 
     const upcomingProjects = projects
-        .filter(project => project.deadline && project.status !== "completed" && getTimeRemaining(project.deadline))
-        .slice(0, 3)
 
     const tableData = upcomingProjects.map(project => ({
         "Title": project.title,

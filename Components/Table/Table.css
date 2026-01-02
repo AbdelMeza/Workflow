@@ -3,6 +3,7 @@
     border-collapse: collapse;
     display: flex;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .data-table .table-column {
@@ -28,7 +29,7 @@
     padding: 0 var(--padding-lv1);
 }
 
-.empty-data{
+.empty-data {
     font-size: calc((var(--small-font-size)) * 0.7);
     text-align: center;
     width: 100%;
@@ -42,26 +43,6 @@
     padding: 0 var(--padding-lv1);
 }
 
-#upcoming-deadlines .table-column:nth-child(1) {
-    display: flex;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;
-    width: 150px;
-    width: 40%;
-}
-
-#upcoming-deadlines .table-column:nth-child(2) {
-    display: flex;
-    width: 20%;
-}
-
-#upcoming-deadlines .table-column:nth-child(3) {
-    display: flex;
-    width: 20%;
-}
-
-#upcoming-deadlines .table-column:last-child {
-    display: flex;
-    width: 20%;
+.table-column:nth-child(1) {
+    flex: 2.5;
 }

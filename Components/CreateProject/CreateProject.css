@@ -1,0 +1,74 @@
+.project-form {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, .1);
+    backdrop-filter: blur(2px);
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--animation-short-duration);
+}
+
+.project-form.opened{
+    pointer-events: all;
+    opacity: 1;
+}
+
+.project-form .close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 2vw;
+    aspect-ratio: 1;
+    cursor: pointer;
+}
+
+.form-container {
+    min-width: 550px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lv2);
+}
+
+.form-container .inputs-container,
+.form-container .textarea-container,
+.form-container .inner-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lv1);
+    width: 100%;
+}
+
+.form-container .inputs-container:has(.inner-container) {
+    flex-direction: row;
+}
+
+.form-container label {
+    font-size: var(--small-font-size);
+}
+
+.form-container input,
+.form-container textarea {
+    width: 100%;
+    height: var(--height-lv2);
+    border: var(--border);
+    font-size: var(--small-font-size);
+    border-radius: var(--border-radius-lv1);
+    padding: 0 var(--padding-lv1);
+}
+
+.form-container textarea {
+    resize: none;
+    min-height: 150px;
+    padding: var(--padding-lv1);
+}
+
+.form-container .submit-btn {
+    width: 100%;
+}

@@ -12,6 +12,6 @@ export function getTimeRemaining(deadline) {
     if(diffDays > 7) return false
     if(diffDays < 0) return false
 
-    if (diffDays > 0) return `${diffDays}j ${diffHours}h`
+    if (diffDays > 0) return `${diffDays}d ${diffHours}h`
     return `${diffHours}h`
 }

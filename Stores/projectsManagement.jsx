@@ -6,6 +6,7 @@ const projectsManagement = create((set) => ({
         projectsData: {
             totalProjects: 0,
             totalLateProjects: 0,
+            totalProjectsCompleted: 0,
             projectsList: {
                 projects: [],
                 lateProjects: [],
@@ -31,12 +32,14 @@ const projectsManagement = create((set) => ({
 
             const data = await res.json()
             if (!data) return
+            console.log(data)
 
             set({
                 pageData: {
                     projectsData: {
                         totalProjects: data.projectsData.totalProjects,
                         totalLateProjects: data.projectsData.totalLateProjects,
+                        totalProjectsCompleted: data.projectsData.totalProjectsCompleted,
                         projectsList: {
                             projects: data.projectsData.projects,
                             lateProjects: data.projectsData.lateProjects
