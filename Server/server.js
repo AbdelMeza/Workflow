@@ -1,14 +1,23 @@
-import mongoose from "mongoose"
-import express from "express"
 import cors from "cors"
-import { loginUser, signupUser } from "./controllers/authentification.js"
+import http from "http"
+import express from "express"
+import mongoose from "mongoose"
+import { Server } from "socket.io"
+import tasksRouter from "./routers/tasksRouter.js"
 import { getUserData } from "./controllers/users.js"
 import projectsRouter from "./routers/projectsRouter.js"
-import tasksRouter from "./routers/tasksRouter.js"
+import { loginUser, signupUser } from "./controllers/authentification.js"
 
 const app = express()
+const server = http.createServer(app)
+app.use(express.json(), cors())
 
-app.use(cors(), express.json())
+export const io = new Server(server, {
+    cors: {
+        origin: "*",
+        credentials: true,
+    },
+})
 
 app.post('/userSignup', signupUser)
 app.post('/userLogin', loginUser)
@@ -18,4 +27,4 @@ app.use('/task', tasksRouter)
 
 mongoose.connect('mongodb://localhost:27017/WorkFlow')
 
-app.listen(2005, () => console.log("Server is working"))
+server.listen(2005, () => console.log("Server is working"))

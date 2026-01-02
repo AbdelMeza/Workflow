@@ -26,7 +26,7 @@ export default function Container({ title, headerTitle, hasPag, children, curren
 
             {hasPag && totalPages > 1 && (
                 <div className="pagination-container flex gap-2">
-                    <button onClick={handlePrev} disabled={currentPage === 1} className="page-btn br h-1 flex-c bgc-lv1 brad-1">
+                    <button onClick={handlePrev} disabled={currentPage === 1} className="page-btn br h-1 flex-c bgc-lv3 brad-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                         </svg>
@@ -38,7 +38,7 @@ export default function Container({ title, headerTitle, hasPag, children, curren
                         </div>
                     }
 
-                    <button onClick={handleNext} disabled={currentPage === totalPages} className="page-btn br h-1 flex-c bgc-lv1 brad-1">
+                    <button onClick={handleNext} disabled={currentPage === totalPages} className="page-btn br h-1 flex-c bgc-lv3 brad-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                         </svg>

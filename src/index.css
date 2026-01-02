@@ -16,7 +16,7 @@
   --small-font-size: 0.5rem;
 
   /*--- Border ---*/
-  --border: 1px solid #b4b4b4;
+  --border: 1px solid #cdcdcd;
   --border-radius-lv1: 10px;
   --border-radius-lv2: 15px;
   --border-radius-lv3: 20px;
@@ -73,6 +73,7 @@ body {
   padding: 0;
   outline: none;
   border: none;
+  background: none;
   box-sizing: border-box;
   font-family: "main-font-regular";
   color: inherit;
