@@ -3,6 +3,7 @@ import Table from "../Table/Table"
 import projectsManagement from "../../Stores/projectsManagement"
 import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
 import Button from "../Button/Button"
+import Status from "../Status/Status"
 
 export default function UpcomingProjectsDeadlines() {
     const { pageData } = projectsManagement()
@@ -20,7 +21,7 @@ export default function UpcomingProjectsDeadlines() {
             />
             </>,
         "Time left": getTimeRemaining(project.deadline),
-        "Status": project.status,
+        "Status": <Status content={"late"}/>,
     }))
 
     return (

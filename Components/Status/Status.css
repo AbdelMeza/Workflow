@@ -1,0 +1,24 @@
+.status{
+    height: calc(var(--height-lv1) * 0.8);
+    padding: 0 calc(var(--padding-lv1) * 0.8);
+}
+
+.status.blue{
+    color: #2a58ff;
+    background-color: #0091ff47;
+}
+
+.status.green{
+    color: #0cba38;
+    background-color: #00ff4047;
+}
+
+.status.red{
+    color: #ee1b1b;
+    background-color: #ff00002c;
+}
+
+.status.yellow{
+    color: #ab8c10;
+    background-color: #ffea0047;
+}

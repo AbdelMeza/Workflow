@@ -10,6 +10,18 @@
     flex: 1;
 }
 
+.data-table .button-element{
+    height: calc(var(--height-lv1) * 0.8);
+}
+
+.data-table .button-content{
+    padding: 0 calc(var(--padding-lv1) * 0.8);
+}
+
+.data-table .slide-text{
+    font-size: calc(var(--small-font-size) * 0.8);
+}
+
 .data-table .column-header {
     display: flex;
     align-items: center;

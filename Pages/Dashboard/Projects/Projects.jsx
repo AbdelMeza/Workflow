@@ -9,6 +9,7 @@ import './Projects.css'
 import formatData from "../../../utils/FormatData/formatData"
 import CreateProject from "../../../Components/CreateProject/CreateProject"
 import useCases from "../../../Stores/useCases"
+import Status from "../../../Components/Status/Status"
 
 export default function Projects() {
     const { pageData, getProjects } = projectsManagement()
@@ -68,7 +69,7 @@ export default function Projects() {
             />
             </>,
         "Deadline": new Date(project.deadline).toLocaleDateString(),
-        "Status": project.status,
+        "Status": <Status content={project.status} />,
     })
     )
 

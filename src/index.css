@@ -22,7 +22,7 @@
   --border-radius-lv3: calc(var(--border-radius-lv2) * 1.618);
 
   /*--- Padding ---*/
-  --padding-lv1: clamp(15px, 2vw, 23px);
+  --padding-lv1: clamp(15px, 2vw, 20px);
   --padding-lv2: calc(var(--padding-lv1) * 1.618);
   --padding-lv3: calc(var(--padding-lv2) * 1.618);
 
