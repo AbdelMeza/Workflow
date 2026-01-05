@@ -3,5 +3,6 @@
 }
 
 .dashboard-page > .content{
+    position: relative;
     flex: 1;
 }

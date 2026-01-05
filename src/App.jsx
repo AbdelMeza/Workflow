@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import Lenis from "lenis"
 import { RequireAuth } from "../RoutesProtection/requireAuth"
 import InDevPage from "../Pages/InDevPage/InDevPage"
+import LoadingPage from "../Components/LoadingPage/LoadingPage"
 
 const SignupPage = lazy(() => import("../Pages/SignupPage/SignupPage"))
 const LoginPage = lazy(() => import("../Pages/LoginPage/LoginPage"))
@@ -41,12 +42,12 @@ function App() {
     <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
       <Route path="*" element={<InDevPage />}></Route>
       <Route path="" element={
-        <Suspense fallback={<div>Loading..</div>} >
+        <Suspense fallback={<LoadingPage />} >
           <Overview />
         </Suspense>
       }></Route>
       <Route path="projects" element={
-        <Suspense fallback={<div>Loading..</div>} >
+        <Suspense fallback={<LoadingPage />} >
           <Projects />
         </Suspense>
       }></Route>

@@ -78,6 +78,7 @@ export default function Projects() {
                 classGiven="bgc-lv3 br brad-1"
             />
             </>,
+        "Created at": new Date(project.createdAt).toLocaleDateString(),
         "Deadline": new Date(project.deadline).toLocaleDateString(),
         "Status": <Status content={project.status} />,
     })

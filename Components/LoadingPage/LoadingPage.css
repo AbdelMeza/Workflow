@@ -1,0 +1,27 @@
+.loading-page{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+
+.loading-page .loading-text{
+    animation: loading calc(var(--animation-long-duration) * 2) infinite;
+}
+
+@keyframes loading {
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    80%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
