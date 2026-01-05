@@ -77,6 +77,21 @@ body {
   box-sizing: border-box;
   font-family: "main-font-regular";
   color: inherit;
+  scrollbar-width: thin;
+  scrollbar-color: #0000006b transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0000006b;
+  border-radius: 10px;
 }
 
 button {

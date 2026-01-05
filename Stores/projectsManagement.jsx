@@ -12,6 +12,7 @@ const projectsManagement = create((set) => ({
             totalProjects: 0,
             totalLateProjects: 0,
             totalProjectsCompleted: 0,
+            estimatedRevenue: 0,
             projectsList: {
                 projects: [],
                 lateProjects: [],
@@ -68,6 +69,7 @@ const projectsManagement = create((set) => ({
                         totalProjects: data.projectsData.totalProjects,
                         totalLateProjects: data.projectsData.totalLateProjects,
                         totalProjectsCompleted: data.projectsData.totalProjectsCompleted,
+                        estimatedRevenue: data.projectsData.estimatedRevenue,
                         projectsList: {
                             projects: data.projectsData.projects,
                             lateProjects: data.projectsData.lateProjects

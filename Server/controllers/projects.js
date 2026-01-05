@@ -50,6 +50,10 @@ export async function getProjects(req, res) {
             ]
         }
 
+        //calculate the estimated revenue by adding the budget of all projects
+        const projectsList = await projectsModel.find(filter)
+        const estimatedRevenue = projectsList.reduce((total, project) => total + (project.budget || 0), 0)
+
         //Count completed projects
         const totalProjectsCompleted = await projectsModel.countDocuments({
             ...filter,
@@ -97,6 +101,7 @@ export async function getProjects(req, res) {
                 lateProjects,
                 totalProjects: total,
                 totalLateProjects,
+                estimatedRevenue,
                 totalProjectsCompleted
             },
             pagination: {
