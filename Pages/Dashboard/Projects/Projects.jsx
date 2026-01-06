@@ -10,9 +10,10 @@ import formatData from "../../../utils/FormatData/formatData"
 import CreateProject from "../../../Components/CreateProject/CreateProject"
 import useCases from "../../../Stores/useCases"
 import Status from "../../../Components/Status/Status"
+import LoadingPage from "../../../Components/LoadingPage/LoadingPage"
 
 export default function Projects() {
-    const { pageData, getProjects } = projectsManagement()
+    const { pageData, getProjects, loadingState } = projectsManagement()
     const { openProjectForm } = useCases()
     const projects = pageData.projectsData.projectsList.projects
     const totalProjects = pageData.projectsData.totalProjects
@@ -119,7 +120,7 @@ export default function Projects() {
                     getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })
                 }}
             >
-                {tableData && tableData.length > 0 ?
+                {loadingState ? <span className="Loading-message s-fs st-c pad-3">Wait for loading..</span> : tableData && tableData.length > 0 ?
                     <Table tableData={tableData} title={"projects"} /> :
                     <div className="create-project-container flex-c flex-d-c gap-2 pad-3">
                         <span className="s-fs st-c">Create your first project</span>
@@ -138,6 +139,8 @@ export default function Projects() {
                             />
                         </div>
                     </div>
+
+
                 }
             </Container>
 

@@ -42,8 +42,8 @@ export default function CreateProject() {
             }
 
             await createProject(projectData)
+            await fetchData()
             openProjectForm()
-            fetchData()
         }
     }
 

@@ -1,12 +1,10 @@
 import { create } from "zustand"
 import { getTimeRemaining } from "../utils/TimeRemaining/getTimeRemaining"
 
-// Zustand store for managing projects state and actions
 const projectsManagement = create((set) => ({
-    // Controls the visibility of the project creation form
     projectFormIsOpen: false,
+    loadingState: false,
 
-    // Global data used by the projects page
     pageData: {
         projectsData: {
             totalProjects: 0,
@@ -24,6 +22,11 @@ const projectsManagement = create((set) => ({
         }
     },
 
+    /**    
+      * Toggle the project creation form visibility
+     */
+    openProjectForm: () => set((state) => ({ projectFormIsOpen: !state.projectFormIsOpen })),
+
     /**
      * Fetch projects from the backend with pagination
      * @param {Object} queries - Query parameters (page, limit)
@@ -34,6 +37,7 @@ const projectsManagement = create((set) => ({
         const { page, limit } = queries
 
         try {
+            set({ loadingState: true })
             // Request projects data from the API
             const res = await fetch(
                 `http://127.0.0.1:2005/project/get?page=${page}&limit=${limit}`,
@@ -85,6 +89,8 @@ const projectsManagement = create((set) => ({
             })
         } catch (error) {
             console.error("Error fetching projects:", error)
+        } finally{
+            set({ loadingState: false })
         }
     },
 
