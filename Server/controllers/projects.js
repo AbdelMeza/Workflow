@@ -1,3 +1,4 @@
+import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining.js"
 import { projectsModel } from "../models/projectsModel.js"
 
 /**
@@ -17,7 +18,9 @@ export async function createProject(req, res) {
             deadline,
             freelancerId: req.user.id, // Current authenticated freelancer
             clientId,
-            budget
+            budget,
+            // Set initial status based on deadline
+            status: getTimeRemaining(deadline) ? "late" : "open"
         })
 
         res.status(201).json(newProject)
@@ -50,50 +53,48 @@ export async function getProjects(req, res) {
             ]
         }
 
-        //calculate the estimated revenue by adding the budget of all projects
-        const projectsList = await projectsModel.find(filter)
-        const estimatedRevenue = projectsList.reduce((total, project) => total + (project.budget || 0), 0)
+        // Fetch projects
+        const projects = await projectsModel
+            .find(filter)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate("clientId", "username email role clientProfile")
+            .populate("freelancerId", "username email role freelancerProfile")
 
-        //Count completed projects
+        // Stats
+        const total = await projectsModel.countDocuments(filter)
+        const totalPages = Math.ceil(total / limit)
+
         const totalProjectsCompleted = await projectsModel.countDocuments({
             ...filter,
             status: "completed"
         })
 
-        // Count total projects
-        const total = await projectsModel.countDocuments(filter)
-        const totalPages = Math.ceil(total / limit)
+        const totalLateProjects = await projectsModel.countDocuments({
+            ...filter,
+            status: "late"
+        })
+
+        const projectsList = await projectsModel.find()
+        const estimatedRevenue = projectsList.reduce((sum, p) => sum + (p.budget || 0), 0)
 
         const today = new Date()
         const in7Days = new Date()
         in7Days.setDate(today.getDate() + 7)
 
-        // Projects "late" or with deadlines in the next 7 days
-        const lateProjects = await projectsModel.find({
-            $or: [
-                { freelancerId: req.user.id },
-                { clientId: req.user.id }
-            ],
-            status: { $ne: "completed" },
-            deadline: {
-                $gte: today,
-                $lte: in7Days
+        // Update statuses for projects if deadline is approaching
+        await projectsModel.updateMany(
+            {
+                status: { $ne: "completed" },
+                deadline: { $lte: in7Days }
+            },
+            {
+                $set: { status: "late" }
             }
-        })
-            .populate("clientId", "username")
-            .populate("freelancerId", "username")
-            .sort({ deadline: 1 })
+        )
 
-        const totalLateProjects = lateProjects.length
-
-        // Fetch paginated projects
-        const projects = await projectsModel
-            .find(filter)
-            .skip(skip)
-            .limit(limit)
-            .populate("clientId", "username email role clientProfile")
-            .populate("freelancerId", "username email role freelancerProfile")
-            .sort({ createdAt: -1 })
+        const lateProjects = await projectsModel.find({ status: "late" })
 
         res.status(200).json({
             projectsData: {
@@ -118,6 +119,8 @@ export async function getProjects(req, res) {
         res.status(500).json({ error: "Internal server error" })
     }
 }
+
+
 
 /**
  * =========================

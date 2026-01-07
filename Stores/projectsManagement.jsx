@@ -1,5 +1,4 @@
 import { create } from "zustand"
-import { getTimeRemaining } from "../utils/TimeRemaining/getTimeRemaining"
 
 const projectsManagement = create((set) => ({
     projectFormIsOpen: false,
@@ -50,21 +49,8 @@ const projectsManagement = create((set) => ({
             )
 
             const data = await res.json()
+            console.log(data)
             if (!data) return
-
-            // Check each project deadline and mark it as "late" if deadline is approaching
-            data.projectsData.projects.map(project => {
-                getTimeRemaining(project.deadline) && project.status !== "completed"
-                    ? project.status = "late"
-                    : project.status
-            })
-
-            // Sort projects: late projects first
-            data.projectsData.projects.sort((a, b) => {
-                if (a.status === "late" && b.status !== "late") return -1
-                if (a.status !== "late" && b.status === "late") return 1
-                return 0
-            })
 
             // Update the Zustand store with fetched data
             set({

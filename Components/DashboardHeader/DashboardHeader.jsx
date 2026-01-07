@@ -19,7 +19,7 @@ export default function DashboardHeader() {
         return () => window.removeEventListener('keydown', searchFocus)
     }, [searchFocus])
 
-    return <div className="dashboard-header flex">
+    return <div className="dashboard-header flex gap-3">
         <div className="side-content">
             <div className="search-bar-container h-2 bgc-lv1 br brad-2">
                 <div className="search-icon">
