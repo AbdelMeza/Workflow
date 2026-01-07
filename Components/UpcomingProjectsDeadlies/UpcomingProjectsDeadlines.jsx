@@ -4,12 +4,12 @@ import projectsManagement from "../../Stores/projectsManagement"
 import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
 import Button from "../Button/Button"
 import Status from "../Status/Status"
+import { useNavigate } from "react-router-dom"
 
 export default function UpcomingProjectsDeadlines() {
+    const navigate = useNavigate()
     const { pageData } = projectsManagement()
-    const projects = pageData.projectsData.projectsList.lateProjects || []
-
-    const upcomingProjects = projects
+    const upcomingProjects = pageData.projectsData.projectsList.lateProjects || []
 
     const tableData = upcomingProjects.map(project => ({
         "Title": project.title,
@@ -21,11 +21,26 @@ export default function UpcomingProjectsDeadlines() {
             />
             </>,
         "Time left": getTimeRemaining(project.deadline),
-        "Status": <Status content={"late"}/>,
-    }))
+        "Status": <Status content={project.status} />,
+    })).slice(0, 3)
 
+    console.log(upcomingProjects)
     return (
-        <Container headerTitle={"Upcoming deadlines"} title="late-projects">
+        <Container
+            headerTitle={
+                <>
+                    <span>Upcoming deadlines</span>
+                    <span
+                        className="st-c"
+                        onClick={() => navigate('/dashboard/projects')}
+                        style={{cursor: "pointer"}}
+                    >
+                        View all
+                    </span>
+                </>
+            }
+            title="late-projects"
+        >
             {tableData && tableData.length > 0 ?
                 <Table title={"upcoming-deadlines"} tableData={tableData} /> :
                 <code

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Button from "../../../Components/Button/Button"
 import Container from "../../../Components/Container/Container"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
@@ -10,11 +10,12 @@ import formatData from "../../../utils/FormatData/formatData"
 import CreateProject from "../../../Components/CreateProject/CreateProject"
 import useCases from "../../../Stores/useCases"
 import Status from "../../../Components/Status/Status"
-import LoadingPage from "../../../Components/LoadingPage/LoadingPage"
+import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
 
 export default function Projects() {
+    const [selectedProject, setSelectedProject] = useState()
     const { pageData, getProjects, loadingState } = projectsManagement()
-    const { openProjectForm } = useCases()
+    const { toggleProjectForm, toggleAffiliateClient } = useCases()
     const projects = pageData.projectsData.projectsList.projects
     const totalProjects = pageData.projectsData.totalProjects
     const totalLateProjects = pageData.projectsData.totalLateProjects
@@ -73,11 +74,20 @@ export default function Projects() {
     projects.map(project => tableData.push({
         "Title": project.title,
         "Client": project.clientId ? project.clientId.username :
-            <> <Button
-                content={"Add"}
-                size="small"
-                classGiven="bgc-lv3 br brad-1"
-            />
+            <>
+                <div
+                    className="affiliate-client-btn"
+                    onClick={() => {
+                        toggleAffiliateClient()
+                        setSelectedProject(project._id)
+                    }}
+                >
+                    <Button
+                        content={"Add"}
+                        size="small"
+                        classGiven="bgc-lv3 br brad-1"
+                    />
+                </div>
             </>,
         "Created at": new Date(project.createdAt).toLocaleDateString(),
         "Deadline": new Date(project.deadline).toLocaleDateString(),
@@ -87,12 +97,13 @@ export default function Projects() {
 
     return <div className="projects flex flex-d-c gap-2">
         <CreateProject />
+        <ClientAffiliation projectId={selectedProject}/>
         <div className="header-container">
             <div className="side-content">
                 <span className="page-title s-fs mt-c">Projects</span>
             </div>
             <div className="side-content">
-                <div className="open-project-form" onClick={() => openProjectForm()}>
+                <div className="open-project-form" onClick={() => toggleProjectForm()}>
                     <Button
                         content={
                             <>
@@ -120,27 +131,26 @@ export default function Projects() {
                     getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })
                 }}
             >
-                {loadingState ? <span className="Loading-message s-fs st-c pad-3">Wait for loading..</span> : tableData && tableData.length > 0 ?
-                    <Table tableData={tableData} title={"projects"} /> :
-                    <div className="create-project-container flex-c flex-d-c gap-2 pad-3">
-                        <span className="s-fs st-c">Create your first project</span>
-                        <div className="open-project-form" onClick={() => openProjectForm()}>
-                            <Button
-                                content={
-                                    <>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        Create project
-                                    </>
-                                }
-                                size="medium"
-                                classGiven="bgc-lv3 br brad-1"
-                            />
+                {loadingState ? <span className="Loading-message s-fs st-c pad-3">Wait for loading..</span> :
+                    tableData && tableData.length > 0 ?
+                        <Table tableData={tableData} title={"projects"} /> :
+                        <div className="create-project-container flex-c flex-d-c gap-2 pad-3">
+                            <span className="s-fs st-c">Create your first project</span>
+                            <div className="open-project-form" onClick={() => openProjectForm()}>
+                                <Button
+                                    content={
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                            Create project
+                                        </>
+                                    }
+                                    size="medium"
+                                    classGiven="bgc-lv3 br brad-1"
+                                />
+                            </div>
                         </div>
-                    </div>
-
-
                 }
             </Container>
 

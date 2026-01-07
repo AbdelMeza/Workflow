@@ -4,7 +4,7 @@
     margin-bottom: var(--padding-lv1);
 }
 
-.search-bar-container{
+.dashboard-header .search-bar-container{
     position: relative;
     display: flex;
     align-items: center;
@@ -12,8 +12,7 @@
     padding: 0 10px;
 }
 
-
-.search-bar-container .search-input{
+.dashboard-header .search-bar-container .search-input{
     background: none;
     position: absolute;
     width: 75%;
@@ -21,7 +20,7 @@
     padding-left: 35px;
 }
 
-.search-bar-container .indication{
+.dashboard-header .search-bar-container .indication{
     position: absolute;
     right: 15px;
     display: flex;
@@ -29,7 +28,7 @@
     font-size: 0.4rem;
 }
 
-.search-bar-container .indication .key{
+.dashboard-header .search-bar-container .indication .key{
     padding: 5px;
     border-radius: 5px;
     font-weight: bold;

@@ -3,10 +3,11 @@ import http from "http"
 import express from "express"
 import mongoose from "mongoose"
 import { Server } from "socket.io"
+import authRouter from "./routers/authRouter.js"
+import userRouter from "./routers/userRouter.js"
 import tasksRouter from "./routers/tasksRouter.js"
-import { getUserData } from "./controllers/users.js"
 import projectsRouter from "./routers/projectsRouter.js"
-import { loginUser, signupUser } from "./controllers/authentification.js"
+import { requireAuth } from "./middlewares/authVerification.js"
 
 const app = express()
 const server = http.createServer(app)
@@ -19,9 +20,8 @@ export const io = new Server(server, {
     },
 })
 
-app.post('/userSignup', signupUser)
-app.post('/userLogin', loginUser)
-app.get('/get-user-data', getUserData)
+app.use('/auth', authRouter)
+app.use('/user', userRouter)
 app.use('/project', projectsRouter)
 app.use('/task', tasksRouter)
 

@@ -4,12 +4,12 @@ import './TaskDueDate.css'
 
 export default function TasksDueDate() {
     const { tasks } = tasksManagement()
+    if(tasks) return 
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
-    const tasksForToday = tasks
-        .filter(task => {
+    const tasksForToday = tasks.filter(task => {
             if (!task.deadline || task.completed) return false
 
             const taskDate = new Date(task.deadline)

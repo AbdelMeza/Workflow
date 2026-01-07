@@ -35,7 +35,7 @@ const authentificationManagement = create((set) => ({
         }
 
         try {
-            const res = await fetch("http://127.0.0.1:2005/get-user-data", {
+            const res = await fetch("http://127.0.0.1:2005/user/data", {
                 method: "GET",
                 headers: {
                     token: userToken,
@@ -51,7 +51,7 @@ const authentificationManagement = create((set) => ({
             const data = await res.json()
 
             // Store authenticated user data
-            set({ userData: data.user })
+            set({ userData: data })
 
         } catch (error) {
             // Network or server error
@@ -66,7 +66,7 @@ const authentificationManagement = create((set) => ({
      */
     signup: async (values) => {
         try {
-            const res = await fetch("http://127.0.0.1:2005/userSignup", {
+            const res = await fetch("http://127.0.0.1:2005/auth/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
@@ -96,7 +96,7 @@ const authentificationManagement = create((set) => ({
      */
     login: async (values) => {
         try {
-            const res = await fetch("http://127.0.0.1:2005/userLogin", {
+            const res = await fetch("http://127.0.0.1:2005/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),

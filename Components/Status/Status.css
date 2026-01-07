@@ -1,24 +1,56 @@
-.status{
+.status {
+    position: relative;
     height: calc(var(--height-lv1) * 0.8);
     padding: 0 calc(var(--padding-lv1) * 0.8);
+    text-transform: capitalize;
+    user-select: none;
 }
 
-.status.blue{
+.status:hover > .status-changer{
+    opacity: 1;
+    pointer-events: all;
+}
+
+.status-changer {
+    position: absolute;
+    top: 100%;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--animation-short-duration);
+}
+
+.status-changer .status-item{
+    transition: color var(--animation-short-duration);
+    cursor: pointer;
+}
+
+.status-changer .status-item:hover{
+    color: var(--main-text-color);
+}
+
+.status-changer {
+    position: absolute;
+    top: 100%;
+    z-index: 100;
+}
+
+.status.blue {
     color: #2a58ff;
     background-color: #0091ff47;
 }
 
-.status.green{
+.status.green {
     color: #0cba38;
     background-color: #00ff4047;
 }
 
-.status.red{
+.status.red {
     color: #ee1b1b;
     background-color: #ff00002c;
 }
 
-.status.yellow{
+.status.yellow {
     color: #ab8c10;
     background-color: #ffea0047;
 }

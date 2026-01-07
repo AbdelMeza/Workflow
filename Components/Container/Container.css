@@ -1,5 +1,7 @@
-.container{
-    padding-top: calc(var(--padding-lv1) * 0.5);
+.container .header{
+    padding: calc(var(--padding-lv1) * 0.2) 0;
+    display: flex;
+    justify-content: space-between;
 }
 
 .container .content{
@@ -7,7 +9,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
 }
 
 .container .content:has(.empty-data){

@@ -29,8 +29,8 @@ export default function DashboardHeader() {
                 </div>
                 <input type="text" className="search-input" placeholder='Search..' ref={searchBar} />
                 <div className="indication">
-                    <code className="key bgc-lv3">Shift</code>
-                    <code className="key bgc-lv3">S</code>
+                    <code className="key bgc-lv3 br">SHIFT</code>
+                    <code className="key bgc-lv3 br">S</code>
                 </div>
             </div>
         </div>

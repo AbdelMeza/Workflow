@@ -6,7 +6,9 @@ export default function Status({ content }) {
             content === "completed" ? "green" :
                 content === "late" ? "red" : null;
 
-    return <div className={`status flex-c brad-1 ${type}`}>
-        <span className="s-fs">{content}</span>
-    </div>
+    return <>
+        <div className={`status flex-c brad-1 ${type}`}>
+            <span className="s-fs">{content}</span>
+        </div>
+    </>
 }

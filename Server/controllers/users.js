@@ -1,30 +1,12 @@
-import { userModel } from "../models/userModel.js"
 import { projectsModel } from "../models/projectsModel.js"
-import { readToken } from "../utils/token.js"
+import { userModel } from "../models/userModel.js"
 
 export async function getUserData(req, res) {
     try {
-        const token = req.headers.token
-
-        if (!token) {
-            return res.status(401).json({
-                error: "Authentication token missing"
-            })
-        }
-
-        // 1️⃣ Decode token
-        const decoded = readToken(token)
-
-        if (!decoded?.id) {
-            return res.status(401).json({
-                error: "Invalid or expired token"
-            })
-        }
-
-        // 2️⃣ Get user
         const user = await userModel
-            .findById(decoded.id)
+            .findById(req.user.id)
             .select("username email role")
+
 
         if (!user) {
             return res.status(401).json({
@@ -32,29 +14,7 @@ export async function getUserData(req, res) {
             })
         }
 
-        // 3️⃣ Get projects depending on role
-        let projects = []
-
-        if (user.role === "freelancer") {
-            projects = await projectsModel
-                .find({ freelancerId: user._id })
-                .populate("clientId", "username email")
-                .sort({ createdAt: -1 })
-        }
-
-        if (user.role === "client") {
-            projects = await projectsModel
-                .find({ clientId: user._id })
-                .populate("freelancerId", "username email")
-                .sort({ createdAt: -1 })
-        }
-
-        // 4️⃣ Response
-        res.status(200).json({
-            user,
-            projects
-        })
-
+        res.status(200).json(user)
     } catch (error) {
         console.error(error)
         res.status(500).json({
@@ -63,3 +23,58 @@ export async function getUserData(req, res) {
     }
 }
 
+export async function searchClient(req, res) {
+    const search = req.query.search
+    try {
+        const users = await userModel.find({
+            $and: [
+                { role: "client" },
+                { username: { $regex: search, $options: "i" } }
+            ]
+        }).select("_id username email")
+
+        if (!users) {
+            return res.status(404).json({ error: "No results found" })
+        }
+
+        res.status(200).json(users)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error: "Server error, try again" })
+    }
+}
+
+export async function affiliateClient(req, res) {
+    const { projectId, clientId } = req.body
+
+    try {
+        const user = await userModel.findById({ _id: clientId })
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" })
+        }
+
+        if (user.role !== "client") {
+            return res.status(404).json({ error: "User must be registrer as a client" })
+        }
+
+        const project = await projectsModel.findOne({ _id: projectId })
+
+        if (!project) {
+            return res.status(404).json({ error: "Cannot find project" })
+        }
+
+        if (project.client) {
+            return res.status(400).json({ error: "Project already has a client" })
+        }
+
+        project.clientId = clientId
+
+        await project.save()
+
+        res.status(200).json({ message: "Client added successfuly" })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error: "Server error, try again" })
+    }
+}

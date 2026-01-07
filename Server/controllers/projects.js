@@ -76,7 +76,7 @@ export async function getProjects(req, res) {
             status: "late"
         })
 
-        const projectsList = await projectsModel.find()
+        const projectsList = await projectsModel.find(filter)
         const estimatedRevenue = projectsList.reduce((sum, p) => sum + (p.budget || 0), 0)
 
         const today = new Date()
@@ -94,7 +94,11 @@ export async function getProjects(req, res) {
             }
         )
 
-        const lateProjects = await projectsModel.find({ status: "late" })
+        //find by status and by userId
+        const lateProjects = await projectsModel.find({
+            ...filter,
+            status: "late"
+        }).sort({ deadline: 1 })
 
         res.status(200).json({
             projectsData: {
@@ -119,8 +123,6 @@ export async function getProjects(req, res) {
         res.status(500).json({ error: "Internal server error" })
     }
 }
-
-
 
 /**
  * =========================
