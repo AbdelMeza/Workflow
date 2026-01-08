@@ -7,9 +7,11 @@ import projectsManagement from "../../../Stores/projectsManagement"
 import tasksManagement from "../../../Stores/tasksManagement"
 import './Overview.css'
 import formatData from "../../../utils/FormatData/formatData"
+import { useState } from "react"
+import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
 
 export default function Overview() {
-
+    const [selectedProject, setSelectedProject] = useState()
     const { pageData } = projectsManagement()
     const { totalTasks } = tasksManagement()
     const projects = pageData.projectsData.projectsList.projects
@@ -57,9 +59,10 @@ export default function Overview() {
     ]
 
     return <div className="overview flex flex-d-c gap-2">
+        <ClientAffiliation projectId={selectedProject}/>
         <KeyPerfIndicators data={data} />
         <div className="late-work-container flex gap-1">
-            <UpcomingProjectsDeadlines />
+            <UpcomingProjectsDeadlines setSelectedProject={setSelectedProject} />
             <TasksDueDate />
         </div>
         <div className="activity-container">

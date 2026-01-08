@@ -98,7 +98,9 @@ export async function getProjects(req, res) {
         const lateProjects = await projectsModel.find({
             ...filter,
             status: "late"
-        }).sort({ deadline: 1 })
+        })
+            .populate("clientId", "username email role clientProfile")
+            .sort({ deadline: 1 })
 
         res.status(200).json({
             projectsData: {

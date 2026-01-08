@@ -6,9 +6,8 @@ import useCases from '../../Stores/useCases'
 import { useSearchParams } from 'react-router-dom'
 
 export default function CreateProject() {
-    const { projectFormIsOpen, openProjectForm } = useCases()
-    const { createProject } = projectsManagement()
-    const { getProjects } = projectsManagement()
+    const { projectFormIsOpen, toggleProjectForm } = useCases()
+    const { createProject, getProjects, loadingState } = projectsManagement()
     const [title, setTitle] = useState('')
     const [services, setServices] = useState('')
     const [client, setClient] = useState('')
@@ -43,7 +42,7 @@ export default function CreateProject() {
 
             await createProject(projectData)
             await fetchData()
-            openProjectForm()
+            toggleProjectForm()
         }
     }
 
@@ -63,86 +62,90 @@ export default function CreateProject() {
             </div>
 
             <div className="form-container bgc-lv3 br brad-2 pad-2">
-                <div className="inputs-container">
-                    <label htmlFor="project-title">Project title</label>
-                    <input
-                        id="project-title"
-                        type="text"
-                        className="form-input"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
+                {loadingState ? <span className="loading-message pad-3 s-fs st-c">Creating your project..</span> :
+                    <>
+                        <div className="inputs-container">
+                            <label htmlFor="project-title">Project title</label>
+                            <input
+                                id="project-title"
+                                type="text"
+                                className="form-input"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </div>
 
-                <div className="inputs-container">
-                    <div className="inner-container">
-                        <label htmlFor="project-services">Services</label>
-                        <input
-                            id="project-services"
-                            type="text"
-                            className="form-input"
-                            value={services}
-                            onChange={(e) => setServices(e.target.value)}
-                        />
-                    </div>
+                        <div className="inputs-container">
+                            <div className="inner-container">
+                                <label htmlFor="project-services">Services</label>
+                                <input
+                                    id="project-services"
+                                    type="text"
+                                    className="form-input"
+                                    value={services}
+                                    onChange={(e) => setServices(e.target.value)}
+                                />
+                            </div>
 
-                    <div className="inner-container">
-                        <label htmlFor="project-client">Search your client</label>
-                        <input
-                            id="project-client"
-                            type="text"
-                            className="form-input"
-                            value={client}
-                            onChange={(e) => setClient(e.target.value)}
-                        />
-                    </div>
-                </div>
+                            <div className="inner-container">
+                                <label htmlFor="project-client">Search your client</label>
+                                <input
+                                    id="project-client"
+                                    type="text"
+                                    className="form-input"
+                                    value={client}
+                                    onChange={(e) => setClient(e.target.value)}
+                                />
+                            </div>
+                        </div>
 
-                <div className="inputs-container">
-                    <div className="inner-container">
-                        <label htmlFor="project-deadline">Deadline</label>
-                        <input
-                            id="project-deadline"
-                            type="date"
-                            className="form-input"
-                            value={deadline}
-                            onChange={(e) => setDeadline(e.target.value)}
-                        />
-                    </div>
+                        <div className="inputs-container">
+                            <div className="inner-container">
+                                <label htmlFor="project-deadline">Deadline</label>
+                                <input
+                                    id="project-deadline"
+                                    type="date"
+                                    className="form-input"
+                                    value={deadline}
+                                    onChange={(e) => setDeadline(e.target.value)}
+                                />
+                            </div>
 
-                    <div className="inner-container">
-                        <label htmlFor="project-budget">Budget (€)</label>
-                        <input
-                            id="project-budget"
-                            type="number"
-                            step={50}
-                            min={0}
-                            className="form-input"
-                            value={budget}
-                            onChange={(e) => setBudget(e.target.value)}
-                        />
-                    </div>
-                </div>
+                            <div className="inner-container">
+                                <label htmlFor="project-budget">Budget (€)</label>
+                                <input
+                                    id="project-budget"
+                                    type="number"
+                                    step={50}
+                                    min={0}
+                                    className="form-input"
+                                    value={budget}
+                                    onChange={(e) => setBudget(e.target.value)}
+                                />
+                            </div>
+                        </div>
 
-                <div className="textarea-container">
-                    <label htmlFor="project-description">Description</label>
-                    <textarea
-                        id="project-description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </div>
+                        <div className="textarea-container">
+                            <label htmlFor="project-description">Description</label>
+                            <textarea
+                                id="project-description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </div>
 
-                <div className="submit-btn-container">
-                    <div className="submit-btn" onClick={() => handleSubmit()}>
-                        <Button
-                            content="Create project"
-                            size="medium"
-                            classGiven="submit-btn btn-bgc brad-1"
-                            disabled={!isFormValid}
-                        />
-                    </div>
-                </div>
+                        <div className="submit-btn-container">
+                            <div className="submit-btn" onClick={() => handleSubmit()}>
+                                <Button
+                                    content="Create project"
+                                    size="medium"
+                                    classGiven="submit-btn btn-bgc brad-1"
+                                    disabled={!isFormValid}
+                                />
+                            </div>
+                        </div>
+                    </>
+                }
             </div>
         </div>
     )

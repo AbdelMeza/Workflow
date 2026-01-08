@@ -4,6 +4,8 @@ const useCases = create((set, get) => ({
     projectFormIsOpen: false,
     affiliateClientIsOpen: false,
     searchResult: null,
+    loadingState: false,
+    searchLoading: false,
 
     toggleProjectForm: () => set({ projectFormIsOpen: !get().projectFormIsOpen }),
     toggleAffiliateClient: () => set({ affiliateClientIsOpen: !get().affiliateClientIsOpen, searchResult: null }),
@@ -17,6 +19,7 @@ const useCases = create((set, get) => ({
                 return
             }
 
+            set({ searchLoading: true })
             const res = await fetch(`http://127.0.0.1:2005/user/search?search=${search}`, {
                 method: "GET",
                 headers: { token: userToken },
@@ -24,10 +27,12 @@ const useCases = create((set, get) => ({
 
             const data = await res.json()
 
-
+            set({ searchLoading: false })
             set({ searchResult: data })
         } catch (error) {
             console.log(error)
+        } finally {
+            set({ loadingState: false })
         }
     },
 
@@ -37,6 +42,8 @@ const useCases = create((set, get) => ({
         try {
             if (!values) return
 
+            set({ loadingState: true })
+
             await fetch("http://127.0.0.1:2005/user/affiliate", {
                 method: "POST",
                 headers: {
@@ -45,6 +52,8 @@ const useCases = create((set, get) => ({
                 },
                 body: JSON.stringify(values)
             })
+
+            set({ loadingState: false })
         } catch (error) {
             console.log(error)
         }

@@ -4,8 +4,6 @@ import './TaskDueDate.css'
 
 export default function TasksDueDate() {
     const { tasks } = tasksManagement()
-    if(tasks) return 
-
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 

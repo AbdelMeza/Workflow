@@ -75,7 +75,7 @@ const projectsManagement = create((set) => ({
             })
         } catch (error) {
             console.error("Error fetching projects:", error)
-        } finally{
+        } finally {
             set({ loadingState: false })
         }
     },
@@ -90,6 +90,7 @@ const projectsManagement = create((set) => ({
         const userToken = localStorage.getItem("userToken")
 
         try {
+            set({ loadingState: true })
             // Send project data to the backend
             const res = await fetch(`http://127.0.0.1:2005/project/create`, {
                 method: "POST",
@@ -101,6 +102,7 @@ const projectsManagement = create((set) => ({
             })
 
             const data = await res.json()
+            set({ loadingState: false })
             return data
         } catch (error) {
             console.error("Error creating project:", error)

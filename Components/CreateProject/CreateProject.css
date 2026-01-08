@@ -15,12 +15,12 @@
     transition: opacity var(--animation-short-duration);
 }
 
-.project-form.opened{
+.project-form.opened {
     pointer-events: all;
     opacity: 1;
 }
 
-.close-btn {
+.project-form .close-btn {
     position: absolute;
     top: 0;
     right: 0;
