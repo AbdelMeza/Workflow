@@ -4,6 +4,8 @@ import useCases from '../../Stores/useCases'
 import { useEffect, useRef } from 'react'
 import UserProfile from '../../utils/UserProfile/UserProfile'
 import projectsManagement from '../../Stores/projectsManagement'
+import { socket } from '../../src/socket'
+import authentificationManagement from '../../Stores/Authentification'
 
 export default function ClientAffiliation({ projectId }) {
     const {
@@ -16,7 +18,8 @@ export default function ClientAffiliation({ projectId }) {
         searchLoading
     } = useCases()
     const searchInput = useRef(null)
-    const { getProjects } = projectsManagement()
+    const { userData } = authentificationManagement()
+    const { getProjects, pageData } = projectsManagement()
     const [searchParams, setSearchParams] = useSearchParams()
     const [queryParams, setQueryParams] = useSearchParams()
 
@@ -26,6 +29,14 @@ export default function ClientAffiliation({ projectId }) {
 
     useEffect(() => {
         searchInput.current.value = ""
+        
+        if (!affiliateClientIsOpen) {
+            setSearchParams(prev => {
+                const params = new URLSearchParams(prev)
+                params.delete("search")
+                return params
+            })
+        }
     }, [affiliateClientIsOpen])
 
     useEffect(() => {
@@ -37,7 +48,7 @@ export default function ClientAffiliation({ projectId }) {
     }, [search])
 
     const handleAddClient = async (clientId) => {
-        await affiliateClient({ projectId, clientId })
+        await affiliateClient({ projectId, clientId, userId: userData._id })
         const fetchData = async () => {
             await getProjects({ page, limit })
         }

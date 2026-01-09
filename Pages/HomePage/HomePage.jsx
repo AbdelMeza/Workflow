@@ -102,7 +102,6 @@ function NavBar() {
  */
 function HeroSection() {
     const { userData } = authentificationManagement()
-
     return (
         <section
             className="hero-section"

@@ -9,7 +9,8 @@ export function getTimeRemaining(deadline) {
         (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     )
 
-    if(diffDays > 7  || diffDays < 0) return false
+    if(diffDays > 7) return false
+    if(diffDays <= 0 && diffHours <= 0) return "Past due"
 
     if (diffDays > 0) return `${diffDays}d ${diffHours}h`
     return `${diffHours}h`

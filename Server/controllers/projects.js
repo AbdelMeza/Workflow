@@ -84,6 +84,7 @@ export async function getProjects(req, res) {
         in7Days.setDate(today.getDate() + 7)
 
         // Update statuses for projects if deadline is approaching
+        //if deadline is passed 
         await projectsModel.updateMany(
             {
                 status: { $ne: "completed" },

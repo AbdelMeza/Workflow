@@ -1,5 +1,6 @@
 import { projectsModel } from "../models/projectsModel.js"
 import { userModel } from "../models/userModel.js"
+import { getIO } from "../socket.js"
 
 export async function getUserData(req, res) {
     try {
@@ -45,7 +46,7 @@ export async function searchClient(req, res) {
 }
 
 export async function affiliateClient(req, res) {
-    const { projectId, clientId } = req.body
+    const { projectId, clientId, userId } = req.body
 
     try {
         const user = await userModel.findById({ _id: clientId })
@@ -64,13 +65,20 @@ export async function affiliateClient(req, res) {
             return res.status(404).json({ error: "Cannot find project" })
         }
 
-        if (project.client) {
+        if (project.clientId) {
             return res.status(400).json({ error: "Project already has a client" })
         }
 
         project.clientId = clientId
 
         await project.save()
+
+        console.log(clientId)
+        getIO()
+            .to(clientId.toString())
+            .to(userId.toString())
+            .emit("project:clientAssigned", project)
+
 
         res.status(200).json({ message: "Client added successfuly" })
     } catch (error) {

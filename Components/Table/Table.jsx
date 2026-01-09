@@ -18,6 +18,7 @@ export default function Table({ tableData, title }) {
                         ))}
                     </div>
                 </div>
-            )) : <code className="empty-data s-fs st-c pad-3">Error fetching data</code>}
+            )) : <code className="empty-data s-fs st-c pad-3">Error fetching data</code>
+        }
     </div>
 }

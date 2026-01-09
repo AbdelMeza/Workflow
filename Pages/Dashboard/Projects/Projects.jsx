@@ -1,18 +1,20 @@
-import { useEffect, useState } from "react"
-import Button from "../../../Components/Button/Button"
-import Container from "../../../Components/Container/Container"
-import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
-import Table from "../../../Components/Table/Table"
-import projectsManagement from "../../../Stores/projectsManagement"
-import { useSearchParams } from "react-router-dom"
 import './Projects.css'
-import formatData from "../../../utils/FormatData/formatData"
-import CreateProject from "../../../Components/CreateProject/CreateProject"
+import { useEffect, useState } from "react"
 import useCases from "../../../Stores/useCases"
+import { useSearchParams } from "react-router-dom"
+import Table from "../../../Components/Table/Table"
+import useRole from "../../../utils/useRole/useRole"
+import Button from "../../../Components/Button/Button"
 import Status from "../../../Components/Status/Status"
+import formatData from "../../../utils/FormatData/formatData"
+import Container from "../../../Components/Container/Container"
+import projectsManagement from "../../../Stores/projectsManagement"
+import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
+import CreateProject from "../../../Components/CreateProject/CreateProject"
 import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
 
 export default function Projects() {
+    const { isFreelancer, isClient } = useRole()
     const [selectedProject, setSelectedProject] = useState()
     const { pageData, getProjects, loadingState } = projectsManagement()
     const { toggleProjectForm, toggleAffiliateClient } = useCases()
@@ -71,7 +73,7 @@ export default function Projects() {
     ]
 
     const tableData = []
-    projects.map(project => tableData.push({
+    isFreelancer && projects.map(project => tableData.push({
         "Title": project.title,
         "Client": project.clientId ? project.clientId.username :
             <>
@@ -95,31 +97,44 @@ export default function Projects() {
     })
     )
 
+    isClient && projects.map(project => tableData.push({
+        "Title": project.title,
+        "Creator": project.freelancerId.username,
+        "Created at": new Date(project.createdAt).toLocaleDateString(),
+        "Deadline": new Date(project.deadline).toLocaleDateString(),
+        "Status": <Status content={project.status} />,
+    })
+    )
+
     return <div className="projects flex flex-d-c gap-2">
-        <CreateProject />
-        <ClientAffiliation projectId={selectedProject}/>
-        <div className="header-container">
-            <div className="side-content">
-                <span className="page-title s-fs mt-c">Projects</span>
-            </div>
-            <div className="side-content">
-                <div className="open-project-form" onClick={() => toggleProjectForm()}>
-                    <Button
-                        content={
-                            <>
-                                <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                </svg>
-                                Create project
-                            </>
-                        }
-                        size="medium"
-                        classGiven="bgc-lv3 br brad-2"
-                    />
+        {isFreelancer &&
+            <>
+                <CreateProject />
+                <ClientAffiliation projectId={selectedProject} />
+                <div className="header-container">
+                    <div className="side-content">
+                        <span className="page-title s-fs mt-c">Projects</span>
+                    </div>
+                    <div className="side-content">
+                        <div className="open-project-form" onClick={() => toggleProjectForm()}>
+                            <Button
+                                content={
+                                    <>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                        Create project
+                                    </>
+                                }
+                                size="medium"
+                                classGiven="bgc-lv3 br brad-2"
+                            />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <KeyPerfIndicators data={data} />
+                <KeyPerfIndicators data={data} />
+            </>
+        }
         <div className="projects-container">
             <Container
                 headerTitle={"All projects"}
@@ -131,26 +146,28 @@ export default function Projects() {
                     getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })
                 }}
             >
-                {loadingState ? <span className="Loading-message s-fs st-c pad-3">Wait for loading..</span> :
-                    tableData && tableData.length > 0 ?
-                        <Table tableData={tableData} title={"projects"} /> :
-                        <div className="create-project-container flex-c flex-d-c gap-2 pad-3">
-                            <span className="s-fs st-c">Create your first project</span>
-                            <div className="open-project-form" onClick={() => openProjectForm()}>
-                                <Button
-                                    content={
-                                        <>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                            </svg>
-                                            Create project
-                                        </>
-                                    }
-                                    size="medium"
-                                    classGiven="bgc-lv3 br brad-1"
-                                />
-                            </div>
-                        </div>
+                {
+                    loadingState ? <span className="Loading-message s-fs st-c pad-3">Wait for loading..</span> :
+                        tableData && tableData.length > 0 ?
+                            <Table tableData={tableData} title={"projects"} /> :
+                            isFreelancer ?
+                                <div className="create-project-container flex-c flex-d-c gap-2 pad-3">
+                                    <span className="s-fs st-c">Create your first project</span>
+                                    <div className="open-project-form" onClick={() => toggleProjectForm()}>
+                                        <Button
+                                            content={
+                                                <>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                    </svg>
+                                                    Create project
+                                                </>
+                                            }
+                                            size="medium"
+                                            classGiven="bgc-lv3 br brad-1"
+                                        />
+                                    </div>
+                                </div> : isClient ? <code className="empty-data s-fs st-c pad-3" >No project for now</code> : null
                 }
             </Container>
 

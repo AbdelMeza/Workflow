@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '../Button/Button'
 import './CreateProject.css'
 import projectsManagement from '../../Stores/projectsManagement'
@@ -24,6 +24,16 @@ export default function CreateProject() {
         budget &&
         description.trim()
 
+
+    useEffect(() => {
+        setTitle("")
+        setServices("")
+        setClient("")
+        setDeadline("")
+        setBudget("")
+        setDescription("")
+    }, [projectFormIsOpen])
+
     const handleSubmit = async () => {
         const projectData = {
             title,
@@ -48,7 +58,7 @@ export default function CreateProject() {
 
     return (
         <div className={`project-form ${projectFormIsOpen ? "opened" : "closed"}`}>
-            <div className="close-btn bgc-lv3 h-1 br brad-1 flex-c" onClick={() => openProjectForm()}>
+            <div className="close-btn bgc-lv3 h-1 br brad-1 flex-c" onClick={() => toggleProjectForm()}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={15}

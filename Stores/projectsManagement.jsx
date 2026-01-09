@@ -49,7 +49,6 @@ const projectsManagement = create((set) => ({
             )
 
             const data = await res.json()
-            console.log(data)
             if (!data) return
 
             // Update the Zustand store with fetched data

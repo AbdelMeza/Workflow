@@ -76,6 +76,7 @@ body {
   background: none;
   box-sizing: border-box;
   font-family: "main-font-regular";
+  text-decoration: none;
   color: inherit;
   scrollbar-width: thin;
   scrollbar-color: #0000006b transparent;

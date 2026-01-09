@@ -43,7 +43,7 @@ export default function UpcomingProjectsDeadlines({ setSelectedProject }) {
                     <span>Upcoming deadlines</span>
                     <span
                         className="st-c"
-                        onClick={() => navigate('/dashboard/projects')}
+                        onClick={() => navigate('/dashboard/freelancer/projects')}
                         style={{ cursor: "pointer" }}
                     >
                         View all

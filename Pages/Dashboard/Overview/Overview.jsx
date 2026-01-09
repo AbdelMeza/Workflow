@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
-import RecentActivity from "../../../Components/RecentActivity/RecentActivity"
+import RecentActivity from "../../../Components/CreateProject/RecentActivity/RecentActivity"
 import TasksDueDate from "../../../Components/TasksDuDate/TasksDueDate"
 import UpcomingProjectsDeadlines from "../../../Components/UpcomingProjectsDeadlies/UpcomingProjectsDeadlines"
 import projectsManagement from "../../../Stores/projectsManagement"
@@ -59,7 +59,7 @@ export default function Overview() {
     ]
 
     return <div className="overview flex flex-d-c gap-2">
-        <ClientAffiliation projectId={selectedProject}/>
+        <ClientAffiliation projectId={selectedProject} />
         <KeyPerfIndicators data={data} />
         <div className="late-work-container flex gap-1">
             <UpcomingProjectsDeadlines setSelectedProject={setSelectedProject} />
