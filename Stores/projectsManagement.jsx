@@ -1,7 +1,6 @@
 import { create } from "zustand"
 
 const projectsManagement = create((set) => ({
-    projectFormIsOpen: false,
     loadingState: false,
 
     pageData: {
@@ -20,11 +19,6 @@ const projectsManagement = create((set) => ({
             totalPages: null,
         }
     },
-
-    /**    
-      * Toggle the project creation form visibility
-     */
-    openProjectForm: () => set((state) => ({ projectFormIsOpen: !state.projectFormIsOpen })),
 
     /**
      * Fetch projects from the backend with pagination
@@ -77,6 +71,76 @@ const projectsManagement = create((set) => ({
         } finally {
             set({ loadingState: false })
         }
+    },
+
+    updateData: (incomingProject) => {
+        const isLate = (project) => project.status === "late"
+
+        set((state) => {
+            const {
+                projects,
+                lateProjects,
+            } = state.pageData.projectsData.projectsList
+
+            const existsInProjects = projects.some(p => p._id === incomingProject._id)
+            const existsInLate = lateProjects.some(p => p._id === incomingProject._id)
+            const late = isLate(incomingProject)
+
+            // ---------- PROJECTS ----------
+            const newProjects = existsInProjects
+                ? projects.map(p =>
+                    p._id === incomingProject._id ? { ...p, ...incomingProject } : p
+                )
+                : [incomingProject, ...projects]
+
+            // ---------- LATE PROJECTS ----------
+            let newLateProjects = lateProjects
+
+            // add to late
+            if (late && !existsInLate) {
+                newLateProjects = [incomingProject, ...lateProjects]
+            }
+
+            // update late
+            if (late && existsInLate) {
+                newLateProjects = lateProjects.map(p =>
+                    p._id === incomingProject._id ? { ...p, ...incomingProject } : p
+                )
+            }
+
+            // remove from late
+            if (!late && existsInLate) {
+                newLateProjects = lateProjects.filter(
+                    p => p._id !== incomingProject._id
+                )
+            }
+
+            // ---------- COUNTERS ----------
+            const totalProjects =
+                state.pageData.projectsData.totalProjects + (existsInProjects ? 0 : 1)
+
+            const totalLateProjects = newLateProjects.length
+
+            const estimatedRevenue =
+                state.pageData.projectsData.estimatedRevenue +
+                (!existsInProjects ? incomingProject.budget || 0 : 0)
+
+            return {
+                pageData: {
+                    ...state.pageData,
+                    projectsData: {
+                        ...state.pageData.projectsData,
+                        totalProjects,
+                        totalLateProjects,
+                        estimatedRevenue,
+                        projectsList: {
+                            projects: newProjects,
+                            lateProjects: newLateProjects,
+                        },
+                    },
+                },
+            }
+        })
     },
 
     /**

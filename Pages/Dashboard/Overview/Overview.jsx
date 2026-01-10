@@ -1,6 +1,4 @@
-import { useSearchParams } from "react-router-dom"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
-import RecentActivity from "../../../Components/CreateProject/RecentActivity/RecentActivity"
 import TasksDueDate from "../../../Components/TasksDuDate/TasksDueDate"
 import UpcomingProjectsDeadlines from "../../../Components/UpcomingProjectsDeadlies/UpcomingProjectsDeadlines"
 import projectsManagement from "../../../Stores/projectsManagement"
@@ -9,6 +7,7 @@ import './Overview.css'
 import formatData from "../../../utils/FormatData/formatData"
 import { useState } from "react"
 import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
+import RecentActivity from "../../../Components/RecentActivity/RecentActivity"
 
 export default function Overview() {
     const [selectedProject, setSelectedProject] = useState()

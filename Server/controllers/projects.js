@@ -1,5 +1,6 @@
 import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining.js"
 import { projectsModel } from "../models/projectsModel.js"
+import { getIO } from "../socket.js"
 
 /**
  * =========================
@@ -22,6 +23,10 @@ export async function createProject(req, res) {
             // Set initial status based on deadline
             status: getTimeRemaining(deadline) ? "late" : "open"
         })
+
+        getIO()
+            .to(req.user.id.toString())
+            .emit("project:create", newProject)
 
         res.status(201).json(newProject)
     } catch (error) {
@@ -59,8 +64,8 @@ export async function getProjects(req, res) {
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
-            .populate("clientId", "username email role clientProfile")
-            .populate("freelancerId", "username email role freelancerProfile")
+            .populate("clientId", "username email")
+            .populate("freelancerId", "username email")
 
         // Stats
         const total = await projectsModel.countDocuments(filter)
@@ -100,7 +105,7 @@ export async function getProjects(req, res) {
             ...filter,
             status: "late"
         })
-            .populate("clientId", "username email role clientProfile")
+            .populate("clientId", "username email")
             .sort({ deadline: 1 })
 
         res.status(200).json({

@@ -37,54 +37,10 @@
     border-bottom: var(--border);
 }
 
-.client-affiliation .content .lower-content:has(.message) {
+.client-affiliation .content .middle-content:has(.message) {
     padding: var(--padding-lv2) 0;
 }
 
-.search-bar-container .search-bar {
-    position: relative;
-    display: flex;
-    align-items: center;
+.client-affiliation .lower-content .add-client-btn .button-element{
     width: 100%;
-    padding: 0 10px;
-}
-
-.client-affiliation .search-bar .search-input {
-    background: none;
-    position: absolute;
-    width: 75%;
-    height: 100%;
-    padding-left: 35px;
-}
-
-.search-bar .indication {
-    position: absolute;
-    right: 15px;
-    display: flex;
-    gap: 3px;
-    font-size: 0.4rem;
-}
-
-.search-bar .indication .key {
-    padding: 5px;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.user-item {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: calc(var(--padding-lv1) * 0.5);
-    margin: calc(var(--padding-lv1) * 0.5);
-    transition: background var(--animation-short-duration);
-}
-
-.user-item:hover {
-    background: rgba(0, 0, 0, .03);
-}
-
-.loading-message{
-    display: block;
-    text-align: center;
 }

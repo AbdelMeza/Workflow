@@ -39,6 +39,7 @@
 .form-container .inputs-container,
 .form-container .textarea-container,
 .form-container .inner-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--gap-lv1);
@@ -59,8 +60,16 @@
     height: var(--height-lv2);
     border: var(--border);
     font-size: var(--small-font-size);
-    border-radius: var(--border-radius-lv1);
+    border-radius: var(--border-radius-lv2);
     padding: 0 var(--padding-lv1);
+}
+
+.form-container .search-bar-container .search-bar{
+    background: none;
+}
+
+.form-container .search-bar-container input{
+    border: 0;
 }
 
 .form-container textarea {
@@ -71,4 +80,17 @@
 
 .form-container .submit-btn {
     width: 100%;
+}
+
+.form-container .result-container{
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 5px);
+    min-width: 300px;
+    z-index: 1;
+}
+
+.form-container .user-profile{
+    scale: 0.8;
 }

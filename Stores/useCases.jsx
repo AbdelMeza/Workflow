@@ -6,7 +6,9 @@ const useCases = create((set, get) => ({
     searchResult: null,
     loadingState: false,
     searchLoading: false,
+    selectedClient: null,
 
+    selectClient: (client) => set({ selectedClient: client }),
     toggleProjectForm: () => set({ projectFormIsOpen: !get().projectFormIsOpen }),
     toggleAffiliateClient: () => set({ affiliateClientIsOpen: !get().affiliateClientIsOpen, searchResult: null }),
 
@@ -36,7 +38,13 @@ const useCases = create((set, get) => ({
         }
     },
 
-    affiliateClient: async (values) => {
+    affiliateClient: async ({ projectId, userId }) => {
+        const values = {
+            projectTargeted: projectId,
+            userId,
+            clientId: get().selectedClient.id
+        }
+
         const userToken = localStorage.getItem("userToken")
 
         try {

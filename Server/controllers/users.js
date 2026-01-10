@@ -46,7 +46,7 @@ export async function searchClient(req, res) {
 }
 
 export async function affiliateClient(req, res) {
-    const { projectId, clientId, userId } = req.body
+    const { projectTargeted, clientId, userId } = req.body
 
     try {
         const user = await userModel.findById({ _id: clientId })
@@ -59,7 +59,7 @@ export async function affiliateClient(req, res) {
             return res.status(404).json({ error: "User must be registrer as a client" })
         }
 
-        const project = await projectsModel.findOne({ _id: projectId })
+        const project = await projectsModel.findOne({ _id: projectTargeted })
 
         if (!project) {
             return res.status(404).json({ error: "Cannot find project" })
@@ -72,8 +72,9 @@ export async function affiliateClient(req, res) {
         project.clientId = clientId
 
         await project.save()
+        await project.populate("clientId", "username")
+        await project.populate("freelancerId", "username")
 
-        console.log(clientId)
         getIO()
             .to(clientId.toString())
             .to(userId.toString())

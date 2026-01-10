@@ -9,6 +9,7 @@ import LoadingPage from "../Components/LoadingPage/LoadingPage"
 import InDevPage from "../Pages/InDevPage/InDevPage"
 import RequireRole from "../RoutesProtection/requireRole"
 import { socket } from "./socket"
+import projectsManagement from "../Stores/projectsManagement"
 
 
 const SignupPage = lazy(() => import("../Pages/SignupPage/SignupPage"))
@@ -21,10 +22,11 @@ const Projects = lazy(() => import("../Pages/Dashboard/Projects/Projects"))
 
 function App() {
   const { userData } = authentificationManagement()
-
+  const { updateData } = projectsManagement()
 
   useEffect(() => {
-    socket.on("project:clientAssigned", (data) => console.log(data))
+    socket.on("project:clientAssigned", (project) => updateData(project))
+    socket.on("project:create", (project) => updateData(project))
 
     const lenis = new Lenis({
       duration: 0.8,

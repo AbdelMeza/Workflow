@@ -1,0 +1,25 @@
+.user-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: calc(var(--padding-lv1) * 0.5);
+    margin: calc(var(--padding-lv1) * 0.5);
+    transition: background var(--animation-short-duration);
+}
+
+.user-item:hover{
+    background: rgba(0, 0, 0, .03);
+}
+
+.user-item.active {
+    background: rgba(0, 0, 0, .05);
+}
+
+.loading-message {
+    display: block;
+    text-align: center;
+}
+
+.message{
+    box-sizing: border-box;
+}

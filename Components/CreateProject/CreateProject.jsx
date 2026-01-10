@@ -3,23 +3,23 @@ import Button from '../Button/Button'
 import './CreateProject.css'
 import projectsManagement from '../../Stores/projectsManagement'
 import useCases from '../../Stores/useCases'
-import { useSearchParams } from 'react-router-dom'
+import SearchBar from '../ClientAffiliation/SearchElements/SearchBar/SearchBar'
+import SearchResult from '../ClientAffiliation/SearchElements/SearchResult/SearchResult'
 
 export default function CreateProject() {
-    const { projectFormIsOpen, toggleProjectForm } = useCases()
-    const { createProject, getProjects, loadingState } = projectsManagement()
+    const { projectFormIsOpen, toggleProjectForm, selectClient } = useCases()
+    const { createProject, loadingState } = projectsManagement()
+    const { searchResult } = useCases()
     const [title, setTitle] = useState('')
     const [services, setServices] = useState('')
     const [client, setClient] = useState('')
     const [deadline, setDeadline] = useState('')
     const [budget, setBudget] = useState('')
     const [description, setDescription] = useState('')
-    const [queryParams, setQueryParams] = useSearchParams()
 
     const isFormValid =
         title.trim() &&
         services.trim() &&
-        client.trim() &&
         deadline &&
         budget &&
         description.trim()
@@ -32,6 +32,10 @@ export default function CreateProject() {
         setDeadline("")
         setBudget("")
         setDescription("")
+
+        if(!projectFormIsOpen){
+            selectClient(null)
+        }
     }, [projectFormIsOpen])
 
     const handleSubmit = async () => {
@@ -43,15 +47,7 @@ export default function CreateProject() {
         }
 
         if (isFormValid) {
-            const fetchData = async () => {
-                const page = parseInt(queryParams.get("page")) || 1
-                const limit = parseInt(queryParams.get("limit")) || 5
-
-                await getProjects({ page, limit })
-            }
-
             await createProject(projectData)
-            await fetchData()
             toggleProjectForm()
         }
     }
@@ -99,13 +95,14 @@ export default function CreateProject() {
 
                             <div className="inner-container">
                                 <label htmlFor="project-client">Search your client</label>
-                                <input
-                                    id="project-client"
-                                    type="text"
-                                    className="form-input"
-                                    value={client}
-                                    onChange={(e) => setClient(e.target.value)}
-                                />
+                                <div className="search-bar-container">
+                                    <SearchBar value={client} />
+                                </div>
+                                {searchResult &&
+                                    <div className="result-container bgc-lv3 br brad-2">
+                                        <SearchResult />
+                                    </div>
+                                }
                             </div>
                         </div>
 
@@ -149,7 +146,7 @@ export default function CreateProject() {
                                 <Button
                                     content="Create project"
                                     size="medium"
-                                    classGiven="submit-btn btn-bgc brad-1"
+                                    classGiven="submit-btn btn-bgc brad-2"
                                     disabled={!isFormValid}
                                 />
                             </div>
