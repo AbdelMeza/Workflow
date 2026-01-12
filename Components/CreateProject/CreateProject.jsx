@@ -7,7 +7,7 @@ import SearchBar from '../ClientAffiliation/SearchElements/SearchBar/SearchBar'
 import SearchResult from '../ClientAffiliation/SearchElements/SearchResult/SearchResult'
 
 export default function CreateProject() {
-    const { projectFormIsOpen, toggleProjectForm, selectClient } = useCases()
+    const { projectFormIsOpen, toggleProjectForm, selectClient, selectedClient } = useCases()
     const { createProject, loadingState } = projectsManagement()
     const { searchResult } = useCases()
     const [title, setTitle] = useState('')
@@ -101,6 +101,17 @@ export default function CreateProject() {
                                 {searchResult &&
                                     <div className="result-container bgc-lv3 br brad-2">
                                         <SearchResult />
+                                        {selectedClient && 
+                                        <div className="add-btn-container">
+                                            <div className="add-btn" onClick={() => handleAddClient()}>
+                                                <Button
+                                                    content="Add client"
+                                                    size="medium"
+                                                    classGiven=" btn-bgc brad-1"
+                                                 />
+                                             </div>
+                                        </div>
+                                            }
                                     </div>
                                 }
                             </div>
