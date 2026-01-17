@@ -3,11 +3,9 @@ import Button from '../Button/Button'
 import './CreateProject.css'
 import projectsManagement from '../../Stores/projectsManagement'
 import useCases from '../../Stores/useCases'
-import SearchBar from '../ClientAffiliation/SearchElements/SearchBar/SearchBar'
-import SearchResult from '../ClientAffiliation/SearchElements/SearchResult/SearchResult'
 
 export default function CreateProject() {
-    const { projectFormIsOpen, toggleProjectForm, selectClient, selectedClient } = useCases()
+    const { projectFormIsOpen, toggleProjectForm, selectClient, selectedClient, affiliateClient } = useCases()
     const { createProject, loadingState } = projectsManagement()
     const { searchResult } = useCases()
     const [title, setTitle] = useState('')
@@ -33,7 +31,7 @@ export default function CreateProject() {
         setBudget("")
         setDescription("")
 
-        if(!projectFormIsOpen){
+        if (!projectFormIsOpen) {
             selectClient(null)
         }
     }, [projectFormIsOpen])
@@ -50,6 +48,10 @@ export default function CreateProject() {
             await createProject(projectData)
             toggleProjectForm()
         }
+    }
+
+    const handleAddClient = async () => {
+        await affiliateClient({ projectId, userId: userData._id })
     }
 
     return (
@@ -82,39 +84,14 @@ export default function CreateProject() {
                         </div>
 
                         <div className="inputs-container">
-                            <div className="inner-container">
-                                <label htmlFor="project-services">Services</label>
-                                <input
-                                    id="project-services"
-                                    type="text"
-                                    className="form-input"
-                                    value={services}
-                                    onChange={(e) => setServices(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="inner-container">
-                                <label htmlFor="project-client">Search your client</label>
-                                <div className="search-bar-container">
-                                    <SearchBar value={client} />
-                                </div>
-                                {searchResult &&
-                                    <div className="result-container bgc-lv3 br brad-2">
-                                        <SearchResult />
-                                        {selectedClient && 
-                                        <div className="add-btn-container">
-                                            <div className="add-btn" onClick={() => handleAddClient()}>
-                                                <Button
-                                                    content="Add client"
-                                                    size="medium"
-                                                    classGiven=" btn-bgc brad-1"
-                                                 />
-                                             </div>
-                                        </div>
-                                            }
-                                    </div>
-                                }
-                            </div>
+                            <label htmlFor="project-services">Services</label>
+                            <input
+                                id="project-services"
+                                type="text"
+                                className="form-input"
+                                value={services}
+                                onChange={(e) => setServices(e.target.value)}
+                            />
                         </div>
 
                         <div className="inputs-container">
