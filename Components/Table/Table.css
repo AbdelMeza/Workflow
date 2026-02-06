@@ -59,3 +59,7 @@
 .table-column:nth-child(1) {
     flex: 2.5;
 }
+
+.table-column:has(.action-btn){
+    flex: 0.5;
+}

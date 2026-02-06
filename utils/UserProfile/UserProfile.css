@@ -1,8 +1,14 @@
 .default-profile{
-    width: var(--height-lv2);
+    min-width: var(--height-lv2);
     aspect-ratio: 1;
     font-size: 0.4rem;
     text-transform: uppercase;
     user-select: none;
     cursor: pointer;
+}
+
+.small .default-profile{
+    min-width: calc(var(--height-lv1) * 0.8);
+    font-size: calc(var(--small-font-size) * 0.6);
+    border-radius: var(--border-radius-lv1);
 }

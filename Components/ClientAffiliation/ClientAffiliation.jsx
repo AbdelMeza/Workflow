@@ -47,7 +47,7 @@ export default function ClientAffiliation({ projectId }) {
         <div className="content flex flex-d-c bgc-lv3 br brad-2">
             {loadingState ? <span className="loading-message pad-3 s-fs st-c">Adding client to project..</span> :
                 <>
-                    <div className="upper-content pad-1 search-bar-container">
+                    <div className="upper-content search-bar-container">
                         <SearchBar placeholder={"Search.."} indicators={["enter"]} />
                     </div>
                     <div className="middle-content result-container">

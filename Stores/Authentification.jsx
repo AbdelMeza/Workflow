@@ -20,6 +20,7 @@ const authentificationManagement = create((set) => ({
      * - object    → authenticated user
      */
     userData: undefined,
+    isLoading: false,
 
     /**
      * Fetch user data using the stored token
@@ -35,6 +36,7 @@ const authentificationManagement = create((set) => ({
         }
 
         try {
+            set({ isLoading: true })
             const res = await fetch("http://127.0.0.1:2005/user/data", {
                 method: "GET",
                 headers: {
@@ -45,11 +47,13 @@ const authentificationManagement = create((set) => ({
             // Invalid or expired token
             if (!res.ok) {
                 set({ userData: null })
+                set({ isLoading: false })
                 return
             }
 
             const data = await res.json()
-
+            
+            set({ isLoading: false })
             // Store authenticated user data
             set({ userData: data })
 
@@ -57,6 +61,7 @@ const authentificationManagement = create((set) => ({
             // Network or server error
             console.error(error)
             set({ userData: null })
+            set({ isLoading: false })
         }
     },
 
@@ -66,6 +71,7 @@ const authentificationManagement = create((set) => ({
      */
     signup: async (values) => {
         try {
+            set({ isLoading: true })
             const res = await fetch("http://127.0.0.1:2005/auth/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -77,15 +83,18 @@ const authentificationManagement = create((set) => ({
             // Backend validation errors
             if (!res.ok) {
                 set({ errors: Array.isArray(data) ? data : [data] })
+                set({ isLoading: false })
                 return false
             }
 
             // Save token on successful signup
             localStorage.setItem("userToken", data.token)
 
+            set({ isLoading: false })
             return true
         } catch (error) {
             console.error(error)
+            set({ isLoading: false })
             return false
         }
     },
@@ -96,6 +105,7 @@ const authentificationManagement = create((set) => ({
      */
     login: async (values) => {
         try {
+            set({ isLoading: true })
             const res = await fetch("http://127.0.0.1:2005/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -107,15 +117,18 @@ const authentificationManagement = create((set) => ({
             // Authentication errors (invalid credentials)
             if (!res.ok) {
                 set({ errors: Array.isArray(data) ? data : [data] })
+                set({ isLoading: false })
                 return false
             }
 
             // Save token on successful login
             localStorage.setItem("userToken", data.token)
 
+            set({ isLoading: false })
             return true
         } catch (error) {
             console.error(error)
+            set({ isLoading: false })
             return false
         }
     },

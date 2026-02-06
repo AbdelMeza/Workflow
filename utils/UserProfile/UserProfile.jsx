@@ -1,11 +1,11 @@
 import authentificationManagement from "../../Stores/Authentification"
 import './UserProfile.css'
 
-export default function UserProfile({ username }) {
+export default function UserProfile({ username, size }) {
     const { userData } = authentificationManagement()
     const user = username === undefined ? userData.username : username
 
-    return <div className="user-profile flex-c gap-1">
+    return <div className={`user-profile flex-c gap-1 ${size ? `${size}` : ""}`}>
         <span className="default-profile btn-bgc brad-2 flex-c lt-c">{getDefaultProfile(user)}</span>
     </div>
 }

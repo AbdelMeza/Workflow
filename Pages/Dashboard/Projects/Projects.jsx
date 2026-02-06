@@ -94,6 +94,11 @@ export default function Projects() {
         "Created at": new Date(project.createdAt).toLocaleDateString(),
         "Deadline": new Date(project.deadline).toLocaleDateString(),
         "Status": <Status content={project.status} />,
+        "": <div className="action-btn">
+            <span className="dot"></span>
+            <span className="dot"></span>
+            <span className="dot"></span>
+        </div>
     })
     )
 

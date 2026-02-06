@@ -33,8 +33,9 @@
     min-width: 400px;
 }
 
-.client-affiliation .content .upper-content {
-    border-bottom: var(--border);
+.client-affiliation .upper-content {
+    padding: var(--padding-lv1);
+    padding-bottom: 0;
 }
 
 .client-affiliation .content .middle-content:has(.message) {

@@ -14,11 +14,11 @@
 }
 
 .dashboard-side-bar .navigation-links-container,
-.dashboard-side-bar .settings-container {
+.dashboard-side-bar .lower-navigation-container {
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: var(--padding-lv1) 0 var(--padding-lv1);
+    padding: var(--padding-lv1) 0; 
 }
 
 .dashboard-side-bar .navigation-links-container::before {

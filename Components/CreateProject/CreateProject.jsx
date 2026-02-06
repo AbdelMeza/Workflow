@@ -19,6 +19,7 @@ export default function CreateProject() {
         title.trim() &&
         services.trim() &&
         deadline &&
+        new Date(deadline) > new Date(new Date().setHours(0, 0, 0, 0)) &&
         budget &&
         description.trim()
 
