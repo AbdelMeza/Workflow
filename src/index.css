@@ -165,6 +165,16 @@ html {
   fill: var(--secondary-text-color);
 }
 
+.st-hover {
+  transition: var(--animation-short-duration),
+    fill var(--animation-short-duration) !important;
+}
+
+.st-hover:hover {
+  color: var(--main-text-color);
+  fill: var(--secondary-text-color);
+}
+
 .lt-c {
   color: var(--light-text-color);
 }

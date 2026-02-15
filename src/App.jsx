@@ -22,11 +22,12 @@ const Projects = lazy(() => import("../Pages/Dashboard/Projects/Projects"))
 
 function App() {
   const { userData } = authentificationManagement()
-  const { updateData } = projectsManagement()
+  const { updateData, removeProject } = projectsManagement()
 
   useEffect(() => {
     socket.on("project:clientAssigned", (project) => updateData(project))
     socket.on("project:create", (project) => updateData(project))
+    socket.on("project:delete", (project) => removeProject(project))
 
     const lenis = new Lenis({
       duration: 0.8,

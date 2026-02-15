@@ -1,0 +1,27 @@
+.actions-container{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    transform: translateX(-50%);
+    height: max-content;
+    padding: calc(var(--padding-lv1) * 0.5);
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+.actions-container .action-item{
+    padding: calc(var(--padding-lv1) * 0.5);
+    cursor: pointer;
+    transition: background var(--animation-short-duration);
+}
+
+.actions-container .action-item.delete-btn{
+    color: #fe3f3f;
+    background-color: #fe3f3f17;
+
+}
+
+.actions-container .action-item.delete-btn:hover{
+    background-color: #fe3f3f24;
+}

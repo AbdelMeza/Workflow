@@ -206,17 +206,20 @@ export async function updateProject(req, res) {
  * DELETE PROJECT
  * =========================
  * Deletes a project by its ID.
- * URL parameter: id (project ID)
  */
 export async function deleteProject(req, res) {
     try {
-        const { id } = req.params
+        const { id } = req.body
 
         const deletedProject = await projectsModel.findByIdAndDelete(id)
-
+        
         if (!deletedProject) {
             return res.status(404).json({ error: "Project not found" })
         }
+        
+        getIO()
+            .to(req.user.id.toString())
+            .emit("project:delete", deletedProject)
 
         res.status(200).json({ message: "Project deleted successfully" })
     } catch (error) {

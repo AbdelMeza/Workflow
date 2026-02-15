@@ -143,6 +143,35 @@ const projectsManagement = create((set) => ({
         })
     },
 
+    removeProject: (deletedProject) => {
+        set((state) => {
+            const { projects, lateProjects } = state.pageData.projectsData.projectsList;
+    
+            const newProjects = projects.filter(p => p._id !== deletedProject._id);
+            const newLateProjects = lateProjects.filter(p => p._id !== deletedProject._id);
+    
+            const totalProjects = newProjects.length;
+            const totalLateProjects = newLateProjects.length;
+            const estimatedRevenue = newProjects.reduce((sum, p) => sum + (p.budget || 0), 0);
+    
+            return {
+                pageData: {
+                    ...state.pageData,
+                    projectsData: {
+                        ...state.pageData.projectsData,
+                        totalProjects,
+                        totalLateProjects,
+                        estimatedRevenue,
+                        projectsList: {
+                            projects: newProjects,
+                            lateProjects: newLateProjects
+                        }
+                    }
+                }
+            };
+        });
+    },    
+
     /**
      * Create a new project
      * @param {Object} projectData - Data of the project to create
@@ -170,7 +199,28 @@ const projectsManagement = create((set) => ({
         } catch (error) {
             console.error("Error creating project:", error)
         }
+    },
+
+    deleteProject: async (projectId) => {
+        const userToken = localStorage.getItem("userToken")
+
+        try {
+            const res = await fetch(`http://127.0.0.1:2005/project/delete`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: userToken,
+                },
+                body: JSON.stringify({ id: projectId }), 
+            })
+
+            const data = await res.json()
+            return data
+        } catch (error) {
+            console.log(error)
+        }
     }
+
 }))
 
 export default projectsManagement
