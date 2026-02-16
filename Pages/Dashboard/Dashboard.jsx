@@ -7,11 +7,13 @@ import DashboardHeader from "../../Components/DashboardHeader/DashboardHeader"
 import DashboardSidebar from "../../Components/DashboardSidebar/DashboardSidebar"
 import authentificationManagement from '../../Stores/Authentification'
 import useRole from '../../utils/useRole/useRole'
+import activitesManagement from '../../Stores/AcitiviesManagement'
 
 export default function Dashboard() {
     const { isFreelancer } = useRole()
     const { getProjects } = projectsManagement()
     const { getTasks } = tasksManagement()
+    const { getActivities } = activitesManagement()
     const [queryParams, setQueryParams] = useSearchParams()
 
     const page = parseInt(queryParams.get("page")) || 1
@@ -20,6 +22,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchData = async () => {
             await getProjects({ page, limit })
+            await getActivities()
             isFreelancer && await getTasks()
         }
 

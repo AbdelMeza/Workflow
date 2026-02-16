@@ -6,7 +6,6 @@ import Button from "../Button/Button"
 import Status from "../Status/Status"
 import { useNavigate } from "react-router-dom"
 import useCases from "../../Stores/useCases"
-import { useState } from "react"
 
 export default function UpcomingProjectsDeadlines({ setSelectedProject }) {
     const navigate = useNavigate()

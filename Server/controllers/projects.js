@@ -1,6 +1,7 @@
 import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining.js"
 import { projectsModel } from "../models/projectsModel.js"
 import { getIO } from "../socket.js"
+import { createActivity } from "./activity.js"
 
 /**
  * =========================
@@ -27,6 +28,14 @@ export async function createProject(req, res) {
         getIO()
             .to(req.user.id.toString())
             .emit("project:create", newProject)
+
+        await createActivity({
+            type: "project_creation",
+            title: "Project creation",
+            details: `Created ${newProject.title} as a new project.`,
+            freelancerId: req.user.id,
+            projectId: newProject._id
+        })
 
         res.status(201).json(newProject)
     } catch (error) {
@@ -212,14 +221,26 @@ export async function deleteProject(req, res) {
         const { id } = req.body
 
         const deletedProject = await projectsModel.findByIdAndDelete(id)
-        
+
         if (!deletedProject) {
             return res.status(404).json({ error: "Project not found" })
         }
-        
-        getIO()
-            .to(req.user.id.toString())
-            .emit("project:delete", deletedProject)
+
+        const io = getIO()
+
+        io.to(req.user.id.toString())
+        if (deletedProject.clientId) {
+            io.to(deletedProject.clientId.toString())
+        }
+        io.emit("project:delete", deletedProject)
+
+        await createActivity({
+            type: "project_deletion",
+            title: "Project deleted",
+            details: `Deleted ${deletedProject.title} from your projects.`,
+            freelancerId: req.user.id,
+            projectId: deletedProject._id
+        })
 
         res.status(200).json({ message: "Project deleted successfully" })
     } catch (error) {

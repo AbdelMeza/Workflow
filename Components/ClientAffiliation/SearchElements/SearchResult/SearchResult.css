@@ -11,6 +11,10 @@
     background: rgba(0, 0, 0, .03);
 }
 
+.user-item .side-content:last-child{
+    gap: calc(var(--gap-lv1) * 0.5);
+}
+
 .user-item.active {
     background: rgba(0, 0, 0, .05);
 }

@@ -1,4 +1,3 @@
-import authentificationManagement from "../../../../Stores/Authentification"
 import useCases from "../../../../Stores/useCases"
 import UserProfile from "../../../../utils/UserProfile/UserProfile"
 import './SearchResult.css'
@@ -16,7 +15,7 @@ export default function SearchResult() {
             Array.isArray(searchResult) ? (
                 searchResult.length > 0 ? (
                     searchResult.map(result => (
-                        <div className={`user-item gap-1 brad-2 ${selectedClient?.id === result._id ? "active" : ""}`}
+                        <div className={`user-item gap-2 brad-2 ${selectedClient?.id === result._id ? "active" : ""}`}
                             key={result._id}
                             onClick={() => selectClient({ id: result._id, username: result.username })}
                         >

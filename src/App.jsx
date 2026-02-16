@@ -1,16 +1,15 @@
-import { lazy, Suspense, useEffect } from "react"
-import { Route, Routes } from "react-router-dom"
 import Lenis from "lenis"
-import { RequireAuth } from "../RoutesProtection/requireAuth"
-import DashboardRedirect from "../RoutesProtection/dashboardRedirect"
-
-import authentificationManagement from "../Stores/Authentification"
-import LoadingPage from "../Components/LoadingPage/LoadingPage"
+import { socket } from "./socket"
+import { Route, Routes } from "react-router-dom"
+import { lazy, Suspense, useEffect } from "react"
 import InDevPage from "../Pages/InDevPage/InDevPage"
 import RequireRole from "../RoutesProtection/requireRole"
-import { socket } from "./socket"
 import projectsManagement from "../Stores/projectsManagement"
-
+import { RequireAuth } from "../RoutesProtection/requireAuth"
+import LoadingPage from "../Components/LoadingPage/LoadingPage"
+import activitesManagement from "../Stores/AcitiviesManagement"
+import authentificationManagement from "../Stores/Authentification"
+import DashboardRedirect from "../RoutesProtection/dashboardRedirect"
 
 const SignupPage = lazy(() => import("../Pages/SignupPage/SignupPage"))
 const LoginPage = lazy(() => import("../Pages/LoginPage/LoginPage"))
@@ -23,11 +22,13 @@ const Projects = lazy(() => import("../Pages/Dashboard/Projects/Projects"))
 function App() {
   const { userData } = authentificationManagement()
   const { updateData, removeProject } = projectsManagement()
+  const { updateActivities } = activitesManagement()
 
   useEffect(() => {
     socket.on("project:clientAssigned", (project) => updateData(project))
     socket.on("project:create", (project) => updateData(project))
     socket.on("project:delete", (project) => removeProject(project))
+    socket.on("activity:new", (activity) => updateActivities(activity))
 
     const lenis = new Lenis({
       duration: 0.8,

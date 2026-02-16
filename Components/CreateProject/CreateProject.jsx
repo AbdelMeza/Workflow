@@ -57,7 +57,7 @@ export default function CreateProject() {
 
     return (
         <div className={`project-form ${projectFormIsOpen ? "opened" : "closed"}`}>
-            <div className="close-btn bgc-lv3 h-1 br brad-1 flex-c" onClick={() => toggleProjectForm()}>
+            <div className="close-btn bgc-lv3 h-1 br brad-2 flex-c" onClick={() => toggleProjectForm()}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={15}
@@ -70,7 +70,7 @@ export default function CreateProject() {
                 </svg>
             </div>
 
-            <div className="form-container bgc-lv3 br brad-2 pad-2">
+            <div className="form-container bgc-lv3 br brad-3 pad-2">
                 {loadingState ? <span className="loading-message pad-3 s-fs st-c">Creating your project..</span> :
                     <>
                         <div className="inputs-container">
@@ -135,7 +135,7 @@ export default function CreateProject() {
                                 <Button
                                     content="Create project"
                                     size="medium"
-                                    classGiven="submit-btn btn-bgc brad-2"
+                                    classGiven="submit-btn btn-bgc brad-1"
                                     disabled={!isFormValid}
                                 />
                             </div>

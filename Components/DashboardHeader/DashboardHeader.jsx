@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import UserProfile from '../../utils/UserProfile/UserProfile'
 import './DashboardHeader.css'
 
 export default function DashboardHeader() {
-    const notifications = 4
+    const notifications = 0
     const searchBar = useRef(null)
 
     const searchFocus = useCallback((e) => {

@@ -1,13 +1,13 @@
-import { projectsModel } from "../models/projectsModel.js"
-import { userModel } from "../models/userModel.js"
 import { getIO } from "../socket.js"
+import { createActivity } from "./activity.js"
+import { userModel } from "../models/userModel.js"
+import { projectsModel } from "../models/projectsModel.js"
 
 export async function getUserData(req, res) {
     try {
         const user = await userModel
             .findById(req.user.id)
             .select("username email role")
-
 
         if (!user) {
             return res.status(401).json({
@@ -80,6 +80,13 @@ export async function affiliateClient(req, res) {
             .to(userId.toString())
             .emit("project:clientAssigned", project)
 
+        await createActivity({
+            type: "client_affiliation",
+            title: "Added a client",
+            details: `Added ${user.username} to your project ${project.title}.`,
+            freelancerId: req.user.id,
+            projectId: project._id
+        })
 
         res.status(200).json({ message: "Client added successfuly" })
     } catch (error) {

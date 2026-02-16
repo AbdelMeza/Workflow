@@ -75,16 +75,15 @@ function NavBar() {
             <div className="navigation-bar-content authentification-buttons flex jc-r">
                 {userData ? (
                     <>
-                        <Button content="Dashboard" size="small" path="/dashboard" />
+                        <Button content="Dashboard" classGiven={"h-2"} path="/dashboard" />
                         <UserProfile />
                     </>
                 ) : (
                     <>
-                        <Button content="Login" size="small" path="/login" />
+                        <Button content="Login" classGiven={"h-2"} path="/login" />
                         <Button
                             content="Get started"
-                            size="small"
-                            classGiven="btn-bgc brad-1"
+                            classGiven="btn-bgc brad-1 h-2"
                             path="/signup"
                         />
                     </>
@@ -127,14 +126,13 @@ function HeroSection() {
                         <Button
                             content="Dashboard"
                             size="small"
-                            classGiven="btn-bgc brad-1"
+                            classGiven="btn-bgc brad-1 h-3"
                             path="/dashboard"
                         />
 
                     ) : <Button
                         content="Get started"
-                        size="small"
-                        classGiven="btn-bgc brad-1"
+                        classGiven="btn-bgc brad-1 h-2"
                         path="/signup"
                     />}
                 </div>
