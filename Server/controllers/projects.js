@@ -27,11 +27,11 @@ export async function createProject(req, res) {
 
         getIO()
             .to(req.user.id.toString())
-            .emit("project:create", newProject)
+            .emit("projects:update", { action: "update", project: newProject })
 
         await createActivity({
             type: "project_creation",
-            title: "Project creation",
+            title: "Created a project",
             details: `Created ${newProject.title} as a new project.`,
             freelancerId: req.user.id,
             projectId: newProject._id
@@ -228,15 +228,14 @@ export async function deleteProject(req, res) {
 
         const io = getIO()
 
-        io.to(req.user.id.toString())
-        if (deletedProject.clientId) {
-            io.to(deletedProject.clientId.toString())
-        }
-        io.emit("project:delete", deletedProject)
+        io
+        .to(req.user.id.toString())
+        .to(deletedProject.clientId?.toString())
+        .emit("projects:update", { action: "delete", project: deletedProject })
 
         await createActivity({
             type: "project_deletion",
-            title: "Project deleted",
+            title: "Deleted a project",
             details: `Deleted ${deletedProject.title} from your projects.`,
             freelancerId: req.user.id,
             projectId: deletedProject._id

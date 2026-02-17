@@ -125,8 +125,7 @@ function HeroSection() {
                     {userData ? (
                         <Button
                             content="Dashboard"
-                            size="small"
-                            classGiven="btn-bgc brad-1 h-3"
+                            classGiven="btn-bgc brad-1 h-2"
                             path="/dashboard"
                         />
 

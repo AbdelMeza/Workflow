@@ -22,7 +22,7 @@ const activitesManagement = create((set) => ({
         }
     },
 
-    updateActivities: (incomingActivity) => {
+    syncActivities: (incomingActivity) => {
         set((state) => {
             const activities = state.activities || [] // <== ici on prend "activities"
 

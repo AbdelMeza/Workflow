@@ -15,7 +15,7 @@ export default function RecentActivity() {
                 {activities.length >= 5 ? (
                     <span
                         className="st-c"
-                        onClick={() => navigate('/dashboard/freelancer/activities')}
+                        onClick={() => navigate('/dashboard/freelancer/activity')}
                         style={{ cursor: "pointer" }}
                     >
                         View all

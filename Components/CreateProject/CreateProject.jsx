@@ -51,10 +51,6 @@ export default function CreateProject() {
         }
     }
 
-    const handleAddClient = async () => {
-        await affiliateClient({ projectId, userId: userData._id })
-    }
-
     return (
         <div className={`project-form ${projectFormIsOpen ? "opened" : "closed"}`}>
             <div className="close-btn bgc-lv3 h-1 br brad-2 flex-c" onClick={() => toggleProjectForm()}>
@@ -78,7 +74,7 @@ export default function CreateProject() {
                             <input
                                 id="project-title"
                                 type="text"
-                                className="form-input"
+                                className="form-input bgc-lv2"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
@@ -89,7 +85,7 @@ export default function CreateProject() {
                             <input
                                 id="project-services"
                                 type="text"
-                                className="form-input"
+                                className="form-input bgc-lv2"
                                 value={services}
                                 onChange={(e) => setServices(e.target.value)}
                             />
@@ -101,7 +97,7 @@ export default function CreateProject() {
                                 <input
                                     id="project-deadline"
                                     type="date"
-                                    className="form-input"
+                                    className="form-input bgc-lv2"
                                     value={deadline}
                                     onChange={(e) => setDeadline(e.target.value)}
                                 />
@@ -114,7 +110,7 @@ export default function CreateProject() {
                                     type="number"
                                     step={50}
                                     min={0}
-                                    className="form-input"
+                                    className="form-input bgc-lv2"
                                     value={budget}
                                     onChange={(e) => setBudget(e.target.value)}
                                 />
@@ -125,6 +121,7 @@ export default function CreateProject() {
                             <label htmlFor="project-description">Description</label>
                             <textarea
                                 id="project-description"
+                                className="bgc-lv2"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />

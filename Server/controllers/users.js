@@ -78,7 +78,7 @@ export async function affiliateClient(req, res) {
         getIO()
             .to(clientId.toString())
             .to(userId.toString())
-            .emit("project:clientAssigned", project)
+            .emit("projects:update", { action: "update", project })
 
         await createActivity({
             type: "client_affiliation",
