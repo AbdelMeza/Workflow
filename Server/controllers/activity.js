@@ -26,16 +26,45 @@ export async function createActivity({ freelancerId, type, title, details, proje
     }
 }
 
-export async function getUserActivities(req, res) {
+export async function getActivities(req, res) {
     try {
         if (!req.user.id) return res.status(500).json("Server error, can not get user activies")
+        const filter = req.query.filter || "all"
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 5
+        const skip = (page - 1) * limit
+
+        const query = { freelancerId: req.user.id }
+        if (filter !== "all") {
+            query.type = filter
+        }
 
         const activities = await activityModel
+            .find(query)
+            .sort({ createdAt: -1 })
+            .populate("projectId", "title")
+            .skip(skip)
+            .limit(limit)
+
+        const latestActivities = await activityModel
             .find({ freelancerId: req.user.id })
             .sort({ createdAt: -1 })
             .populate("projectId", "title")
+            .limit(5)
 
-        res.status(200).json(activities)
+
+        const totalActivities = await activityModel.countDocuments(query)
+
+        res.status(200).json({
+            activities,
+            latestActivities,
+            pagination: {
+                page: page,
+                totalPages: Math.ceil(totalActivities / limit),
+                hasNextPage: page * limit < totalActivities,
+                hasPrevPage: page > 1
+            }
+        })
     } catch (error) {
         console.error(error)
         res.status(500).json({
@@ -43,4 +72,3 @@ export async function getUserActivities(req, res) {
         })
     }
 }
-

@@ -1,33 +1,40 @@
 import './Dashboard.css'
 import { useEffect } from "react"
-import { Outlet, useSearchParams } from "react-router-dom"
+import useRole from '../../utils/useRole/useRole'
 import tasksManagement from "../../Stores/tasksManagement"
+import { Outlet, useSearchParams } from "react-router-dom"
 import projectsManagement from "../../Stores/projectsManagement"
+import activitesManagement from '../../Stores/AcitiviesManagement'
 import DashboardHeader from "../../Components/DashboardHeader/DashboardHeader"
 import DashboardSidebar from "../../Components/DashboardSidebar/DashboardSidebar"
-import authentificationManagement from '../../Stores/Authentification'
-import useRole from '../../utils/useRole/useRole'
-import activitesManagement from '../../Stores/AcitiviesManagement'
 
 export default function Dashboard() {
-    const { isFreelancer } = useRole()
     const { getProjects } = projectsManagement()
-    const { getTasks } = tasksManagement()
     const { getActivities } = activitesManagement()
     const [queryParams, setQueryParams] = useSearchParams()
 
+    const filter = queryParams.get("filter") || "all"
     const page = parseInt(queryParams.get("page")) || 1
     const limit = parseInt(queryParams.get("limit")) || 5
 
     useEffect(() => {
+        document.title = "Workflow — Dashboard"
+    }, [])
+
+    useEffect(() => {
         const fetchData = async () => {
-            await getProjects({ page, limit })
-            await getActivities()
-            isFreelancer && await getTasks()
+            await getActivities({ page, limit, filter })
         }
 
         fetchData()
-        document.title = "Workflow — Dashboard"
+    }, [page, limit, filter])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getProjects({ page, limit })
+        }
+
+        fetchData()
     }, [page, limit])
 
     return <div className="dashboard-page bgc-lv2">

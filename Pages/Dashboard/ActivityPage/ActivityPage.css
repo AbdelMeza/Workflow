@@ -1,0 +1,7 @@
+.activity-list{
+    width: 100%;
+}
+
+.activity-item:not(:last-child) {
+    border-bottom: var(--border);
+}

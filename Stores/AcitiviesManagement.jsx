@@ -1,13 +1,26 @@
 import { create } from "zustand"
 
 const activitesManagement = create((set) => ({
-    activities: [],
+    activitiesData: {
+        data: {
+            activities: [],
+            latestActivities: [],
+            filteredActivities: []
+        },
+        pagination: {
+            page: null,
+            totalPages: null,
+        },
+    },
+    loadingState: false,
 
-    getActivities: async () => {
+    getActivities: async (queries) => {
         const userToken = localStorage.getItem("userToken")
+        const { filter, page, limit } = queries
 
         try {
-            const res = await fetch(`http://127.0.0.1:2005/activities/get`, {
+            set({ loadingState: true })
+            const res = await fetch(`http://127.0.0.1:2005/activities/get?filter=${filter}&page=${page}&limit=${limit}`, {
                 headers: {
                     "Content-Type": "application/json",
                     token: userToken,
@@ -16,15 +29,26 @@ const activitesManagement = create((set) => ({
 
             const data = await res.json()
 
-            set({ activities: data.slice(0, 5) })
+            set((state) => ({
+                activitiesData: {
+                    data: {
+                        ...state.activitiesData.data,
+                        latestActivities: data.latestActivities,
+                        activities: data.activities || []
+                    },
+                    pagination: data.pagination || {}
+                }
+            }))
         } catch (error) {
             console.log(error)
+        } finally {
+            set({ loadingState: false })
         }
     },
 
     syncActivities: (incomingActivity) => {
         set((state) => {
-            const activities = state.activities || [] // <== ici on prend "activities"
+            const activities = state.activitiesData.data.activities || []
 
             const exists = activities.some(a => a._id === incomingActivity._id)
 
@@ -34,7 +58,7 @@ const activitesManagement = create((set) => ({
                 )
                 : [incomingActivity, ...activities]
 
-            return { activities: newActivities.slice(0, 5) } // <== mettre à jour "activities"
+            return { activitiesData: { ...state.activitiesData, data: { ...state.activitiesData.data, activities: newActivities } } }
         })
     }
 

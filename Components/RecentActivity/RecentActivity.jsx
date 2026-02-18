@@ -5,7 +5,9 @@ import Activity from "./Activity";
 import './RecentActivity.css'
 
 export default function RecentActivity() {
-    const { activities } = activitesManagement()
+    const { activitiesData } = activitesManagement()
+    const activities = activitiesData.data.activities || []
+    console.log(activities)
     const navigate = useNavigate()
 
     return <Container
@@ -27,7 +29,7 @@ export default function RecentActivity() {
         {activities && activities.length > 0 ?
             <div className="activity-wrapper flex flex-d-c">
                 {activities.map((activity, index) => (
-                    <Activity type={activity.type} title={activity.title} details={activity.details} key={index} />
+                    <Activity type={activity.type} title={activity.title} details={activity.details} time={activity.createdAt} key={index} />
                 ))}
             </div>
             : <code className="empty-data pad-3 st-c">No recent activity in sight</code>

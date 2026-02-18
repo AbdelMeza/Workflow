@@ -1,10 +1,10 @@
 import { create } from "zustand"
 
-const projectsManagement = create((set) => ({
+const projectsManagement = create((set, get) => ({
     loadingState: false,
 
-    pageData: {
-        projectsData: {
+    projectsData: {
+        data: {
             totalProjects: 0,
             totalLateProjects: 0,
             totalProjectsCompleted: 0,
@@ -47,8 +47,8 @@ const projectsManagement = create((set) => ({
 
             // Update the Zustand store with fetched data
             set({
-                pageData: {
-                    projectsData: {
+                projectsData: {
+                    data: {
                         totalProjects: data.projectsData.totalProjects,
                         totalLateProjects: data.projectsData.totalLateProjects,
                         totalProjectsCompleted: data.projectsData.totalProjectsCompleted,
@@ -73,90 +73,97 @@ const projectsManagement = create((set) => ({
         }
     },
 
-    syncProjects: ({ action, project }) => {
-        const isLate = (p) => p.status === "late"
-    
-        set((state) => {
-            const {
-                projects,
-                lateProjects,
-            } = state.pageData.projectsData.projectsList
-    
-            let newProjects = [...projects]
-            let newLateProjects = [...lateProjects]
-    
-            const existsInProjects = projects.some(p => p._id === project._id)
-            const existsInLate = lateProjects.some(p => p._id === project._id)
-    
-            // ================================
-            // DELETE
-            // ================================
-            if (action === "delete") {
-                newProjects = projects.filter(p => p._id !== project._id)
-                newLateProjects = lateProjects.filter(p => p._id !== project._id)
+    syncProjects: ({ action, project, currentPage = 1, limit = 5 }) => {
+        const isLate = (p) => p.status === "late";
+
+        const state = projectsManagement.getState();
+
+        const { projects, lateProjects } = state.projectsData.data.projectsList;
+
+        const existsInProjects = projects.some(p => p._id === project._id);
+        const existsInLate = lateProjects.some(p => p._id === project._id);
+
+        // DELETE
+        if (action === "delete") {
+            const isLastInPage = state.projectsData.data.projectsList.projects.length === 1;
+
+            if (isLastInPage) {
+                setTimeout(() => projectsManagement.getState().getProjects({ page: currentPage - 1, limit }), 0);
+                return { refetchPreviousPage: true }
             }
-    
-            // ================================
-            // UPDATE / ADD
-            // ================================
-            if (action === "update") {
-                const late = isLate(project)
-    
-                // ---- projects ----
-                if (existsInProjects) {
-                    newProjects = projects.map(p =>
-                        p._id === project._id ? { ...p, ...project } : p
-                    )
-                } else {
-                    newProjects = [project, ...projects]
+
+            projectsManagement.setState({
+                projectsData: {
+                    ...state.projectsData,
+                    data: {
+                        ...state.projectsData.data,
+                        totalProjects: state.projectsData.data.totalProjects - (existsInProjects ? 1 : 0),
+                        totalLateProjects: state.projectsData.data.totalLateProjects - (existsInLate ? 1 : 0),
+                        estimatedRevenue: state.projectsData.data.estimatedRevenue - (existsInProjects ? (project.budget || 0) : 0),
+                        projectsList: {
+                            projects: projects.filter(p => p._id !== project._id),
+                            lateProjects: lateProjects.filter(p => p._id !== project._id),
+                        }
+                    },
+                    pagination: {
+                        ...state.projectsData.pagination,
+                        totalPages: Math.ceil((state.projectsData.data.totalProjects - 1) / limit) || 1,
+                    }
                 }
-    
-                // ---- late projects ----
-                if (late && !existsInLate) {
-                    newLateProjects = [project, ...lateProjects]
-                }
-    
-                if (late && existsInLate) {
-                    newLateProjects = lateProjects.map(p =>
-                        p._id === project._id ? { ...p, ...project } : p
-                    )
-                }
-    
-                if (!late && existsInLate) {
-                    newLateProjects = lateProjects.filter(
-                        p => p._id !== project._id
-                    )
-                }
+            });
+
+            return;
+        }
+
+        // UPDATE / ADD
+        if (action === "update") {
+            const late = isLate(project);
+
+            if (!existsInProjects && currentPage !== 1) {
+                // Refetch la page actuelle si on est pas sur la première
+                setTimeout(() => projectsManagement.getState().getProjects({ page: currentPage, limit }), 0);
+                return;
             }
-    
-            // ================================
-            // COUNTERS (toujours recalculés proprement)
-            // ================================
-            const totalProjects = newProjects.length
-            const totalLateProjects = newLateProjects.length
-            const estimatedRevenue = newProjects.reduce(
-                (sum, p) => sum + (p.budget || 0),
-                0
-            )
-    
-            return {
-                pageData: {
-                    ...state.pageData,
-                    projectsData: {
-                        ...state.pageData.projectsData,
+
+            let newProjects = existsInProjects
+                ? projects.map(p => p._id === project._id ? { ...p, ...project } : p)
+                : [project, ...projects].slice(0, limit);
+
+            let newLateProjects = existsInLate
+                ? lateProjects.map(p => p._id === project._id ? { ...p, ...project } : p)
+                : late ? [project, ...lateProjects] : lateProjects;
+
+            const totalProjects = existsInProjects ? state.projectsData.data.totalProjects : state.projectsData.data.totalProjects + 1;
+            const totalLateProjects = !existsInLate && late ? state.projectsData.data.totalLateProjects + 1
+                : existsInLate && !late ? state.projectsData.data.totalLateProjects - 1
+                    : state.projectsData.data.totalLateProjects;
+
+            const estimatedRevenue = existsInProjects
+                ? state.projectsData.data.estimatedRevenue
+                : state.projectsData.data.estimatedRevenue + (project.budget || 0);
+
+            projectsManagement.setState({
+                projectsData: {
+                    data: {
+                        ...state.projectsData.data,
                         totalProjects,
                         totalLateProjects,
                         estimatedRevenue,
                         projectsList: {
                             projects: newProjects,
                             lateProjects: newLateProjects,
-                        },
+                        }
                     },
-                },
-            }
-        })
+                    pagination: {
+                        ...state.projectsData.pagination,
+                        totalPages: Math.ceil(totalProjects / limit) || 1,
+                    }
+                }
+            });
+        }
     },
-    
+
+
     /**
      * Create a new project
      * @param {Object} projectData - Data of the project to create
@@ -196,7 +203,7 @@ const projectsManagement = create((set) => ({
                     "Content-Type": "application/json",
                     token: userToken,
                 },
-                body: JSON.stringify({ id: projectId }), 
+                body: JSON.stringify({ id: projectId }),
             })
 
             const data = await res.json()

@@ -9,9 +9,9 @@ import useCases from "../../Stores/useCases"
 
 export default function UpcomingProjectsDeadlines({ setSelectedProject }) {
     const navigate = useNavigate()
-    const { pageData } = projectsManagement()
+    const { projectsData } = projectsManagement()
     const { toggleAffiliateClient } = useCases()
-    const upcomingProjects = pageData.projectsData.projectsList.lateProjects || []
+    const upcomingProjects = projectsData.data.projectsList.lateProjects || []
 
     const tableData = upcomingProjects.map(project => ({
         "Title": project.title,
@@ -53,10 +53,7 @@ export default function UpcomingProjectsDeadlines({ setSelectedProject }) {
         >
             {tableData && tableData.length > 0 ?
                 <Table title={"upcoming-deadlines"} tableData={tableData} /> :
-                <code
-                    className="empty-data s-fs st-c pad-3"
-                    style={{ display: "block", textAlign: "center" }}
-                >
+                <code className="empty-data s-fs st-c pad-3">
                     No projects are behind schedule.
                 </code>}
         </Container>

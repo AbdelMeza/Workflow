@@ -1,4 +1,4 @@
-import './Projects.css'
+import './ProjectsPage.css'
 import { useEffect, useState } from "react"
 import useCases from "../../../Stores/useCases"
 import { useSearchParams } from "react-router-dom"
@@ -6,15 +6,15 @@ import Table from "../../../Components/Table/Table"
 import useRole from "../../../utils/useRole/useRole"
 import Button from "../../../Components/Button/Button"
 import Status from "../../../Components/Status/Status"
+import Actions from '../../../Components/Actions/Actions'
 import formatData from "../../../utils/FormatData/formatData"
 import Container from "../../../Components/Container/Container"
 import projectsManagement from "../../../Stores/projectsManagement"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
 import CreateProject from "../../../Components/CreateProject/CreateProject"
 import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
-import Actions from '../../../Components/Actions/Actions'
 
-export default function Projects() {
+export default function ProjectsPage() {
   const { isFreelancer, isClient } = useRole()
   const [actionsStatus, setActionsStatus] = useState({
     isVisible: false,
@@ -22,15 +22,18 @@ export default function Projects() {
     projectId: null
   })
   const [selectedProject, setSelectedProject] = useState()
-  const { pageData, getProjects, loadingState } = projectsManagement()
+  const { projectsData, getProjects, loadingState } = projectsManagement()
   const { toggleProjectForm, toggleAffiliateClient } = useCases()
-  const projects = pageData.projectsData.projectsList.projects
-  const totalProjects = pageData.projectsData.totalProjects
-  const totalLateProjects = pageData.projectsData.totalLateProjects
-  const totalProjectsCompleted = pageData.projectsData.totalProjectsCompleted
-  const estimatedRevenue = pageData.projectsData.estimatedRevenue
-
+  const projects = projectsData.data.projectsList.projects
+  const totalProjects = projectsData.data.totalProjects
+  const totalLateProjects = projectsData.data.totalLateProjects
+  const totalProjectsCompleted = projectsData.data.totalProjectsCompleted
+  const estimatedRevenue = projectsData.data.estimatedRevenue
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const page = parseInt(searchParams.get("page"))
+  const limit = parseInt(searchParams.get("limit"))
+  const totalPages = projectsData.pagination.totalPages
 
   const showActions = (event, projectId) => {
     const rect = event.target.getBoundingClientRect()
@@ -56,7 +59,13 @@ export default function Projects() {
     window.addEventListener("resize", () => setActionsStatus({ isVisible: false }))
   }, [])
 
-  const data = [
+  useEffect(() => {
+    if (page && totalPages && page > totalPages) {
+      setSearchParams({ ...Object.fromEntries(searchParams), page: totalPages })
+    }
+  }, [searchParams.get("page")])
+
+  const KPI_Data = [
     {
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6">
@@ -132,7 +141,7 @@ export default function Projects() {
   }
 
   return (
-    <div className="projects flex flex-d-c gap-2">
+    <div className="projects flex flex-d-c gap-3">
       {isFreelancer &&
         <>
           <CreateProject />
@@ -152,13 +161,12 @@ export default function Projects() {
                       Create project
                     </>
                   }
-                  size="medium"
-                  classGiven="bgc-lv3 br brad-2"
+                  classGiven="bgc-lv3 br h-2 brad-2"
                 />
               </div>
             </div>
           </div>
-          <KeyPerfIndicators data={data} />
+          <KeyPerfIndicators data={KPI_Data} />
         </>
       }
       {actionsStatus.isVisible &&
@@ -174,9 +182,9 @@ export default function Projects() {
       <div className="projects-container">
         <Container
           headerTitle={"All projects"}
-          hasPag={true}
+          hasPag={projectsData.data.totalProjects > limit}
           currentPage={parseInt(searchParams.get("page")) || 1}
-          totalPages={pageData.pagination.totalPages || 1}
+          totalPages={projectsData.pagination.totalPages || 1}
           onPageChange={(newPage) => {
             setSearchParams({ page: newPage, limit: parseInt(searchParams.get("limit")) })
             getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })
@@ -198,8 +206,7 @@ export default function Projects() {
                           Create project
                         </>
                       }
-                      size="medium"
-                      classGiven="bgc-lv3 br brad-1"
+                      classGiven="bgc-lv3 br h-2 brad-2"
                     />
                   </div>
                 </div> : isClient ? <code className="empty-data s-fs st-c pad-3">No project for now</code> : null

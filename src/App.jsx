@@ -1,6 +1,5 @@
 import Lenis from "lenis"
 import { socket } from "./socket"
-import { Route, Routes } from "react-router-dom"
 import { lazy, Suspense, useEffect } from "react"
 import InDevPage from "../Pages/InDevPage/InDevPage"
 import RequireRole from "../RoutesProtection/requireRole"
@@ -8,6 +7,7 @@ import projectsManagement from "../Stores/projectsManagement"
 import { RequireAuth } from "../RoutesProtection/requireAuth"
 import LoadingPage from "../Components/LoadingPage/LoadingPage"
 import activitesManagement from "../Stores/AcitiviesManagement"
+import { Route, Routes, useSearchParams } from "react-router-dom"
 import authentificationManagement from "../Stores/Authentification"
 import DashboardRedirect from "../RoutesProtection/dashboardRedirect"
 
@@ -16,16 +16,39 @@ const LoginPage = lazy(() => import("../Pages/LoginPage/LoginPage"))
 const HomePage = lazy(() => import("../Pages/HomePage/HomePage"))
 
 const DashboardLayout = lazy(() => import("../Pages/Dashboard/Dashboard"))
-const Overview = lazy(() => import("../Pages/Dashboard/Overview/Overview"))
-const Projects = lazy(() => import("../Pages/Dashboard/Projects/Projects"))
+const OverviewPage = lazy(() => import("../Pages/Dashboard/OverviewPage/OverviewPage.jsx"))
+const ProjectsPage = lazy(() => import("../Pages/Dashboard/ProjectsPage/ProjectsPage.jsx"))
+const ActivityPage = lazy(() => import("../Pages/Dashboard/ActivityPage/ActivityPage.jsx"))
 
 function App() {
   const { userData } = authentificationManagement()
   const { syncProjects } = projectsManagement()
   const { syncActivities } = activitesManagement()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const currentPage = parseInt(searchParams.get("page"))
+  const limit = parseInt(searchParams.get("limit"))
 
   useEffect(() => {
-    socket.on("projects:update", project => syncProjects(project))
+    if (syncProjects !== null && syncProjects !== undefined) {
+      socket.on("projects:update", ({ action, project }) => {
+        const result = syncProjects({ action, project, currentPage, limit })
+
+        if (result?.refetchPreviousPage) {
+          const newPage = currentPage - 1
+          setSearchParams({ ...Object.fromEntries(searchParams), page: newPage, limit })
+          getProjects({ page: newPage, limit })
+        }
+
+        if (result?.refetchCurrentPage) {
+          getProjects({ page: currentPage, limit })
+        }
+      })
+    }
+
+  }, [syncProjects])
+
+  useEffect(() => {
     socket.on("activity:new", activity => syncActivities(activity))
 
     const lenis = new Lenis({
@@ -42,7 +65,7 @@ function App() {
     }
     requestAnimationFrame(raf)
     return () => {
-      socket.off("project:clientAssigned")
+      socket.off()
       lenis.destroy()
     }
   }, [])
@@ -51,7 +74,7 @@ function App() {
     if (!userData?._id) return
 
     socket.connect()
-    socket.emit("user:join", { userId: userData._id, username: userData.username })
+    socket.emit("user:join", { userId: userData._id })
 
     return () => {
       socket.disconnect()
@@ -89,7 +112,7 @@ function App() {
           index
           element={
             <Suspense fallback={<LoadingPage />}>
-              <Overview />
+              <OverviewPage />
             </Suspense>
           }
         />
@@ -97,7 +120,15 @@ function App() {
           path="projects"
           element={
             <Suspense fallback={<LoadingPage />}>
-              <Projects />
+              <ProjectsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="activity"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ActivityPage />
             </Suspense>
           }
         />
@@ -117,7 +148,7 @@ function App() {
           index
           element={
             <Suspense fallback={<LoadingPage />}>
-              <Projects />
+              <ProjectsPage />
             </Suspense>
           }
         />

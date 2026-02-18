@@ -1,23 +1,23 @@
-import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
-import TasksDueDate from "../../../Components/TasksDuDate/TasksDueDate"
-import UpcomingProjectsDeadlines from "../../../Components/UpcomingProjectsDeadlies/UpcomingProjectsDeadlines"
-import projectsManagement from "../../../Stores/projectsManagement"
-import tasksManagement from "../../../Stores/tasksManagement"
-import './Overview.css'
-import formatData from "../../../utils/FormatData/formatData"
+import './OverviewPage.css'
 import { useState } from "react"
-import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
+import formatData from "../../../utils/FormatData/formatData"
+import tasksManagement from "../../../Stores/tasksManagement"
+import projectsManagement from "../../../Stores/projectsManagement"
+import TasksDueDate from "../../../Components/TasksDuDate/TasksDueDate"
+import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
 import RecentActivity from "../../../Components/RecentActivity/RecentActivity"
+import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
+import UpcomingProjectsDeadlines from "../../../Components/UpcomingProjectsDeadlies/UpcomingProjectsDeadlines"
 
-export default function Overview() {
-    const [selectedProject, setSelectedProject] = useState()
-    const { pageData } = projectsManagement()
+export default function OverviewPage() {
+    const [ selectedProject, setSelectedProject ] = useState()
+    const { projectsData } = projectsManagement()
     const { totalTasks } = tasksManagement()
-    const projects = pageData.projectsData.projectsList.projects
-    const totalProjects = pageData.projectsData.totalProjects
-    const totalLateProjects = pageData.projectsData.totalLateProjects
+    const projects = projectsData.data.projectsList.projects
+    const totalProjects = projectsData.data.totalProjects
+    const totalLateProjects = projectsData.data.totalLateProjects
 
-    const data = [
+    const KPI_data = [
         {
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="size-6">
@@ -59,7 +59,7 @@ export default function Overview() {
 
     return <div className="overview flex flex-d-c gap-2">
         <ClientAffiliation projectId={selectedProject} />
-        <KeyPerfIndicators data={data} />
+        <KeyPerfIndicators data={KPI_data} />
         <div className="late-work-container flex gap-1">
             <UpcomingProjectsDeadlines setSelectedProject={setSelectedProject} />
             <TasksDueDate />

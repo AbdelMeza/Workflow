@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { requireAuth } from "../middlewares/authVerification.js";
-import { getUserActivities } from "../controllers/activity.js";
+import { getActivities } from "../controllers/activity.js";
 
 const activitiesRouter = Router()
 
-activitiesRouter.get('/get', requireAuth, getUserActivities)
+activitiesRouter.get('/get', requireAuth, getActivities)
 
 export default activitiesRouter

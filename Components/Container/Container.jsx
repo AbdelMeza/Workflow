@@ -23,7 +23,7 @@ export default function Container({ title, headerTitle, hasPag, children, curren
                 {children}
             </div>
 
-            {hasPag && totalPages > 1 && (
+            {hasPag && (
                 <div className="pagination-container flex gap-2">
                     <button onClick={handlePrev} disabled={currentPage === 1} className="page-btn br h-1 flex-c bgc-lv3 brad-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
