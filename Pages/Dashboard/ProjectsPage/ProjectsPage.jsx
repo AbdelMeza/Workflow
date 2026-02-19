@@ -182,9 +182,12 @@ export default function ProjectsPage() {
       <div className="projects-container">
         <Container
           headerTitle={"All projects"}
+          // Determine if pagination is needed based on total projects count and limit.
           hasPag={projectsData.data.totalProjects > limit}
           currentPage={parseInt(searchParams.get("page")) || 1}
-          totalPages={projectsData.pagination.totalPages || 1}
+          // Recalculate total pages dynamically based on totalProjects.
+          // Ensures pagination stays in sync after realtime updates (socket events).
+          totalPages={Math.ceil(projectsData.data.totalProjects / limit)}
           onPageChange={(newPage) => {
             setSearchParams({ page: newPage, limit: parseInt(searchParams.get("limit")) })
             getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })

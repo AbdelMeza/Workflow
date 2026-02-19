@@ -73,95 +73,124 @@ const projectsManagement = create((set, get) => ({
         }
     },
 
-    syncProjects: ({ action, project, currentPage = 1, limit = 5 }) => {
-        const isLate = (p) => p.status === "late";
+    syncProjects: ({ action, project, currentPage, limit }) => {
 
-        const state = projectsManagement.getState();
+        const state = get()
 
-        const { projects, lateProjects } = state.projectsData.data.projectsList;
+        const { projects, lateProjects } =
+            state.projectsData.data.projectsList
 
-        const existsInProjects = projects.some(p => p._id === project._id);
-        const existsInLate = lateProjects.some(p => p._id === project._id);
+        const isLate = (p) => p.status === "late"
 
-        // DELETE
+        const existsInProjects =
+            projects.some(p => p._id === project._id)
+
+        const existsInLate =
+            lateProjects.some(p => p._id === project._id)
+
+        // ========= DELETE =========
+
         if (action === "delete") {
-            const isLastInPage = state.projectsData.data.projectsList.projects.length === 1;
 
-            if (isLastInPage) {
+            const isLastInPage = projects.length === 1
+
+            if (isLastInPage && currentPage > 1) {
                 return { refetchPreviousPage: true }
             }
 
-            projectsManagement.setState({
+            set({
                 projectsData: {
                     ...state.projectsData,
                     data: {
                         ...state.projectsData.data,
-                        totalProjects: state.projectsData.data.totalProjects - (existsInProjects ? 1 : 0),
-                        totalLateProjects: state.projectsData.data.totalLateProjects - (existsInLate ? 1 : 0),
-                        estimatedRevenue: state.projectsData.data.estimatedRevenue - (existsInProjects ? (project.budget || 0) : 0),
+                        totalProjects:
+                            state.projectsData.data.totalProjects - 1,
+
+                        totalLateProjects:
+                            existsInLate
+                                ? state.projectsData.data.totalLateProjects - 1
+                                : state.projectsData.data.totalLateProjects,
+
+                        estimatedRevenue:
+                            existsInProjects
+                                ? state.projectsData.data.estimatedRevenue - (project.budget || 0)
+                                : state.projectsData.data.estimatedRevenue,
+
                         projectsList: {
                             projects: projects.filter(p => p._id !== project._id),
                             lateProjects: lateProjects.filter(p => p._id !== project._id),
                         }
-                    },
-                    pagination: {
-                        ...state.projectsData.pagination,
-                        totalPages: Math.ceil((state.projectsData.data.totalProjects - 1) / limit) || 1,
                     }
                 }
-            });
+            })
 
-            return;
+            return
         }
 
-        // UPDATE / ADD
+        // ========= UPDATE / ADD =========
+
         if (action === "update") {
-            const late = isLate(project);
 
             if (!existsInProjects && currentPage !== 1) {
-                // Refetch la page actuelle si on est pas sur la première
-                setTimeout(() => projectsManagement.getState().getProjects({ page: currentPage, limit }), 0);
-                return;
+                return { refetchCurrentPage: true }
             }
 
-            let newProjects = existsInProjects
-                ? projects.map(p => p._id === project._id ? { ...p, ...project } : p)
-                : [project, ...projects].slice(0, limit);
+            const late = isLate(project)
 
-            let newLateProjects = existsInLate
-                ? lateProjects.map(p => p._id === project._id ? { ...p, ...project } : p)
-                : late ? [project, ...lateProjects] : lateProjects;
+            const newProjects = existsInProjects
+                ? projects.map(p =>
+                    p._id === project._id ? { ...p, ...project } : p
+                )
+                : [project, ...projects].slice(0, limit)
 
-            const totalProjects = existsInProjects ? state.projectsData.data.totalProjects : state.projectsData.data.totalProjects + 1;
-            const totalLateProjects = !existsInLate && late ? state.projectsData.data.totalLateProjects + 1
-                : existsInLate && !late ? state.projectsData.data.totalLateProjects - 1
-                    : state.projectsData.data.totalLateProjects;
+            let newLateProjects = [...lateProjects]
 
-            const estimatedRevenue = existsInProjects
-                ? state.projectsData.data.estimatedRevenue
-                : state.projectsData.data.estimatedRevenue + (project.budget || 0);
+            if (late && !existsInLate)
+                newLateProjects.unshift(project)
 
-            projectsManagement.setState({
+            if (late && existsInLate)
+                newLateProjects =
+                    lateProjects.map(p =>
+                        p._id === project._id ? { ...p, ...project } : p
+                    )
+
+            if (!late && existsInLate)
+                newLateProjects =
+                    lateProjects.filter(p => p._id !== project._id)
+
+            set({
                 projectsData: {
+                    ...state.projectsData,
                     data: {
                         ...state.projectsData.data,
-                        totalProjects,
-                        totalLateProjects,
-                        estimatedRevenue,
+                        totalProjects:
+                            existsInProjects
+                                ? state.projectsData.data.totalProjects
+                                : state.projectsData.data.totalProjects + 1,
+
+                        totalLateProjects:
+                            !existsInLate && late
+                                ? state.projectsData.data.totalLateProjects + 1
+                                : existsInLate && !late
+                                    ? state.projectsData.data.totalLateProjects - 1
+                                    : state.projectsData.data.totalLateProjects,
+
+                        estimatedRevenue:
+                            existsInProjects
+                                ? state.projectsData.data.estimatedRevenue
+                                : state.projectsData.data.estimatedRevenue + (project.budget || 0),
+
                         projectsList: {
                             projects: newProjects,
                             lateProjects: newLateProjects,
                         }
-                    },
-                    pagination: {
-                        ...state.projectsData.pagination,
-                        totalPages: Math.ceil(totalProjects / limit) || 1,
                     }
                 }
-            });
+            })
+
+            return
         }
     },
-
 
     /**
      * Create a new project

@@ -29,24 +29,41 @@ function App() {
   const currentPage = parseInt(searchParams.get("page"))
   const limit = parseInt(searchParams.get("limit"))
 
+
   useEffect(() => {
-    if (syncProjects !== null && syncProjects !== undefined) {
-      socket.on("projects:update", ({ action, project }) => {
-        const result = syncProjects({ action, project, currentPage, limit })
 
-        if (result?.refetchPreviousPage) {
-          const newPage = currentPage - 1
-          setSearchParams({ ...Object.fromEntries(searchParams), page: newPage, limit })
-          getProjects({ page: newPage, limit })
-        }
+    const handler = ({ action, project }) => {
 
-        if (result?.refetchCurrentPage) {
-          getProjects({ page: currentPage, limit })
-        }
+      const result = syncProjects({
+        action,
+        project,
+        currentPage,
+        limit
       })
+
+      if (result?.refetchPreviousPage) {
+
+        const page = currentPage - 1
+
+        setSearchParams({
+          page,
+          limit
+        })
+
+        getProjects({ page, limit })
+      }
+
+      if (result?.refetchCurrentPage) {
+        getProjects({ page: currentPage, limit })
+      }
     }
 
-  }, [syncProjects])
+    socket.on("projects:update", handler)
+
+    return () => socket.off("projects:update", handler)
+
+  }, [currentPage, limit])
+
 
   useEffect(() => {
     socket.on("activity:new", activity => syncActivities(activity))

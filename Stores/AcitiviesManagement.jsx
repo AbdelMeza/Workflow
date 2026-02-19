@@ -26,14 +26,14 @@ const activitesManagement = create((set) => ({
             })
 
             const data = await res.json()
-            set((state) => ({
+            set({
                 activitiesData: {
                     data: {
                         activities: data.activities || []
                     },
                     pagination: data.pagination || {}
                 }
-            }))
+            })
         } catch (error) {
             console.log(error)
         } finally {
