@@ -22,7 +22,7 @@ const ActivityPage = lazy(() => import("../Pages/Dashboard/ActivityPage/Activity
 
 function App() {
   const { userData } = authentificationManagement()
-  const { syncProjects } = projectsManagement()
+  const { syncProjects, getProjects } = projectsManagement()
   const { syncActivities } = activitesManagement()
   const [searchParams, setSearchParams] = useSearchParams()
 

@@ -88,7 +88,6 @@ const projectsManagement = create((set, get) => ({
             const isLastInPage = state.projectsData.data.projectsList.projects.length === 1;
 
             if (isLastInPage) {
-                setTimeout(() => projectsManagement.getState().getProjects({ page: currentPage - 1, limit }), 0);
                 return { refetchPreviousPage: true }
             }
 

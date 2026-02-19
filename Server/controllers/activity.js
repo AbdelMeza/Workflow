@@ -46,18 +46,11 @@ export async function getActivities(req, res) {
             .skip(skip)
             .limit(limit)
 
-        const latestActivities = await activityModel
-            .find({ freelancerId: req.user.id })
-            .sort({ createdAt: -1 })
-            .populate("projectId", "title")
-            .limit(5)
-
 
         const totalActivities = await activityModel.countDocuments(query)
 
         res.status(200).json({
             activities,
-            latestActivities,
             pagination: {
                 page: page,
                 totalPages: Math.ceil(totalActivities / limit),

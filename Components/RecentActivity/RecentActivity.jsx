@@ -5,10 +5,11 @@ import Activity from "./Activity";
 import './RecentActivity.css'
 
 export default function RecentActivity() {
+    const limit = 5
+    const navigate = useNavigate()
     const { activitiesData } = activitesManagement()
     const activities = activitiesData.data.activities || []
-    console.log(activities)
-    const navigate = useNavigate()
+    const latestActivities = activities.slice(0, limit)
 
     return <Container
         headerTitle={
@@ -26,9 +27,9 @@ export default function RecentActivity() {
             </>
         } title="activity"
     >
-        {activities && activities.length > 0 ?
+        {latestActivities && latestActivities.length > 0 ?
             <div className="activity-wrapper flex flex-d-c">
-                {activities.map((activity, index) => (
+                {latestActivities.map((activity, index) => (
                     <Activity type={activity.type} title={activity.title} details={activity.details} time={activity.createdAt} key={index} />
                 ))}
             </div>

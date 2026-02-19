@@ -4,8 +4,6 @@ const activitesManagement = create((set) => ({
     activitiesData: {
         data: {
             activities: [],
-            latestActivities: [],
-            filteredActivities: []
         },
         pagination: {
             page: null,
@@ -28,12 +26,9 @@ const activitesManagement = create((set) => ({
             })
 
             const data = await res.json()
-
             set((state) => ({
                 activitiesData: {
                     data: {
-                        ...state.activitiesData.data,
-                        latestActivities: data.latestActivities,
                         activities: data.activities || []
                     },
                     pagination: data.pagination || {}
@@ -58,7 +53,16 @@ const activitesManagement = create((set) => ({
                 )
                 : [incomingActivity, ...activities]
 
-            return { activitiesData: { ...state.activitiesData, data: { ...state.activitiesData.data, activities: newActivities } } }
+            return {
+                activitiesData:
+                {
+                    ...state.activitiesData,
+                    data: {
+                        ...state.activitiesData.data,
+                        activities: newActivities
+                    }
+                }
+            }
         })
     }
 
