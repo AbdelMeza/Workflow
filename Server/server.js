@@ -8,6 +8,7 @@ import tasksRouter from "./routers/tasksRouter.js"
 import projectsRouter from "./routers/projectsRouter.js"
 import { initSocket } from "./socket.js"
 import activitiesRouter from "./routers/activitiesRouter.js"
+import dataRouter from "./routers/dataRouter.js"
 
 const app = express()
 const server = http.createServer(app)
@@ -25,6 +26,7 @@ app.use('/user', userRouter)
 app.use('/project', projectsRouter)
 app.use('/task', tasksRouter)
 app.use('/activities', activitiesRouter)
+app.use('/data', dataRouter)
 
 mongoose.connect('mongodb://localhost:27017/WorkFlow')
 

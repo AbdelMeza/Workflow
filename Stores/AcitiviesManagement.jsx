@@ -10,6 +10,7 @@ const activitesManagement = create((set) => ({
             totalPages: null,
         },
     },
+    activityTypes: null,
     loadingState: false,
 
     getActivities: async (queries) => {
@@ -38,6 +39,23 @@ const activitesManagement = create((set) => ({
             console.log(error)
         } finally {
             set({ loadingState: false })
+        }
+    },
+
+    getActivityTypes: async () => {
+        const userToken = localStorage.getItem("userToken")
+        try {
+            const res = await fetch(`http://127.0.0.1:2005/data/activity_types`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    token: userToken,
+                },
+            })
+
+            const data = await res.json()
+            set({ activityTypes: data })
+        } catch (error) {
+            console.log(error)
         }
     },
 

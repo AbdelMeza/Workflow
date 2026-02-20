@@ -5,13 +5,13 @@ import Button from '../../../Components/Button/Button'
 import Container from '../../../Components/Container/Container'
 import activitesManagement from '../../../Stores/AcitiviesManagement'
 import Activity from '../../../Components/RecentActivity/Activity'
+import FilterContainer from '../../../Components/FilterContainer/FilterContainer'
 
 export default function ActivityPage() {
     const [searchParams, setSearchParams] = useSearchParams()
-    const { activitiesData, loadingState } = activitesManagement()
+    const { activitiesData, getActivityTypes, activityTypes, loadingState } = activitesManagement()
 
     const page = parseInt(searchParams.get("page")) || 1
-    const limit = parseInt(searchParams.get("limit")) || 5
 
     const activities = activitiesData.data.activities || []
     const totalPages = activitiesData.pagination?.totalPages || 1
@@ -20,6 +20,12 @@ export default function ActivityPage() {
         if (!searchParams.get("page")) {
             setSearchParams({ filter: "all", page: 1, limit: 7 })
         }
+
+        const fetchData = async () => {
+            await getActivityTypes()
+        }
+
+        fetchData()
     }, [])
 
     useEffect(() => {
@@ -51,7 +57,7 @@ export default function ActivityPage() {
                     />
                 </div>
             </div>
-
+            <FilterContainer entries={activityTypes} />
             <div className="activity-container">
                 <Container
                     headerTitle="All activities"

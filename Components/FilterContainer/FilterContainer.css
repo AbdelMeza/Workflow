@@ -1,0 +1,13 @@
+.filter-items-container{
+    flex-wrap: wrap;
+}
+
+.filter-item{
+    cursor: pointer;
+    transition: background var(--animation-short-duration);
+    user-select: none;
+}
+
+.filter-item:hover{
+    background-color: rgba(0, 0, 0, 0.03);
+}
