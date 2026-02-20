@@ -14,6 +14,7 @@ export default function Dashboard() {
     const [queryParams, setQueryParams] = useSearchParams()
 
     const filter = queryParams.get("filter") || "all"
+    const time = queryParams.get("time") || "newest"
     const page = parseInt(queryParams.get("page")) || 1
     const limit = parseInt(queryParams.get("limit")) || 5
 
@@ -23,11 +24,11 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchData = async () => {
-            await getActivities({ page, limit, filter })
+            await getActivities({ page, limit, filter, time })
         }
 
         fetchData()
-    }, [page, limit, filter])
+    }, [page, limit, filter, time])
 
     useEffect(() => {
         const fetchData = async () => {

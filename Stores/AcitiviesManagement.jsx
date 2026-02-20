@@ -15,11 +15,11 @@ const activitesManagement = create((set) => ({
 
     getActivities: async (queries) => {
         const userToken = localStorage.getItem("userToken")
-        const { filter, page, limit } = queries
+        const { filter, page, limit, time } = queries
 
         try {
             set({ loadingState: true })
-            const res = await fetch(`http://127.0.0.1:2005/activities/get?filter=${filter}&page=${page}&limit=${limit}`, {
+            const res = await fetch(`http://127.0.0.1:2005/activities/get?filter=${filter}&page=${page}&limit=${limit}&time=${time || "newest"}`, {
                 headers: {
                     "Content-Type": "application/json",
                     token: userToken,

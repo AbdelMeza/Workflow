@@ -28,10 +28,12 @@ export async function createActivity({ freelancerId, type, title, details, proje
 
 export async function getActivities(req, res) {
     try {
+        console.log(req.query)
         if (!req.user.id) return res.status(500).json("Server error, can not get user activies")
         const filter = req.query.filter || "all"
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 5
+        const time = req.query.time || "newest"
         const skip = (page - 1) * limit
 
         const query = { freelancerId: req.user.id }
@@ -41,7 +43,7 @@ export async function getActivities(req, res) {
 
         const activities = await activityModel
             .find(query)
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: time === "newest" ? -1 : 1 })
             .populate("projectId", "title")
             .skip(skip)
             .limit(limit)

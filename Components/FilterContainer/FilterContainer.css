@@ -1,3 +1,8 @@
+.filter-wrapper{
+    overflow: hidden;
+    transition: height var(--animation-short-duration);
+}
+
 .filter-items-container{
     flex-wrap: wrap;
 }
@@ -6,8 +11,21 @@
     cursor: pointer;
     transition: background var(--animation-short-duration);
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-lv2);
+    padding: var(--padding-lv1);
+    height: var(--height-lv2);
+    border: var(--border);
+    font-size: var(--small-font-size);
 }
 
 .filter-item:hover{
     background-color: rgba(0, 0, 0, 0.03);
+}
+
+.filter-item.active{
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.05);
 }
