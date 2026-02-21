@@ -19,6 +19,7 @@ const projectsManagement = create((set, get) => ({
             totalPages: null,
         }
     },
+    projectStatus: null,
 
     /**
      * Fetch projects from the backend with pagination
@@ -27,13 +28,13 @@ const projectsManagement = create((set, get) => ({
     getProjects: async (queries) => {
         // Retrieve user authentication token from localStorage
         const userToken = localStorage.getItem("userToken")
-        const { page, limit } = queries
+        const { page, limit, filter, time } = queries
 
         try {
             set({ loadingState: true })
             // Request projects data from the API
             const res = await fetch(
-                `http://127.0.0.1:2005/project/get?page=${page}&limit=${limit}`,
+                `http://127.0.0.1:2005/project/get?page=${page}&limit=${limit}&filter=${filter}&time=${time || "newest"}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -70,6 +71,26 @@ const projectsManagement = create((set, get) => ({
             console.error("Error fetching projects:", error)
         } finally {
             set({ loadingState: false })
+        }
+    },
+
+    getProjectStatus: async () => {
+        const userToken = localStorage.getItem("userToken")
+        try {
+            const res = await fetch(`http://127.0.0.1:2005/data/project_status`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    token: userToken,
+                },
+            })
+
+            const data = await res.json()
+            console.log(data)
+            if (!data) return
+
+            set({ projectStatus: data })
+        } catch (error) {
+            console.error("Error fetching project status:", error)
         }
     },
 

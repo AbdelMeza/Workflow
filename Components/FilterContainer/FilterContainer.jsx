@@ -3,9 +3,8 @@ import useCases from "../../Stores/useCases"
 import "./FilterContainer.css"
 import { useSearchParams } from "react-router-dom"
 
-export default function FilterContainer({ entries }) {
+export default function FilterContainer({ entries, isOpen }) {
 
-    const { filterIsOpen } = useCases()
     const filterWrapper = useRef(null)
     const filterContainer = useRef(null)
     const [containerHeight, setContainerHeight] = useState(0)
@@ -38,10 +37,10 @@ export default function FilterContainer({ entries }) {
 
         requestAnimationFrame(() => {
             filterWrapper.current.style.height =
-                filterIsOpen ? `${containerHeight}px` : "0px"
+                isOpen ? `${containerHeight}px` : "0px"
         })
 
-    }, [filterIsOpen, containerHeight])
+    }, [isOpen, containerHeight])
 
     const setFilter = (value) => {
         setSearchParams(prev => ({
@@ -94,8 +93,8 @@ export default function FilterContainer({ entries }) {
                     <div className="filter-items-container flex gap-1">
                         <div className="filter-item" data-value="all" onClick={() => setFilter("all")}>All</div>
                         {entries?.data?.map((d, i) => (
-                            <div className="filter-item" data-value={d.type} key={i} onClick={() => setFilter(d.type)}>
-                                {d.value}
+                            <div className="filter-item" data-value={d.value} key={i} onClick={() => setFilter(d.value)}>
+                                {d.title}
                             </div>
                         ))}
                     </div>

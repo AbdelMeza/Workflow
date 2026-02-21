@@ -13,16 +13,18 @@ import projectsManagement from "../../../Stores/projectsManagement"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
 import CreateProject from "../../../Components/CreateProject/CreateProject"
 import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
+import FilterContainer from '../../../Components/FilterContainer/FilterContainer'
 
 export default function ProjectsPage() {
   const { isFreelancer, isClient } = useRole()
+  const [filterIsOpen, setFilterIsOpen] = useState(false)
   const [actionsStatus, setActionsStatus] = useState({
     isVisible: false,
     position: { x: 0, y: 0 },
     projectId: null
   })
   const [selectedProject, setSelectedProject] = useState()
-  const { projectsData, getProjects, loadingState } = projectsManagement()
+  const { projectsData, getProjects, getProjectStatus, projectStatus, loadingState } = projectsManagement()
   const { toggleProjectForm, toggleAffiliateClient } = useCases()
   const projects = projectsData.data.projectsList.projects
   const totalProjects = projectsData.data.totalProjects
@@ -33,6 +35,7 @@ export default function ProjectsPage() {
 
   const page = parseInt(searchParams.get("page"))
   const limit = parseInt(searchParams.get("limit"))
+  const filter = searchParams.get("filter") || "all"
   const totalPages = projectsData.pagination.totalPages
 
   const showActions = (event, projectId) => {
@@ -53,8 +56,14 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     if (!searchParams.get("page")) {
-      setSearchParams({ page: 1, limit: 5 })
+      setSearchParams({ filter: "all", page: 1, limit: 5 })
     }
+
+    const fetchData = async () => {
+      await getProjectStatus()
+    }
+
+    fetchData()
 
     window.addEventListener("resize", () => setActionsStatus({ isVisible: false }))
   }, [])
@@ -150,7 +159,7 @@ export default function ProjectsPage() {
             <div className="side-content">
               <span className="page-title s-fs mt-c">Projects</span>
             </div>
-            <div className="side-content">
+            <div className="side-content flex" style={{ gap: "0.3vw" }}>
               <div className="open-project-form" onClick={() => toggleProjectForm()}>
                 <Button
                   content={
@@ -164,9 +173,23 @@ export default function ProjectsPage() {
                   classGiven="bgc-lv3 br h-2 brad-2"
                 />
               </div>
+              <div onClick={() => setFilterIsOpen(!filterIsOpen)}>
+                <Button
+                  content={
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" width={15} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                      </svg>
+                      Filter
+                    </>
+                  }
+                  classGiven="bgc-lv3 br h-2 brad-2"
+                />
+              </div>
             </div>
           </div>
           <KeyPerfIndicators data={KPI_Data} />
+          <FilterContainer entries={projectStatus} isOpen={filterIsOpen} />
         </>
       }
       {actionsStatus.isVisible &&
@@ -189,31 +212,47 @@ export default function ProjectsPage() {
           // Ensures pagination stays in sync after realtime updates (socket events).
           totalPages={Math.ceil(projectsData.data.totalProjects / limit)}
           onPageChange={(newPage) => {
-            setSearchParams({ page: newPage, limit: parseInt(searchParams.get("limit")) })
-            getProjects({ page: newPage, limit: parseInt(searchParams.get("limit")) })
+            setSearchParams({ page: newPage, limit: parseInt(searchParams.get("limit")), filter: searchParams.get("filter") })
+            getProjects({ filter: searchParams.get("filter"), page: newPage, limit: parseInt(searchParams.get("limit")) })
           }}
         >
-          {loadingState ? <span className="Loading-message s-fs st-c pad-3">Wait for loading..</span> :
-            tableData && tableData.length > 0 ?
-              <Table tableData={tableData} title={"projects"} /> :
-              isFreelancer ?
-                <div className="create-project-container flex-c flex-d-c gap-2 pad-3">
-                  <span className="s-fs st-c">Create your first project</span>
-                  <div className="open-project-form" onClick={() => toggleProjectForm()}>
-                    <Button
-                      content={
-                        <>
-                          <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                          </svg>
-                          Create project
-                        </>
-                      }
-                      classGiven="bgc-lv3 br h-2 brad-2"
-                    />
-                  </div>
-                </div> : isClient ? <code className="empty-data s-fs st-c pad-3">No project for now</code> : null
-          }
+          {loadingState ? (
+            <span className="Loading-message s-fs st-c pad-3">Wait for loading..</span>
+          ) : tableData && tableData.length > 0 ? (
+            <Table tableData={tableData} title={"projects"} />
+          ) : isFreelancer ? (
+            filter === "all" ? (
+              <div className="create-project-container flex-c flex-d-c gap-2 pad-3">
+                <span className="s-fs st-c">Create your first project</span>
+                <div className="open-project-form" onClick={() => toggleProjectForm()}>
+                  <Button
+                    content={
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={15}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2.5}
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Create project
+                      </>
+                    }
+                    classGiven="bgc-lv3 br h-2 brad-2"
+                  />
+                </div>
+              </div>
+            ) : (
+              <code className="empty-data s-fs st-c pad-3">
+                No projects found with <b>{filter}</b> filter
+              </code>
+            )
+          ) : isClient ? (
+            <code className="empty-data s-fs st-c pad-3">No project for now</code>
+          ) : null}
         </Container>
       </div>
     </div>

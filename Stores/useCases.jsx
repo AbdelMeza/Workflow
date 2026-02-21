@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 const useCases = create((set, get) => ({
     projectFormIsOpen: false,
-    filterIsOpen: false,
     affiliateClientIsOpen: false,
     searchResult: null,
     loadingState: false,
@@ -11,7 +10,6 @@ const useCases = create((set, get) => ({
 
     selectClient: (client) => set({ selectedClient: client }),
     toggleProjectForm: () => set({ projectFormIsOpen: !get().projectFormIsOpen }),
-    toggleFilter: () => set({ filterIsOpen: !get().filterIsOpen }),
     toggleAffiliateClient: () => set({ affiliateClientIsOpen: !get().affiliateClientIsOpen, searchResult: null }),
 
     searchClient: async (search) => {

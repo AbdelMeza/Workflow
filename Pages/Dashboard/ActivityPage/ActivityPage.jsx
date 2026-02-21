@@ -1,19 +1,19 @@
 import './ActivityPage.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Button from '../../../Components/Button/Button'
 import Container from '../../../Components/Container/Container'
 import activitesManagement from '../../../Stores/AcitiviesManagement'
 import Activity from '../../../Components/RecentActivity/Activity'
 import FilterContainer from '../../../Components/FilterContainer/FilterContainer'
-import useCases from '../../../Stores/useCases'
 
 export default function ActivityPage() {
     const [searchParams, setSearchParams] = useSearchParams()
-    const { toggleFilter } = useCases()
+    const [filterIsOpen, setFilterIsOpen] = useState(false)
     const { activitiesData, getActivityTypes, activityTypes, loadingState } = activitesManagement()
 
     const page = parseInt(searchParams.get("page")) || 1
+    const filter = searchParams.get("filter") || "all"
 
     const activities = activitiesData.data.activities || []
     const totalPages = activitiesData.pagination?.totalPages || 1
@@ -46,7 +46,7 @@ export default function ActivityPage() {
                     <span className="page-title s-fs mt-c">Activity</span>
                 </div>
                 <div className="side-content">
-                    <div onClick={() => toggleFilter()}>
+                    <div onClick={() => setFilterIsOpen(!filterIsOpen)}>
                         <Button
                             content={
                                 <>
@@ -61,7 +61,7 @@ export default function ActivityPage() {
                     </div>
                 </div>
             </div>
-            <FilterContainer entries={activityTypes} />
+            <FilterContainer entries={activityTypes} isOpen={filterIsOpen} />
             <div className="activity-container">
                 <Container
                     headerTitle="All activities"
@@ -91,9 +91,13 @@ export default function ActivityPage() {
                                 />
                             ))}
                         </div>
-                    ) : (
+                    ) : filter === "all" ? (
                         <code className="empty-data pad-3 st-c">
                             No activity in sight
+                        </code>
+                    ) : (
+                        <code className="empty-data pad-3 st-c">
+                            No activities found with <b>{filter}</b> filter
                         </code>
                     )}
                 </Container>

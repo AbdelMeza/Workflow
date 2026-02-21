@@ -32,11 +32,11 @@ export default function Dashboard() {
 
     useEffect(() => {
         const fetchData = async () => {
-            await getProjects({ page, limit })
+            await getProjects({ filter, page, limit, time })
         }
 
         fetchData()
-    }, [page, limit])
+    }, [page, limit, filter, time])
 
     return <div className="dashboard-page bgc-lv2">
         <DashboardSidebar />

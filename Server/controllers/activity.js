@@ -28,7 +28,6 @@ export async function createActivity({ freelancerId, type, title, details, proje
 
 export async function getActivities(req, res) {
     try {
-        console.log(req.query)
         if (!req.user.id) return res.status(500).json("Server error, can not get user activies")
         const filter = req.query.filter || "all"
         const page = parseInt(req.query.page) || 1

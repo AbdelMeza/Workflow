@@ -58,19 +58,25 @@ export async function getProjects(req, res) {
     try {
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 5
+        const filter = req.query.filter || "all"
+        const time = req.query.time || "newest"
         const skip = (page - 1) * limit
 
-        const filter = {
+        const query = {
             $or: [
                 { freelancerId: req.user.id },
-                { clientId: req.user.id }
+                { clientId: req.user.id },
             ]
+        }
+
+        if (filter !== "all") {
+            query.status = filter
         }
 
         // Fetch projects
         const projects = await projectsModel
-            .find(filter)
-            .sort({ createdAt: -1 })
+            .find(query)
+            .sort({ createdAt: time === "newest" ? -1 : 1 })
             .skip(skip)
             .limit(limit)
             .populate("clientId", "username email")
@@ -81,16 +87,16 @@ export async function getProjects(req, res) {
         const totalPages = Math.ceil(total / limit)
 
         const totalProjectsCompleted = await projectsModel.countDocuments({
-            ...filter,
+            ...query,
             status: "completed"
         })
 
         const totalLateProjects = await projectsModel.countDocuments({
-            ...filter,
+            ...query,
             status: "late"
         })
 
-        const projectsList = await projectsModel.find(filter)
+        const projectsList = await projectsModel.find(query)
         const estimatedRevenue = projectsList.reduce((sum, p) => sum + (p.budget || 0), 0)
 
         const today = new Date()
@@ -111,7 +117,7 @@ export async function getProjects(req, res) {
 
         //find by status and by userId
         const lateProjects = await projectsModel.find({
-            ...filter,
+            ...query,
             status: "late"
         })
             .populate("clientId", "username email")
@@ -229,9 +235,9 @@ export async function deleteProject(req, res) {
         const io = getIO()
 
         io
-        .to(req.user.id.toString())
-        .to(deletedProject.clientId?.toString())
-        .emit("projects:update", { action: "delete", project: deletedProject })
+            .to(req.user.id.toString())
+            .to(deletedProject.clientId?.toString())
+            .emit("projects:update", { action: "delete", project: deletedProject })
 
         await createActivity({
             type: "project_deletion",
