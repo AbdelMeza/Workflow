@@ -56,7 +56,7 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     if (!searchParams.get("page")) {
-      setSearchParams({ filter: "all", page: 1, limit: 5 })
+      setSearchParams({ filter: "all", page: 1, limit: 5, time: "newest" })
     }
 
     const fetchData = async () => {
@@ -189,7 +189,7 @@ export default function ProjectsPage() {
             </div>
           </div>
           <KeyPerfIndicators data={KPI_Data} />
-          <FilterContainer entries={projectStatus} isOpen={filterIsOpen} />
+          <FilterContainer entries={projectStatus} isOpen={filterIsOpen} setFilterIsOpen={setFilterIsOpen} />
         </>
       }
       {actionsStatus.isVisible &&

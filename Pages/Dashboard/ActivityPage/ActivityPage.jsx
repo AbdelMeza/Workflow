@@ -61,7 +61,7 @@ export default function ActivityPage() {
                     </div>
                 </div>
             </div>
-            <FilterContainer entries={activityTypes} isOpen={filterIsOpen} />
+            <FilterContainer entries={activityTypes} isOpen={filterIsOpen} setFilterIsOpen={setFilterIsOpen} />
             <div className="activity-container">
                 <Container
                     headerTitle="All activities"

@@ -3,7 +3,7 @@ import useCases from "../../Stores/useCases"
 import "./FilterContainer.css"
 import { useSearchParams } from "react-router-dom"
 
-export default function FilterContainer({ entries, isOpen }) {
+export default function FilterContainer({ entries, isOpen, setFilterIsOpen }) {
 
     const filterWrapper = useRef(null)
     const filterContainer = useRef(null)
@@ -12,11 +12,11 @@ export default function FilterContainer({ entries, isOpen }) {
 
     useEffect(() => {
         if (!filterContainer.current) return
+        const styles = getComputedStyle(filterContainer.current)
+        const borderTop = parseInt(styles.borderTopWidth)
+        const borderBottom = parseInt(styles.borderBottomWidth)
 
         const observer = new ResizeObserver(() => {
-            const styles = getComputedStyle(filterContainer.current)
-            const borderTop = parseInt(styles.borderTopWidth)
-            const borderBottom = parseInt(styles.borderTopWidth)
 
             requestAnimationFrame(() => {
                 const height = filterContainer.current.scrollHeight + borderTop + borderBottom
@@ -78,6 +78,13 @@ export default function FilterContainer({ entries, isOpen }) {
                 ref={filterContainer}
                 className="filter-container flex flex-d-c gap-2 br bgc-lv3 brad-3 pad-1"
             >
+                <div className="close-filter-container-btn">
+                    <button className="brad-1 br flex-c" onClick={() => setFilterIsOpen(false)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width={15} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
                 <div className="filter-type flex flex-d-c gap-2">
                     <span className="title s-fs">Time</span>
 

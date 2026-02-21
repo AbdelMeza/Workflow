@@ -3,6 +3,21 @@
     transition: height var(--animation-short-duration);
 }
 
+.filter-container{
+    position: relative;
+}
+
+.close-filter-container-btn{
+    position: absolute;
+    top: 1.5vw;
+    right: 1.5vw;
+}
+
+.close-filter-container-btn button{
+    height: calc(var(--height-lv1) * 0.8);
+    aspect-ratio: 1;
+}
+
 .filter-items-container{
     flex-wrap: wrap;
 }
@@ -16,7 +31,7 @@
     justify-content: center;
     border-radius: var(--border-radius-lv2);
     padding: var(--padding-lv1);
-    height: var(--height-lv2);
+    height: var(--height-lv1);
     border: var(--border);
     font-size: var(--small-font-size);
 }
