@@ -2,6 +2,7 @@ import { create } from "zustand"
 
 const projectsManagement = create((set, get) => ({
     loadingState: false,
+    projectFormIsOpen: false,
 
     projectsData: {
         data: {
@@ -20,6 +21,8 @@ const projectsManagement = create((set, get) => ({
         }
     },
     projectStatus: null,
+
+    toggleProjectForm: () => set({ projectFormIsOpen: !get().projectFormIsOpen }),
 
     /**
      * Fetch projects from the backend with pagination

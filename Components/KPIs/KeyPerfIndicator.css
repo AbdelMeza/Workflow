@@ -1,6 +1,5 @@
 .key-performance-indicator {
     flex: 1;
-    padding: var(--padding-lv1) var(--padding-lv1);
 }
 
 .key-performance-indicator.alert {

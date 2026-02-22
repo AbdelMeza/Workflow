@@ -30,12 +30,18 @@
 }
 
 .client-affiliation .content {
-    min-width: 400px;
+    min-width: 500px;
 }
 
 .client-affiliation .upper-content {
     padding: var(--padding-lv1);
     padding-bottom: 0;
+}
+
+.client-affiliation .content .middle-content{
+    padding: var(--padding-lv1);
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .client-affiliation .content .middle-content:has(.message) {

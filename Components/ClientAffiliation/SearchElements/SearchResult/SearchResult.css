@@ -3,7 +3,6 @@
     align-items: center;
     cursor: pointer;
     padding: calc(var(--padding-lv1) * 0.5);
-    margin: calc(var(--padding-lv1) * 0.5);
     transition: background var(--animation-short-duration);
 }
 

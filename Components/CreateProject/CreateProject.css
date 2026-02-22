@@ -58,11 +58,10 @@
 .form-container input,
 .form-container textarea {
     width: 100%;
-    height: var(--height-lv2);
     border: var(--border);
     font-size: var(--small-font-size);
-    border-radius: var(--border-radius-lv1);
-    padding: 0 calc(var(--padding-lv1) * 0.8);
+    border-radius: var(--border-radius-lv2);
+    padding: var(--padding-lv1) calc(var(--padding-lv1) * 0.8);
 }
 
 .form-container .search-bar-container .search-bar{
@@ -81,6 +80,7 @@
 
 .form-container .submit-btn {
     width: 100%;
+    border-radius: var(--border-radius-lv2);
 }
 
 .form-container .result-container{

@@ -6,7 +6,7 @@
     user-select: none;
 }
 
-.status:hover > .status-changer{
+.status:hover>.status-changer {
     opacity: 1;
     pointer-events: all;
 }
@@ -20,12 +20,12 @@
     transition: opacity var(--animation-short-duration);
 }
 
-.status-changer .status-item{
+.status-changer .status-item {
     transition: color var(--animation-short-duration);
     cursor: pointer;
 }
 
-.status-changer .status-item:hover{
+.status-changer .status-item:hover {
     color: var(--main-text-color);
 }
 
@@ -40,6 +40,11 @@
     background-color: #0091ff47;
 }
 
+.status.grey {
+    color: #595959;
+    background-color: #c0c0c085;
+}
+
 .status.green {
     color: #0cba38;
     background-color: #00ff4047;
@@ -51,6 +56,6 @@
 }
 
 .status.yellow {
-    color: #ab8c10;
-    background-color: #ffea0047;
+    color: #ab7010;
+    background-color: #ffb70047;
 }

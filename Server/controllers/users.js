@@ -30,7 +30,12 @@ export async function searchClient(req, res) {
         const users = await userModel.find({
             $and: [
                 { role: "client" },
-                { username: { $regex: search, $options: "i" } }
+                {
+                    $or: [
+                        { username: { $regex: search, $options: "i" } },
+                        { email: { $regex: search, $options: "i" } }
+                    ]
+                }
             ]
         }).select("_id username email")
 

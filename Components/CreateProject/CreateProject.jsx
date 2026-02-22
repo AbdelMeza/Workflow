@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react'
-import Button from '../Button/Button'
 import './CreateProject.css'
+import Button from '../Button/Button'
+import { useEffect, useState } from 'react'
 import projectsManagement from '../../Stores/projectsManagement'
-import useCases from '../../Stores/useCases'
+import clientAffilationManagement from '../../Stores/clientAffilationManagement'
 
 export default function CreateProject() {
-    const { projectFormIsOpen, toggleProjectForm, selectClient, selectedClient, affiliateClient } = useCases()
-    const { createProject, loadingState } = projectsManagement()
-    const { searchResult } = useCases()
+    const { selectClient } = clientAffilationManagement()
+    const { createProject, loadingState, toggleProjectForm, projectFormIsOpen } = projectsManagement()
     const [title, setTitle] = useState('')
     const [services, setServices] = useState('')
     const [client, setClient] = useState('')
@@ -131,8 +130,7 @@ export default function CreateProject() {
                             <div className="submit-btn" onClick={() => handleSubmit()}>
                                 <Button
                                     content="Create project"
-                                    size="medium"
-                                    classGiven="submit-btn btn-bgc brad-1"
+                                    classGiven="submit-btn h-2 btn-bgc brad-1"
                                     disabled={!isFormValid}
                                 />
                             </div>

@@ -83,7 +83,7 @@ export async function getProjects(req, res) {
             .populate("freelancerId", "username email")
 
         // Stats
-        const total = await projectsModel.countDocuments(filter)
+        const total = await projectsModel.countDocuments(query)
         const totalPages = Math.ceil(total / limit)
 
         const totalProjectsCompleted = await projectsModel.countDocuments({

@@ -10,7 +10,7 @@ import './KeyPerfIndicator.css'
 export default function KeyPerfIndicators({ data }) {
     return <div className="key-performance-container flex gap-1">
         {data.map((d, i) => (
-            <div key={i} className={`key-performance-indicator ${d.alert && "alert"} bgc-lv3 brad-2 br flex flex-d-c`}>
+            <div key={i} className={`key-performance-indicator ${d.alert && "alert"} pad-1 bgc-lv3 brad-3 br flex flex-d-c`}>
                 {d.icon && (
                     <div className="icon-container">
                         <span className="icon">{d.icon}</span>

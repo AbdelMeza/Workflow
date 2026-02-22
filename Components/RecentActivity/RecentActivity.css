@@ -2,3 +2,14 @@
     align-items: flex-start;
     width: 100%;
 }
+
+.activity-item {
+    dis
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.activity-item:not(:last-child) {
+    border-bottom: var(--border);
+}

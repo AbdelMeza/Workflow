@@ -1,15 +1,15 @@
-import { useSearchParams } from "react-router-dom"
-import useCases from "../../../../Stores/useCases"
-import { useEffect, useRef } from "react"
 import './SearchBar.css'
-import projectsManagement from "../../../../Stores/projectsManagement"
+import { useEffect, useRef } from "react"
+import { useSearchParams } from "react-router-dom"
+import clientAffilationManagement from "../../../../Stores/clientAffilationManagement"
+import searchManagement from '../../../../Stores/searchManagement'
 
-export default function SearchBar({ placeholder, indicators }) {
+export default function SearchBar({ placeholder, indicators, maxLength }) {
+    const { searchClient } = searchManagement()
     const {
-        searchClient,
         affiliateClientIsOpen,
         projectFormIsOpen
-    } = useCases()
+    } = clientAffilationManagement()
 
     const [searchParams, setSearchParams] = useSearchParams()
     const search = searchParams.get("search") || ""
@@ -26,7 +26,7 @@ export default function SearchBar({ placeholder, indicators }) {
             })
         }
     }, [affiliateClientIsOpen, projectFormIsOpen])
-    
+
     useEffect(() => {
         const searchTimeOut = setTimeout(() => {
             searchClient(search)
@@ -41,7 +41,7 @@ export default function SearchBar({ placeholder, indicators }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
         </div>
-        <input type="text" className="search-input" placeholder={placeholder} ref={searchInput} maxLength={13} onChange={(e) => {
+        <input type="text" className="search-input" placeholder={placeholder} ref={searchInput} maxLength={maxLength} onChange={(e) => {
             const value = e.target.value
             setSearchParams(prev => {
                 const params = new URLSearchParams(prev)

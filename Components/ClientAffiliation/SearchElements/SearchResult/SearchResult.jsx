@@ -1,20 +1,20 @@
-import useCases from "../../../../Stores/useCases"
-import UserProfile from "../../../../utils/UserProfile/UserProfile"
 import './SearchResult.css'
+import searchManagement from '../../../../Stores/searchManagement'
+import UserProfile from "../../../../utils/UserProfile/UserProfile"
+import clientAffilationManagement from '../../../../Stores/clientAffilationManagement'
 
-export default function SearchResult() {
-    const {
-        searchResult,
-        searchLoading,
-        selectClient,
-        selectedClient
-    } = useCases()
+export default function SearchResult({ expectedResult }) {
+    const { searchResult, searchLoading } = searchManagement()
+    const { selectClient, selectedClient } = clientAffilationManagement()
+
+    const result = expectedResult === "clients" ? searchResult.clients :
+        expectedResult === "services" ? searchResult.services : null
 
     return <div className="search-result">
         {searchLoading ? <span className="loading-message pad-2 s-fs st-c">Wait for searching..</span> :
-            Array.isArray(searchResult) ? (
-                searchResult.length > 0 ? (
-                    searchResult.map(result => (
+            Array.isArray(result) ? (
+                result.length > 0 ? (
+                    result.map(result => (
                         <div className={`user-item gap-2 brad-2 ${selectedClient?.id === result._id ? "active" : ""}`}
                             key={result._id}
                             onClick={() => selectClient({ id: result._id, username: result.username })}

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import useCases from "../../Stores/useCases"
 import "./FilterContainer.css"
 import { useSearchParams } from "react-router-dom"
 

@@ -4,7 +4,7 @@ export const projectStatus = {
     title: "Project types",
     data: [
         { title: "Open", value: "open" },
-        { title: "In Progress", value: "in_progress" },
+        { title: "In Progress", value: "in progress" },
         { title: "Completed", value: "completed" },
         { title: "Cancelled", value: "cancelled" },
         { title: "Late", value: "late" }

@@ -1,6 +1,5 @@
 import './ProjectsPage.css'
 import { useEffect, useState } from "react"
-import useCases from "../../../Stores/useCases"
 import { useSearchParams } from "react-router-dom"
 import Table from "../../../Components/Table/Table"
 import useRole from "../../../utils/useRole/useRole"
@@ -12,8 +11,9 @@ import Container from "../../../Components/Container/Container"
 import projectsManagement from "../../../Stores/projectsManagement"
 import KeyPerfIndicators from "../../../Components/KPIs/KeyPerfIndicator"
 import CreateProject from "../../../Components/CreateProject/CreateProject"
-import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
 import FilterContainer from '../../../Components/FilterContainer/FilterContainer'
+import clientAffilationManagement from '../../../Stores/clientAffilationManagement'
+import ClientAffiliation from "../../../Components/ClientAffiliation/ClientAffiliation"
 
 export default function ProjectsPage() {
   const { isFreelancer, isClient } = useRole()
@@ -23,9 +23,9 @@ export default function ProjectsPage() {
     position: { x: 0, y: 0 },
     projectId: null
   })
+  const { toggleAffiliateClient } = clientAffilationManagement()
   const [selectedProject, setSelectedProject] = useState()
-  const { projectsData, getProjects, getProjectStatus, projectStatus, loadingState } = projectsManagement()
-  const { toggleProjectForm, toggleAffiliateClient } = useCases()
+  const { projectsData, getProjects, getProjectStatus, projectStatus, loadingState, toggleProjectForm } = projectsManagement()
   const projects = projectsData.data.projectsList.projects
   const totalProjects = projectsData.data.totalProjects
   const totalLateProjects = projectsData.data.totalLateProjects
