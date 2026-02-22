@@ -212,8 +212,10 @@ export default function ProjectsPage() {
           // Ensures pagination stays in sync after realtime updates (socket events).
           totalPages={Math.ceil(projectsData.data.totalProjects / limit)}
           onPageChange={(newPage) => {
-            setSearchParams({ page: newPage, limit: parseInt(searchParams.get("limit")), filter: searchParams.get("filter") })
-            getProjects({ filter: searchParams.get("filter"), page: newPage, limit: parseInt(searchParams.get("limit")) })
+            setSearchParams(prev => ({
+              ...Object.fromEntries(prev),
+              page: newPage
+            }))
           }}
         >
           {loadingState ? (
