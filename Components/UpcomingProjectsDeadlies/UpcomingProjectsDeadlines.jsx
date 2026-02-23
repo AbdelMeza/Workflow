@@ -1,16 +1,16 @@
-import Container from "../Container/Container"
 import Table from "../Table/Table"
-import projectsManagement from "../../Stores/projectsManagement"
-import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
 import Button from "../Button/Button"
 import Status from "../Status/Status"
 import { useNavigate } from "react-router-dom"
-import useCases from "../../Stores/useCases"
+import Container from "../Container/Container"
+import projectsManagement from "../../Stores/projectsManagement"
+import { getTimeRemaining } from "../../utils/TimeRemaining/getTimeRemaining"
+import clientAffilationManagement from "../../Stores/clientAffilationManagement"
 
 export default function UpcomingProjectsDeadlines({ setSelectedProject }) {
     const navigate = useNavigate()
     const { projectsData } = projectsManagement()
-    const { toggleAffiliateClient } = useCases()
+    const { toggleAffiliateClient } = clientAffilationManagement()
     const upcomingProjects = projectsData.data.projectsList.lateProjects || []
 
     const tableData = upcomingProjects.map(project => ({

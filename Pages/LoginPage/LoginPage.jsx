@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import Button from "../../Components/Button/Button"
 import authentificationManagement from "../../Stores/Authentification"
+import { GoogleLogin } from "@react-oauth/google"
 
 /**
  * LoginPage
@@ -152,6 +153,7 @@ export default function LoginPage() {
 
                         {/* Submit button */}
                         <div className="lower-content">
+
                             <div onClick={handleSubmit}>
                                 <Button
                                     content="Login"
@@ -160,6 +162,14 @@ export default function LoginPage() {
                                 />
                             </div>
                         </div>
+                        <span className="or-separator">
+                            <span className="line"></span>
+                            or
+                            <span className="line"></span>
+                        </span>
+                        <GoogleLogin text="continue_with" shape="rectangular" size="large" ux_mode="popup" onSuccess={res => {
+                            console.log(res)
+                        }} />
                     </div>
                 </div>
             </div>

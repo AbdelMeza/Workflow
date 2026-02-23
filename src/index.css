@@ -361,6 +361,23 @@ html {
   user-select: none;
 }
 
+.or-separator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--secondary-text-color);
+}
+
+.or-separator .line{
+  flex: 1;
+  height: 1px;
+  background-color: #cdcdcd
+}
+
+.google-login{
+  display: none;
+}
+
 .signup-page .arrow-down {
   position: absolute;
   right: 10px;
