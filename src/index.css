@@ -1,7 +1,7 @@
 :root {
   --light-background-lv1: #DEDCD8;
   --light-background-lv2: #F0EEE8;
-  --light-background-lv3:#fdfbf5;
+  --light-background-lv3: #fdfbf5;
   --main-color: 255, 87, 65;
   --red-color: #ff3434;
   --main-text-color: #111;
@@ -292,12 +292,28 @@ html {
 .signup-page,
 .login-page {
   display: flex;
+
+  >.content {
+    position: relative;
+  }
+}
+
+.signup-page .header,
+.login-page .header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: var(--padding-lv1);
 }
 
 .home-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  cursor: pointer;
+  aspect-ratio: 1;
+  display: flex;
+  place-content: center;
 }
 
 .signup-page .content,
@@ -325,12 +341,13 @@ html {
 .login-page .form-content {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
   padding: var(--padding-lv1) 0;
 }
 
 .signup-page .field-container,
 .login-page .field-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
   margin: 10px 0;
@@ -361,6 +378,10 @@ html {
   user-select: none;
 }
 
+.signup-page .lower-content{
+  margin-top: var(--gap-lv2);
+}
+
 .or-separator {
   display: flex;
   align-items: center;
@@ -368,14 +389,10 @@ html {
   color: var(--secondary-text-color);
 }
 
-.or-separator .line{
+.or-separator .line {
   flex: 1;
   height: 1px;
   background-color: #cdcdcd
-}
-
-.google-login{
-  display: none;
 }
 
 .signup-page .arrow-down {

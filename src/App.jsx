@@ -100,9 +100,21 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={
+        <Suspense fallback={<LoadingPage />}>
+          <HomePage />
+        </Suspense>
+      } />
+      <Route path="/signup" element={
+        <Suspense fallback={<LoadingPage />}>
+          <SignupPage />
+        </Suspense>
+      } />
+      <Route path="/login" element={
+        <Suspense fallback={<LoadingPage />}>
+          <LoginPage />
+        </Suspense>
+      } />
 
       <Route
         path="/dashboard"
