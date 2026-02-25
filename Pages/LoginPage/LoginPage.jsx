@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import Button from "../../Components/Button/Button"
 import authentificationManagement from "../../Stores/Authentification"
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google"
+import LoadingPage from "../../Components/LoadingPage/LoadingPage"
 
 /**
  * LoginPage
@@ -19,7 +20,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("")
 
     // Authentication store
-    const { login, errors, clearErrorsLog } = authentificationManagement()
+    const { login, errors, clearErrorsLog, isLoading } = authentificationManagement()
 
     /**
      * Clear previous authentication errors
@@ -126,7 +127,7 @@ export default function LoginPage() {
 
                             <div onClick={handleSubmit}>
                                 <Button
-                                    content="Login"
+                                    content={isLoading ? <div className="loading-text s-fs s-tc">Logging in, please wait...</div> : "Log in"}
                                     size="medium"
                                     classGiven="submit-btn btn-bgc brad-1"
                                 />

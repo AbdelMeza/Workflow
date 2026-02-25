@@ -340,6 +340,7 @@ html {
 .signup-page .form-content,
 .login-page .form-content {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 20px;
   padding: var(--padding-lv1) 0;

@@ -7,7 +7,7 @@
     z-index: 100;
 }
 
-.loading-page .loading-text{
+.loading-text{
     animation: loading calc(var(--animation-long-duration) * 2) infinite;
 }
 

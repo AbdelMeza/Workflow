@@ -23,7 +23,7 @@ export default function SignupPage() {
     const [selectionStatus, setSelectionStatus] = useState(false)
 
     // Authentication store
-    const { signup, errors, clearErrorsLog } = authentificationManagement()
+    const { signup, errors, clearErrorsLog, isLoading } = authentificationManagement()
 
     /**
      * Clear previous authentication errors
@@ -196,9 +196,8 @@ export default function SignupPage() {
                         <div className="lower-content">
                             <div onClick={handleSubmit}>
                                 <Button
-                                    content="Create account"
-                                    size="medium"
-                                    classGiven="submit-btn btn-bgc brad-1"
+                                    content={isLoading ? <div className="loading-text s-fs s-tc">Creating account, please wait...</div> : "Create account"}
+                                    classGiven="submit-btn h-2 btn-bgc brad-1"
                                 />
                             </div>
                         </div>
