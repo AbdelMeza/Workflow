@@ -50,11 +50,11 @@ function App() {
           limit
         })
 
-        getProjects({ page, limit })
+        getProjects({ page, limit, filter, time: searchParams.get("time") })
       }
 
-      if (result?.refetchCurrentPage) {
-        getProjects({ page: currentPage, limit })
+      if (currentPage === 1 && result?.refetchCurrentPage) {
+        getProjects({ page: currentPage, limit, filter: searchParams.get("filter"), time: searchParams.get("time") })
       }
     }
 

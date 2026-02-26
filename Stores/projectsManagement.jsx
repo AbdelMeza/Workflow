@@ -117,9 +117,15 @@ const projectsManagement = create((set, get) => ({
         if (action === "delete") {
 
             const isLastInPage = projects.length === 1
+            const totalPages = Math.ceil((state.projectsData.data.totalProjects) / limit)
+            const totalProjects = state.projectsData.data.totalProjects - 1
 
             if (isLastInPage && currentPage > 1) {
                 return { refetchPreviousPage: true }
+            }
+
+            if (!isLastInPage && totalPages > 1) {
+                return { refetchCurrentPage: true }
             }
 
             set({
@@ -127,8 +133,7 @@ const projectsManagement = create((set, get) => ({
                     ...state.projectsData,
                     data: {
                         ...state.projectsData.data,
-                        totalProjects:
-                            state.projectsData.data.totalProjects - 1,
+                        totalProjects: totalProjects,
 
                         totalLateProjects:
                             existsInLate

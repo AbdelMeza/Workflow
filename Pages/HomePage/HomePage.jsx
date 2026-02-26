@@ -4,6 +4,7 @@ import Button from '../../Components/Button/Button'
 import authentificationManagement from '../../Stores/Authentification'
 import UserProfile from '../../utils/UserProfile/UserProfile'
 import { useEffect } from 'react'
+import LoadingPage from '../../Components/LoadingPage/LoadingPage'
 
 /**
  * HomePage
@@ -15,7 +16,7 @@ import { useEffect } from 'react'
  * - Dashboard preview
  */
 export default function HomePage() {
-    const { getUserData } = authentificationManagement()
+    const { getUserData, userData } = authentificationManagement()
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -28,9 +29,13 @@ export default function HomePage() {
 
     return (
         <div className="home-page bgc-lv1">
-            <NavBar />
-            <HeroSection />
-            <PreviewContainer />
+            {userData !== null ?
+                <>
+                    <NavBar userData={userData} />
+                    <HeroSection />
+                    <PreviewContainer />
+                </>
+                : <LoadingPage />}
         </div>
     )
 }
@@ -43,9 +48,7 @@ export default function HomePage() {
  * - If user is logged in → show Dashboard + UserProfile
  * - If not logged in → show Login / Get Started buttons
  */
-function NavBar() {
-    const { userData } = authentificationManagement()
-
+function NavBar({ userData }) {
     return (
         <div className="navigation-bar flex">
             <div className="navigation-bar-content main-link-container flex">
