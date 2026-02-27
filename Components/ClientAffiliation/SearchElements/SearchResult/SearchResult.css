@@ -26,3 +26,7 @@
 .message{
     box-sizing: border-box;
 }
+
+.highlight{
+    color: var(--main-text-color);
+}

@@ -2,10 +2,15 @@ import './SearchResult.css'
 import searchManagement from '../../../../Stores/searchManagement'
 import UserProfile from "../../../../utils/UserProfile/UserProfile"
 import clientAffilationManagement from '../../../../Stores/clientAffilationManagement'
+import { useSearchParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 export default function SearchResult({ expectedResult }) {
     const { searchResult, searchLoading } = searchManagement()
     const { selectClient, selectedClient } = clientAffilationManagement()
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    const searchValue = searchParams.get("search") || ""
 
     const result = expectedResult === "clients" ? searchResult.clients :
         expectedResult === "services" ? searchResult.services : null
@@ -23,7 +28,11 @@ export default function SearchResult({ expectedResult }) {
                                 <UserProfile username={result.username} />
                             </div>
                             <div className="side-content flex flex-d-c">
-                                <span className="s-fs">{result.username}</span>
+                                <span className="s-fs st-c">
+                                    {result.username.split("").map((char, index) => (
+                                        <span key={index} className={char.toLowerCase() === searchValue?.toLowerCase()?.charAt(index) ? "highlight" : ""}>{char}</span>
+                                    ))}
+                                </span>
                                 <span className="s-fs st-c">{result.email}</span>
                             </div>
                         </div>

@@ -1,7 +1,7 @@
 import { Router } from "express"
-import { requireAuth } from "../middlewares/authVerification.js"
 import { affiliateClient, getUserData, searchClient } from "../controllers/users.js"
 import { requireRole } from "../middlewares/roleVerification.js"
+import { requireAuth } from "../middlewares/authVerification.js"
 
 const userRouter = Router()
 

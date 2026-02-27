@@ -1,6 +1,6 @@
+import { createToken } from "../utils/token.js"
 import { userModel } from "../models/userModel.js"
 import { comparePasswords, hashPassword } from "../utils/hashPass.js"
-import { createToken } from "../utils/token.js"
 
 /**
  * =========================
