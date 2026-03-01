@@ -5,19 +5,22 @@ const searchManagement = create((set) => ({
     searchResult: {
         clients: null,
         services: null,
+        global: null,
     },
 
-    searchClient: async (search) => {
+    search: async ({ search, type }) => {
         const userToken = localStorage.getItem("userToken")
 
         try {
+            set({ searchLoading: true })
+
             if (search === "") {
                 set({ searchResult: { clients: null } })
                 return
             }
 
-            set({ searchLoading: true })
-            const res = await fetch(`http://127.0.0.1:2005/user/search?search=${search}`, {
+            //search by search query and type (clients, services, global)
+            const res = await fetch(`http://127.0.0.1:2005/user/search?search=${search}&type=${type}`, {
                 method: "GET",
                 headers: { token: userToken },
             })
@@ -25,37 +28,11 @@ const searchManagement = create((set) => ({
             const data = await res.json()
 
             set({ searchLoading: false })
-            set({ searchResult: { clients: data } })
+            set({ searchResult: { [type]: data } })
         } catch (error) {
-            console.log(error)
-        } finally {
-            set({ searchLoading: false })
+            throw error
         }
     },
-
-    searchService: async (search) => {
-        const userToken = localStorage.getItem("userToken")
-        try {
-            if (search === "") {
-                set({ searchResult: { services: null } })
-                return
-            }
-            set({ searchLoading: true })
-            const res = await fetch(`http://127.0.0.1:2005/data/search_services?search=${search}`, {
-                method: "GET",
-                headers: { token: userToken },
-            })
-
-            const data = await res.json()
-
-            set({ searchLoading: false })
-            set({ searchResult: { services: data } })
-        } catch (error) {
-            console.log(error)
-        } finally {
-            set({ searchLoading: false })
-        }
-    }
 }))
 
 export default searchManagement

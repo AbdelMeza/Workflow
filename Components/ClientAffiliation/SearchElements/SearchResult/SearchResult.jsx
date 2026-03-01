@@ -3,7 +3,6 @@ import searchManagement from '../../../../Stores/searchManagement'
 import UserProfile from "../../../../utils/UserProfile/UserProfile"
 import clientAffilationManagement from '../../../../Stores/clientAffilationManagement'
 import { useSearchParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 
 export default function SearchResult({ expectedResult }) {
     const { searchResult, searchLoading } = searchManagement()

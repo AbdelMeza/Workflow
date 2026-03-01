@@ -63,7 +63,7 @@ export default function ClientAffiliation({ projectId }) {
                         {selectedClient &&
                             <div className="add-client-btn" onClick={() => handleAddClient()}>
                                 <Button
-                                    content="Add client"
+                                    content="Add to project"
                                     size="medium"
                                     classGiven=" btn-bgc brad-2"
                                 />

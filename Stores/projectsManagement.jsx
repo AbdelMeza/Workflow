@@ -88,7 +88,7 @@ const projectsManagement = create((set, get) => ({
             })
 
             const data = await res.json()
-            console.log(data)
+            
             if (!data) return
 
             set({ projectStatus: data })

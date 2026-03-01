@@ -3,12 +3,14 @@ import { useEffect, useRef } from "react"
 import { useSearchParams } from "react-router-dom"
 import clientAffilationManagement from "../../../../Stores/clientAffilationManagement"
 import searchManagement from '../../../../Stores/searchManagement'
+import SearchResult from '../SearchResult/SearchResult'
 
 export default function SearchBar({ placeholder, indicators, maxLength }) {
-    const { searchClient } = searchManagement()
+    const { searchClient, searchResult } = searchManagement()
     const {
         affiliateClientIsOpen,
-        projectFormIsOpen
+        projectFormIsOpen,
+        selectClient,
     } = clientAffilationManagement()
 
     const [searchParams, setSearchParams] = useSearchParams()
@@ -30,6 +32,9 @@ export default function SearchBar({ placeholder, indicators, maxLength }) {
     useEffect(() => {
         const searchTimeOut = setTimeout(() => {
             searchClient(search)
+            if (!search || search.trim() === "" || searchResult?.clients?.map(client => client.username).indexOf(search) === -1) {
+                selectClient(null)
+            }
         }, 300)
 
         return () => clearTimeout(searchTimeOut)
